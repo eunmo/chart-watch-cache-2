@@ -56,11 +56,17 @@ class MusicLibray {
     var albums = [Album]()
     var artists = [Artist]()
     
+    var initials = [Character: [Artist]]()
+    
     let dateFormatter: DateFormatter = DateFormatter()
     let serverAddress = "http://192.168.219.137:3000"
     
     init() {
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+        
+        for char in Array("ㄱㄴㄷㄹㅁㅂㅅㅇㅈㅊㅋㅌㅍㅎ#ABCDEFGHIJKLMNOPQRSTUVWXYZ") {
+            initials[char] = [Artist]()
+        }
     }
     
     func testParse() {
@@ -81,6 +87,17 @@ class MusicLibray {
                     self.songs = json.songs
                     self.albums = json.albums
                     self.artists = json.artists
+                    
+                    var initial: Character
+                    for artist in self.artists {
+                        initial = self.getInitial(name: artist.nameNorm)
+                        self.initials[initial]?.append(artist)
+                    }
+                    
+                    for (key, array) in self.initials {
+                        self.initials[key] = array.sorted{ $0.nameNorm.lowercased() < $1.nameNorm.lowercased() }
+                    }
+                    
                     print("songs:\(self.songs.count) albums:\(self.albums.count) artists:\(self.artists.count)")
                 } catch {
                     print("\(error)")
@@ -89,5 +106,39 @@ class MusicLibray {
         })
         
         query.resume()
+    }
+    
+    func getInitial(name: String) -> Character {
+        var regex: NSRegularExpression
+        
+        for char in Array("ABCDEFGHIJKLMNOPQRSTUVWXYZ") {
+            regex = try! NSRegularExpression(pattern: "^\(char)", options: NSRegularExpression.Options.caseInsensitive)
+            if regex.matches(in: name, options: [], range: NSRange(name.startIndex..., in: name)).count > 0 {
+                return char
+            }
+        }
+        
+        let leftString = "가나다라마바사아자차카타파"
+        let rightString = "나다라마바사아자차카타파하"
+        
+        for index in leftString.indices {
+            if name >= "\(leftString[index])" && name < "\(rightString[index])" {
+                return "ㄱㄴㄷㄹㅁㅂㅅㅇㅈㅊㅋㅌㅍ"[index]
+            }
+        }
+        
+        if name >= "하" {
+            return "ㅎ".first!
+        }
+        
+        return "#".first!
+    }
+    
+    func getArtistsByInitial(initial: Character) -> [Artist] {
+        return initials[initial]!
+    }
+    
+    func checkInitialExists(initial: Character) -> Bool {
+        return initials[initial]!.count > 0
     }
 }

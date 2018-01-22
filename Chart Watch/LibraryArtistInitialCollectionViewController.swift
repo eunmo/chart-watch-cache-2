@@ -10,7 +10,8 @@ import UIKit
 
 class LibraryArtistInitialCollectionViewController: UICollectionViewController {
     
-    var initials = Array("ㄱㄴㄷㄹㅁㅂㅅㅇㅈㅊㅋㅌㅍㅎ#ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+    let initialOrder = Array("ㄱㄴㄷㄹㅁㅂㅅㅇㅈㅊㅋㅌㅍㅎ#ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+    var initials = [Character]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,6 +23,15 @@ class LibraryArtistInitialCollectionViewController: UICollectionViewController {
         self.collectionView?.register(LibraryArtistInitialCollectionViewCell.nib, forCellWithReuseIdentifier: LibraryArtistInitialCollectionViewCell.identifier)
 
         // Do any additional setup after loading the view.
+        
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        let library = appDelegate.library
+        
+        for char in initialOrder {
+            if library.checkInitialExists(initial: char) {
+                initials.append(char)
+            }
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -63,6 +73,12 @@ class LibraryArtistInitialCollectionViewController: UICollectionViewController {
     
         return cell
     }
+    
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let vc = ArtistTableViewController()
+        vc.initial = "\(initials[indexPath.row])"
+        navigationController?.pushViewController(vc, animated: true)
+    }
 
     // MARK: UICollectionViewDelegate
 
@@ -94,5 +110,4 @@ class LibraryArtistInitialCollectionViewController: UICollectionViewController {
     
     }
     */
-
 }
