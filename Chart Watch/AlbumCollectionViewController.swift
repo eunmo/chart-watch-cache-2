@@ -77,6 +77,10 @@ class AlbumCollectionViewController: UICollectionViewController {
     
         return cell
     }
+    
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        performSegue(withIdentifier: "AlbumSongSegue", sender: self)
+    }
 
     // MARK: UICollectionViewDelegate
 
@@ -108,5 +112,24 @@ class AlbumCollectionViewController: UICollectionViewController {
     
     }
     */
+    
+    // MARK: - Navigation
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        // Get the new view controller using segue.destinationViewController.
+        // Pass the selected object to the new view controller.
+        if let identifier = segue.identifier {
+            switch identifier {
+            case "AlbumSongSegue":
+                if let vc = segue.destination as? SongTableViewController {
+                    let album = albums[(collectionView?.indexPathsForSelectedItems![0].row)!]
+                    vc.album = album
+                    vc.artist = artist
+                    vc.showTrack = true
+                }
+            default: break
+            }
+        }
+    }
 
 }

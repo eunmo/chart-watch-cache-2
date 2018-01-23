@@ -1,17 +1,20 @@
 //
-//  LibraryTableViewController.swift
+//  SongTableViewController.swift
 //  Chart Watch
 //
-//  Created by Eunmo Yang on 1/21/18.
+//  Created by Eunmo Yang on 1/23/18.
 //  Copyright © 2018 Eunmo Yang. All rights reserved.
 //
 
 import UIKit
 
-class LibraryTableViewController: UITableViewController {
+class SongTableViewController: UITableViewController {
     
-    let section1 = ["Artists", "Albums", "Songs"]
+    var artist: Artist?
+    var album: Album?
+    var songs = [FullSong]()
     var library: MusicLibray?
+    var showTrack = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,10 +25,27 @@ class LibraryTableViewController: UITableViewController {
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
         
-        self.tableView.register(LibraryBasicTableViewCell.nib, forCellReuseIdentifier: LibraryBasicTableViewCell.identifier)
+        self.tableView.register(SongTableViewCell.nib, forCellReuseIdentifier: SongTableViewCell.identifier)
+        self.tableView.register(TrackTableViewCell.nib, forCellReuseIdentifier: TrackTableViewCell.identifier)
         
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         library = appDelegate.library
+        
+        if let album = self.album {
+            if let artist = self.artist {
+                songs = library!.getSongs(by: album, filterBy: artist)
+            } else {
+                songs = library!.getSongs(by: album)
+            }
+            self.title = album.title
+        } else {
+            songs = library!.getSongs()
+            self.title = "Songs"
+        }
+        
+        if showTrack {
+            self.tableView.separatorInset = UIEdgeInsetsMake(0, 54, 0, 0)
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -42,34 +62,29 @@ class LibraryTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return 3
+        return songs.count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let song = songs[indexPath.row]
         
-        if let cell = tableView.dequeueReusableCell(withIdentifier: LibraryBasicTableViewCell.identifier, for: indexPath) as? LibraryBasicTableViewCell {
-            cell.title = "\(section1[indexPath.row])"
-            return cell
-        }
-        
-        return UITableViewCell()
-    }
-    
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if indexPath.section == 0 {
-            switch indexPath.row {
-            case 0:
-                performSegue(withIdentifier: "LibraryArtistSegue", sender: self)
-                break
-            case 1:
-                performSegue(withIdentifier: "LibraryAlbumSegue", sender: self)
-                break
-            case 2:
-                performSegue(withIdentifier: "LibrarySongSegue", sender: self)
-                break
-            default:
-                break
+        if showTrack {
+            let cell = tableView.dequeueReusableCell(withIdentifier: TrackTableViewCell.identifier, for: indexPath)
+            
+            if let trackCell = cell as? TrackTableViewCell {
+                trackCell.song = song
             }
+            
+            return cell
+        } else {
+            let cell = tableView.dequeueReusableCell(withIdentifier: SongTableViewCell.identifier, for: indexPath)
+
+            // Configure the cell...
+            if let songCell = cell as? SongTableViewCell {
+                songCell.song = song
+            }
+
+            return cell
         }
     }
 
@@ -105,6 +120,16 @@ class LibraryTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
         // Return false if you do not want the item to be re-orderable.
         return true
+    }
+    */
+
+    /*
+    // MARK: - Navigation
+
+    // In a storyboard-based application, you will often want to do a little preparation before navigation
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        // Get the new view controller using segue.destinationViewController.
+        // Pass the selected object to the new view controller.
     }
     */
 

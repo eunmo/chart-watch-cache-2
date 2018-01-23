@@ -50,11 +50,26 @@ struct ServerJSON: Decodable {
     let artists: [Artist]
 }
 
+struct FullSong {
+    let id: Int
+    let title: String
+    let artists: [Artist]
+    let features: [Artist]
+    let artistString: String
+    let album: Album?
+    let track: Track?
+    let order: Int?
+}
+
 class MusicLibray {
     
     var songs = [Song]()
     var albums = [Album]()
     var artists = [Artist]()
+    
+    var songMap = [Int: Song]()
+    var albumMap = [Int: Album]()
+    var artistMap = [Int: Artist]()
     
     var initials = [Character: [Artist]]()
     
@@ -87,6 +102,18 @@ class MusicLibray {
                     self.songs = json.songs
                     self.albums = json.albums
                     self.artists = json.artists
+                    
+                    for song in self.songs {
+                        self.songMap[song.id] = song
+                    }
+                    
+                    for album in self.albums {
+                        self.albumMap[album.id] = album
+                    }
+                    
+                    for artist in self.artists {
+                        self.artistMap[artist.id] = artist
+                    }
                     
                     var initial: Character
                     for artist in self.artists {
@@ -167,12 +194,76 @@ class MusicLibray {
         
         var artistAlbums = [Album]()
         
-        for album in albums {
-            if albumIdSet.contains(album.id) {
-                artistAlbums.append(album)
-            }
+        for albumId in albumIdSet {
+            artistAlbums.append(albumMap[albumId]!)
         }
         
         return artistAlbums
+    }
+    
+    func makeFullSong(song: Song, track: Track? = nil) -> FullSong {
+        var songArtists = [Artist]()
+        var songFeatures = [Artist]()
+        var artist: Artist
+        
+        var artistString = ""
+        for artistId in song.artists {
+            artist = artistMap[artistId]!
+            songArtists.append(artist)
+            artistString += (artistString == "") ? "\(artist.name)" : ", \(artist.name)"
+        }
+        
+        var featureString = ""
+        for artistId in song.features {
+            artist = artistMap[artistId]!
+            songFeatures.append(artist)
+            featureString += (featureString == "") ? "\(artist.name)" : ", \(artist.name)"
+        }
+        if featureString != "" {
+            artistString += " feat. \(featureString)"
+        }
+        
+        let fullSong = FullSong(id: song.id, title: song.title, artists: songArtists, features: songFeatures, artistString: artistString, album: nil, track: track, order: nil)
+        
+        return fullSong
+    }
+    
+    func getSongs() -> [FullSong] {
+        var fullSongs = [FullSong]()
+        
+        for song in songs {
+            fullSongs.append(makeFullSong(song: song))
+        }
+        
+        return fullSongs
+    }
+    
+    func getSongs(by album: Album) -> [FullSong] {
+        var albumSongs = [FullSong]()
+        
+        for track in album.tracks {
+            albumSongs.append(makeFullSong(song: songMap[track.id]!, track: track))
+        }
+        
+        return albumSongs
+    }
+    
+    func getSongs(by album: Album, filterBy artist: Artist) -> [FullSong] {
+        
+        if album.artists.contains(artist.id) {
+            return getSongs(by: album)
+        } else {
+            var albumSongs = [FullSong]()
+            
+            for track in album.tracks {
+                let song = songMap[track.id]!
+                
+                if song.artists.contains(artist.id) || song.features.contains(artist.id) {
+                    albumSongs.append(makeFullSong(song: song, track: track))
+                }
+            }
+            
+            return albumSongs
+        }
     }
 }
