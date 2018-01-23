@@ -10,6 +10,9 @@
 		5429FAA120160AE6001D2F63 /* ArtistTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5429FAA020160AE6001D2F63 /* ArtistTableViewController.swift */; };
 		5429FAA4201617A4001D2F63 /* ArtistTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5429FAA2201617A4001D2F63 /* ArtistTableViewCell.swift */; };
 		5429FAA5201617A4001D2F63 /* ArtistTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5429FAA3201617A4001D2F63 /* ArtistTableViewCell.xib */; };
+		5429FAA920162F0B001D2F63 /* AlbumCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5429FAA820162F0B001D2F63 /* AlbumCollectionViewController.swift */; };
+		5429FAAC20162F1F001D2F63 /* AlbumCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5429FAAA20162F1F001D2F63 /* AlbumCollectionViewCell.swift */; };
+		5429FAAD20162F1F001D2F63 /* AlbumCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5429FAAB20162F1F001D2F63 /* AlbumCollectionViewCell.xib */; };
 		5489A9FC20146D6400B26F62 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5489A9FB20146D6400B26F62 /* AppDelegate.swift */; };
 		5489AA0320146D6400B26F62 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5489AA0120146D6400B26F62 /* Main.storyboard */; };
 		5489AA0520146D6400B26F62 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5489AA0420146D6400B26F62 /* Assets.xcassets */; };
@@ -27,6 +30,9 @@
 		5429FAA020160AE6001D2F63 /* ArtistTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtistTableViewController.swift; sourceTree = "<group>"; };
 		5429FAA2201617A4001D2F63 /* ArtistTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtistTableViewCell.swift; sourceTree = "<group>"; };
 		5429FAA3201617A4001D2F63 /* ArtistTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ArtistTableViewCell.xib; sourceTree = "<group>"; };
+		5429FAA820162F0B001D2F63 /* AlbumCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumCollectionViewController.swift; sourceTree = "<group>"; };
+		5429FAAA20162F1F001D2F63 /* AlbumCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumCollectionViewCell.swift; sourceTree = "<group>"; };
+		5429FAAB20162F1F001D2F63 /* AlbumCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AlbumCollectionViewCell.xib; sourceTree = "<group>"; };
 		5489A9F820146D6400B26F62 /* Chart Watch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Chart Watch.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5489A9FB20146D6400B26F62 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5489AA0220146D6400B26F62 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -84,6 +90,9 @@
 				5429FAA020160AE6001D2F63 /* ArtistTableViewController.swift */,
 				5429FAA2201617A4001D2F63 /* ArtistTableViewCell.swift */,
 				5429FAA3201617A4001D2F63 /* ArtistTableViewCell.xib */,
+				5429FAA820162F0B001D2F63 /* AlbumCollectionViewController.swift */,
+				5429FAAA20162F1F001D2F63 /* AlbumCollectionViewCell.swift */,
+				5429FAAB20162F1F001D2F63 /* AlbumCollectionViewCell.xib */,
 				5489AA0420146D6400B26F62 /* Assets.xcassets */,
 				5489AA0620146D6400B26F62 /* LaunchScreen.storyboard */,
 				5489AA0920146D6400B26F62 /* Info.plist */,
@@ -154,6 +163,7 @@
 				5489AA1E2014BA4D00B26F62 /* LibraryBasicTableViewCell.xib in Resources */,
 				5489AA0820146D6400B26F62 /* LaunchScreen.storyboard in Resources */,
 				5489AA0520146D6400B26F62 /* Assets.xcassets in Resources */,
+				5429FAAD20162F1F001D2F63 /* AlbumCollectionViewCell.xib in Resources */,
 				5489AA2E2015008100B26F62 /* LibraryArtistInitialCollectionViewCell.xib in Resources */,
 				5489AA0320146D6400B26F62 /* Main.storyboard in Resources */,
 			);
@@ -169,6 +179,8 @@
 				5489AA2D2015008100B26F62 /* LibraryArtistInitialCollectionViewCell.swift in Sources */,
 				5489AA1D2014BA4D00B26F62 /* LibraryBasicTableViewCell.swift in Sources */,
 				5489A9FC20146D6400B26F62 /* AppDelegate.swift in Sources */,
+				5429FAA920162F0B001D2F63 /* AlbumCollectionViewController.swift in Sources */,
+				5429FAAC20162F1F001D2F63 /* AlbumCollectionViewCell.swift in Sources */,
 				5429FAA120160AE6001D2F63 /* ArtistTableViewController.swift in Sources */,
 				5489AA282014FB2800B26F62 /* LibraryArtistInitialCollectionViewController.swift in Sources */,
 				5489AA202014C3DB00B26F62 /* LibraryTableViewController.swift in Sources */,

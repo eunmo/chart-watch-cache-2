@@ -1,5 +1,5 @@
 //
-//  LibraryArtistCollectionViewController.swift
+//  AlbumCollectionViewController.swift
 //  Chart Watch
 //
 //  Created by Eunmo Yang on 1/22/18.
@@ -8,10 +8,11 @@
 
 import UIKit
 
-class LibraryArtistInitialCollectionViewController: UICollectionViewController {
+class AlbumCollectionViewController: UICollectionViewController {
     
-    let initialOrder = Array("ㄱㄴㄷㄹㅁㅂㅅㅇㅈㅊㅋㅌㅍㅎABCDEFGHIJKLMNOPQRSTUVWXYZ#")
-    var initials = [Character]()
+    var albums = [Album]()
+    var artist: Artist?
+    var library: MusicLibray?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,18 +21,22 @@ class LibraryArtistInitialCollectionViewController: UICollectionViewController {
         // self.clearsSelectionOnViewWillAppear = false
 
         // Register cell classes
-        self.collectionView?.register(LibraryArtistInitialCollectionViewCell.nib, forCellWithReuseIdentifier: LibraryArtistInitialCollectionViewCell.identifier)
+        self.collectionView?.register(AlbumCollectionViewCell.nib, forCellWithReuseIdentifier: AlbumCollectionViewCell.identifier)
 
         // Do any additional setup after loading the view.
         
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        let library = appDelegate.library
+        library = appDelegate.library
         
-        for char in initialOrder {
-            if library.checkInitialExists(initial: char) {
-                initials.append(char)
-            }
+        if let a = artist {
+            self.title = a.name
+            self.albums = library!.getAlbumsByArtist(artist: a)
+        } else {
+            self.title = "Albums"
+            self.albums = library!.albums
         }
+        
+        albums.sort(by: { $0.release > $1.release })
     }
 
     override func didReceiveMemoryWarning() {
@@ -59,23 +64,18 @@ class LibraryArtistInitialCollectionViewController: UICollectionViewController {
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of items
-        return initials.count
+        return albums.count
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: LibraryArtistInitialCollectionViewCell.identifier, for: indexPath)
-        
-        if let initialCell = cell as? LibraryArtistInitialCollectionViewCell {
-            initialCell.initial = initials[indexPath.row]
-        }
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: AlbumCollectionViewCell.identifier, for: indexPath)
     
         // Configure the cell
+        if let albumCell = cell as? AlbumCollectionViewCell {
+            albumCell.album = albums[indexPath.row]
+        }
     
         return cell
-    }
-    
-    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        performSegue(withIdentifier: "LibraryArtistInitialSegue", sender: self)
     }
 
     // MARK: UICollectionViewDelegate
@@ -108,20 +108,5 @@ class LibraryArtistInitialCollectionViewController: UICollectionViewController {
     
     }
     */
-    
-    // MARK: - Navigation
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-        if let identifier = segue.identifier {
-            switch identifier {
-            case "LibraryArtistInitialSegue":
-                if let vc = segue.destination as? ArtistTableViewController {
-                    vc.initial = "\(initials[(collectionView?.indexPathsForSelectedItems![0].row)!])"
-                }
-            default: break
-            }
-        }
-    }
+
 }

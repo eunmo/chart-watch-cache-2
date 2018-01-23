@@ -12,6 +12,7 @@ class ArtistTableViewController: UITableViewController {
     
     var initial: String = ""
     var artists = [Artist]()
+    var library: MusicLibray?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,11 +25,11 @@ class ArtistTableViewController: UITableViewController {
         
         self.tableView.register(ArtistTableViewCell.nib, forCellReuseIdentifier: ArtistTableViewCell.identifier)
         
-        self.navigationItem.title = initial
+        self.title = initial
         
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        
-        artists = appDelegate.library.getArtistsByInitial(initial: initial.first!)
+        library = appDelegate.library
+        artists = library!.getArtistsByInitial(initial: initial.first!)
     }
 
     override func didReceiveMemoryWarning() {
@@ -57,6 +58,10 @@ class ArtistTableViewController: UITableViewController {
         }
 
         return cell
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        performSegue(withIdentifier: "ArtistAlbumSegue", sender: self)
     }
 
     /*
@@ -94,14 +99,22 @@ class ArtistTableViewController: UITableViewController {
     }
     */
 
-    /*
+    
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
+        if let identifier = segue.identifier {
+            switch identifier {
+            case "ArtistAlbumSegue":
+                if let vc = segue.destination as? AlbumCollectionViewController {
+                    vc.artist = artists[tableView.indexPathForSelectedRow!.row]
+                }
+            default: break
+            }
+        }
     }
-    */
 
 }

@@ -108,6 +108,8 @@ class MusicLibray {
         query.resume()
     }
     
+    // MARK: Handle Initials
+    
     func getInitial(name: String) -> Character {
         var regex: NSRegularExpression
         
@@ -140,5 +142,37 @@ class MusicLibray {
     
     func checkInitialExists(initial: Character) -> Bool {
         return initials[initial]!.count > 0
+    }
+    
+    func getAlbumsByArtist(artist: Artist) -> [Album] {
+        var albumIdSet = Set<Int>()
+        
+        for album in albums {
+            if album.artists.contains(artist.id) {
+                albumIdSet.insert(album.id)
+            }
+        }
+        
+        for song in songs {
+            if song.artists.contains(artist.id) || song.features.contains(artist.id) {
+                for album in albums {
+                    for track in album.tracks {
+                        if track.id == song.id {
+                            albumIdSet.insert(album.id)
+                        }
+                    }
+                }
+            }
+        }
+        
+        var artistAlbums = [Album]()
+        
+        for album in albums {
+            if albumIdSet.contains(album.id) {
+                artistAlbums.append(album)
+            }
+        }
+        
+        return artistAlbums
     }
 }

@@ -42,6 +42,9 @@
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <segue destination="1tE-eK-Pxj" kind="show" identifier="LibraryAlbumSegue" id="1yT-F9-BaE"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
@@ -80,6 +83,9 @@
                                     <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </view>
+                                <connections>
+                                    <segue destination="CeY-42-g11" kind="show" identifier="LibraryArtistInitialSegue" id="ygN-M0-Eeh"/>
+                                </connections>
                             </collectionViewCell>
                         </cells>
                         <connections>
@@ -92,6 +98,40 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="E1U-Zy-5wg" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2330" y="0.0"/>
+        </scene>
+        <!--Album Collection View Controller-->
+        <scene sceneID="MIi-hQ-5w5">
+            <objects>
+                <collectionViewController id="1tE-eK-Pxj" customClass="AlbumCollectionViewController" customModule="Chart_Watch" customModuleProvider="target" sceneMemberID="viewController">
+                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="fAW-Jg-0cl">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="coL-6B-icC">
+                            <size key="itemSize" width="100" height="100"/>
+                            <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                            <inset key="sectionInset" minX="10" minY="0.0" maxX="10" maxY="0.0"/>
+                        </collectionViewFlowLayout>
+                        <cells>
+                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="7PA-sK-laY">
+                                <rect key="frame" x="10" y="0.0" width="100" height="100"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
+                                    <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </view>
+                            </collectionViewCell>
+                        </cells>
+                        <connections>
+                            <outlet property="dataSource" destination="1tE-eK-Pxj" id="uzO-d7-JRp"/>
+                            <outlet property="delegate" destination="1tE-eK-Pxj" id="Jyi-Fy-G1t"/>
+                        </connections>
+                    </collectionView>
+                </collectionViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="p5A-8y-06j" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2327" y="714"/>
         </scene>
         <!--Artist Table View Controller-->
         <scene sceneID="zJW-8M-qWX">
@@ -109,6 +149,9 @@
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <segue destination="1tE-eK-Pxj" kind="show" identifier="ArtistAlbumSegue" id="NJi-gu-kiK"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
@@ -144,4 +187,7 @@
     <resources>
         <image name="glyphicons-201-download" width="26" height="26"/>
     </resources>
+    <inferredMetricsTieBreakers>
+        <segue reference="NJi-gu-kiK"/>
+    </inferredMetricsTieBreakers>
 </document>

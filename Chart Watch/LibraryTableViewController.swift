@@ -11,6 +11,7 @@ import UIKit
 class LibraryTableViewController: UITableViewController {
     
     let section1 = ["Artists", "Albums", "Songs"]
+    var library: MusicLibray?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,6 +23,9 @@ class LibraryTableViewController: UITableViewController {
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
         
         self.tableView.register(LibraryBasicTableViewCell.nib, forCellReuseIdentifier: LibraryBasicTableViewCell.identifier)
+        
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        library = appDelegate.library
     }
 
     override func didReceiveMemoryWarning() {
@@ -52,8 +56,12 @@ class LibraryTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if (indexPath.section == 0 && indexPath.row == 0) {
-            performSegue(withIdentifier: "LibraryArtistSegue", sender: self)
+        if indexPath.section == 0 {
+            if indexPath.row == 0 {
+                performSegue(withIdentifier: "LibraryArtistSegue", sender: self)
+            } else if indexPath.row == 1 {
+                performSegue(withIdentifier: "LibraryAlbumSegue", sender: self)
+            }
         }
     }
 
@@ -92,14 +100,21 @@ class LibraryTableViewController: UITableViewController {
     }
     */
 
-    /*
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
+        if let identifier = segue.identifier {
+            switch identifier {
+            case "LibraryAlbumSegue":
+                if let vc = segue.destination as? AlbumCollectionViewController {
+                    vc.albums = library!.albums
+                }
+            default: break
+            }
+        }
     }
-    */
 
 }
