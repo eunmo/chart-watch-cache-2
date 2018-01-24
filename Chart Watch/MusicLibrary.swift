@@ -10,7 +10,7 @@ import Foundation
 
 struct Artist: Codable {
     let id: Int
-    let name: String
+    var name: String
     let nameNorm: String
 }
 
@@ -24,7 +24,7 @@ struct Album: Codable {
     let id: Int
     let tracks: [Track]
     let artists: [Int]
-    let title: String
+    var title: String
     let format: String?
     let format2: String?
     let release: Date
@@ -32,7 +32,7 @@ struct Album: Codable {
 
 struct Song: Codable {
     let id: Int
-    let title: String
+    var title: String
     let plays: Int
     let lastPlayed: Date?
     let artists: [Int]
@@ -63,14 +63,17 @@ struct FullSong {
 
 class MusicLibray {
     
+    // MARK: raw data array
+    
     var songs = [Song]()
     var albums = [Album]()
     var artists = [Artist]()
     
+    // MARK: indexed map
+    
     var songMap = [Int: Song]()
     var albumMap = [Int: Album]()
-    var artistMap = [Int: Artist]()
-    
+    var artistMap = [Int: Artist]()    
     var initials = [Character: [Artist]]()
     
     let dateFormatter: DateFormatter = DateFormatter()
@@ -82,6 +85,10 @@ class MusicLibray {
         for char in Array("ㄱㄴㄷㄹㅁㅂㅅㅇㅈㅊㅋㅌㅍㅎ#ABCDEFGHIJKLMNOPQRSTUVWXYZ") {
             initials[char] = [Artist]()
         }
+    }
+    
+    func normalizeString(string: String) -> String {
+        return string.replacingOccurrences(of: "`", with: "'")
     }
     
     func testParse() {
@@ -99,19 +106,22 @@ class MusicLibray {
             if data != nil {
                 do {
                     let json = try decoder.decode(ServerJSON.self, from: data!)
-                    self.songs = json.songs
-                    self.albums = json.albums
-                    self.artists = json.artists
                     
-                    for song in self.songs {
+                    for var song in json.songs {
+                        song.title = self.normalizeString(string: song.title)
+                        self.songs.append(song)
                         self.songMap[song.id] = song
                     }
                     
-                    for album in self.albums {
+                    for var album in json.albums {
+                        album.title = self.normalizeString(string: album.title)
+                        self.albums.append(album)
                         self.albumMap[album.id] = album
                     }
                     
-                    for artist in self.artists {
+                    for var artist in json.artists {
+                        artist.name = self.normalizeString(string: artist.name)
+                        self.artists.append(artist)
                         self.artistMap[artist.id] = artist
                     }
                     
