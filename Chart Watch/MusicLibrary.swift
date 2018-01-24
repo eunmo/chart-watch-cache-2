@@ -61,7 +61,13 @@ struct FullSong {
     let order: Int?
 }
 
-class MusicLibray {
+struct Archive: Codable {
+    let songs: [Song]
+    let albums: [Album]
+    let artists: [Artist]
+}
+
+class MusicLibrary {
     
     // MARK: raw data array
     
@@ -73,11 +79,14 @@ class MusicLibray {
     
     var songMap = [Int: Song]()
     var albumMap = [Int: Album]()
-    var artistMap = [Int: Artist]()    
+    var artistMap = [Int: Artist]()
     var initials = [Character: [Artist]]()
     
     let dateFormatter: DateFormatter = DateFormatter()
     let serverAddress = "http://192.168.219.137:3000"
+    
+    static let DocumentsDirectory = FileManager().urls(for: .documentDirectory, in: .userDomainMask).first!
+    static let ArchiveURL = DocumentsDirectory.appendingPathComponent("library")
     
     init() {
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
@@ -87,12 +96,53 @@ class MusicLibray {
         }
     }
     
+    func save() {
+        let archive = Archive(songs: songs, albums: albums, artists: artists)
+        let data = try! PropertyListEncoder().encode(archive)
+        NSKeyedArchiver.archiveRootObject(data, toFile: MusicLibrary.ArchiveURL.path)
+    }
+    
+    func load() {
+        if let data = NSKeyedUnarchiver.unarchiveObject(withFile: MusicLibrary.ArchiveURL.path) as? Data {
+            let archive = try! PropertyListDecoder().decode(Archive.self, from: data)
+            self.songs = archive.songs
+            self.albums = archive.albums
+            self.artists = archive.artists
+            buildMaps()
+        } else {
+            testParse()
+        }
+    }
+    
+    func buildMaps() {
+        for song in songs {
+            songMap[song.id] = song
+        }
+        
+        for album in albums {
+            albumMap[album.id] = album
+        }
+        
+        for artist in artists {
+            artistMap[artist.id] = artist
+        }
+        
+        var initial: Character
+        for artist in artists {
+            initial = getInitial(name: artist.nameNorm)
+            initials[initial]?.append(artist)
+        }
+        
+        for (key, array) in initials {
+            initials[key] = array.sorted{ $0.nameNorm.lowercased() < $1.nameNorm.lowercased() }
+        }
+    }
+    
     func normalizeString(string: String) -> String {
         return string.replacingOccurrences(of: "`", with: "'")
     }
     
     func testParse() {
-        print("start parsing")
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .formatted(dateFormatter)
         
@@ -110,32 +160,19 @@ class MusicLibray {
                     for var song in json.songs {
                         song.title = self.normalizeString(string: song.title)
                         self.songs.append(song)
-                        self.songMap[song.id] = song
                     }
                     
                     for var album in json.albums {
                         album.title = self.normalizeString(string: album.title)
                         self.albums.append(album)
-                        self.albumMap[album.id] = album
                     }
                     
                     for var artist in json.artists {
                         artist.name = self.normalizeString(string: artist.name)
                         self.artists.append(artist)
-                        self.artistMap[artist.id] = artist
                     }
                     
-                    var initial: Character
-                    for artist in self.artists {
-                        initial = self.getInitial(name: artist.nameNorm)
-                        self.initials[initial]?.append(artist)
-                    }
-                    
-                    for (key, array) in self.initials {
-                        self.initials[key] = array.sorted{ $0.nameNorm.lowercased() < $1.nameNorm.lowercased() }
-                    }
-                    
-                    print("songs:\(self.songs.count) albums:\(self.albums.count) artists:\(self.artists.count)")
+                    self.save()
                 } catch {
                     print("\(error)")
                 }
