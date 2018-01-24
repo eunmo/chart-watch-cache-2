@@ -91,6 +91,17 @@
 				5489A9FB20146D6400B26F62 /* AppDelegate.swift */,
 				5489AA0120146D6400B26F62 /* Main.storyboard */,
 				5489AA0F20146E9400B26F62 /* MusicLibrary.swift */,
+				549A23312017A40900CE1F2D /* LibraryTab */,
+				5489AA0420146D6400B26F62 /* Assets.xcassets */,
+				5489AA0620146D6400B26F62 /* LaunchScreen.storyboard */,
+				5489AA0920146D6400B26F62 /* Info.plist */,
+			);
+			path = "Chart Watch";
+			sourceTree = "<group>";
+		};
+		549A23312017A40900CE1F2D /* LibraryTab */ = {
+			isa = PBXGroup;
+			children = (
 				5489AA1F2014C3DB00B26F62 /* LibraryTableViewController.swift */,
 				5489AA1B2014BA4D00B26F62 /* LibraryBasicTableViewCell.swift */,
 				5489AA1C2014BA4D00B26F62 /* LibraryBasicTableViewCell.xib */,
@@ -108,11 +119,9 @@
 				5429FAB12016E381001D2F63 /* SongTableViewCell.xib */,
 				5429FAB420179CD3001D2F63 /* TrackTableViewCell.swift */,
 				5429FAB520179CD3001D2F63 /* TrackTableViewCell.xib */,
-				5489AA0420146D6400B26F62 /* Assets.xcassets */,
-				5489AA0620146D6400B26F62 /* LaunchScreen.storyboard */,
-				5489AA0920146D6400B26F62 /* Info.plist */,
 			);
-			path = "Chart Watch";
+			name = LibraryTab;
+			path = "New Group";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

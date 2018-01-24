@@ -98,7 +98,7 @@
             </objects>
             <point key="canvasLocation" x="2326" y="-744"/>
         </scene>
-        <!--Album Collection View Controller-->
+        <!--Albums-->
         <scene sceneID="MIi-hQ-5w5">
             <objects>
                 <collectionViewController id="1tE-eK-Pxj" customClass="AlbumCollectionViewController" customModule="Chart_Watch" customModuleProvider="target" sceneMemberID="viewController">
@@ -127,6 +127,7 @@
                             <outlet property="delegate" destination="1tE-eK-Pxj" id="Jyi-Fy-G1t"/>
                         </connections>
                     </collectionView>
+                    <navigationItem key="navigationItem" title="Albums" id="Pd4-kO-2lH"/>
                     <connections>
                         <segue destination="0eS-Ei-G0C" kind="show" identifier="AlbumSongSegue" id="IBn-nd-ojm"/>
                     </connections>
@@ -135,7 +136,7 @@
             </objects>
             <point key="canvasLocation" x="2326" y="0.0"/>
         </scene>
-        <!--Song Table View Controller-->
+        <!--Songs-->
         <scene sceneID="pib-8W-nh1">
             <objects>
                 <tableViewController id="0eS-Ei-G0C" customClass="SongTableViewController" customModule="Chart_Watch" customModuleProvider="target" sceneMemberID="viewController">
@@ -158,6 +159,7 @@
                             <outlet property="delegate" destination="0eS-Ei-G0C" id="9Mk-da-i9f"/>
                         </connections>
                     </tableView>
+                    <navigationItem key="navigationItem" title="Songs" id="mFi-qS-8uS"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gFr-cw-ffw" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -218,7 +220,7 @@
         <image name="glyphicons-201-download" width="26" height="26"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="ISJ-i4-7KE"/>
-        <segue reference="QId-DK-kKf"/>
+        <segue reference="IBn-nd-ojm"/>
+        <segue reference="NJi-gu-kiK"/>
     </inferredMetricsTieBreakers>
 </document>
