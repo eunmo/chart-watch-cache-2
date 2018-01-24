@@ -29,6 +29,7 @@
 		5489AA282014FB2800B26F62 /* LibraryArtistInitialCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5489AA272014FB2800B26F62 /* LibraryArtistInitialCollectionViewController.swift */; };
 		5489AA2D2015008100B26F62 /* LibraryArtistInitialCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5489AA2B2015008100B26F62 /* LibraryArtistInitialCollectionViewCell.swift */; };
 		5489AA2E2015008100B26F62 /* LibraryArtistInitialCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5489AA2C2015008100B26F62 /* LibraryArtistInitialCollectionViewCell.xib */; };
+		54984E822018DC9F002D8203 /* Downloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54984E812018DC9F002D8203 /* Downloader.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -56,6 +57,7 @@
 		5489AA272014FB2800B26F62 /* LibraryArtistInitialCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryArtistInitialCollectionViewController.swift; sourceTree = "<group>"; };
 		5489AA2B2015008100B26F62 /* LibraryArtistInitialCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryArtistInitialCollectionViewCell.swift; sourceTree = "<group>"; };
 		5489AA2C2015008100B26F62 /* LibraryArtistInitialCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LibraryArtistInitialCollectionViewCell.xib; sourceTree = "<group>"; };
+		54984E812018DC9F002D8203 /* Downloader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Downloader.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -91,6 +93,7 @@
 				5489A9FB20146D6400B26F62 /* AppDelegate.swift */,
 				5489AA0120146D6400B26F62 /* Main.storyboard */,
 				5489AA0F20146E9400B26F62 /* MusicLibrary.swift */,
+				54984E812018DC9F002D8203 /* Downloader.swift */,
 				549A23312017A40900CE1F2D /* LibraryTab */,
 				5489AA0420146D6400B26F62 /* Assets.xcassets */,
 				5489AA0620146D6400B26F62 /* LaunchScreen.storyboard */,
@@ -210,6 +213,7 @@
 				5429FAB620179CD3001D2F63 /* TrackTableViewCell.swift in Sources */,
 				5429FAAC20162F1F001D2F63 /* AlbumCollectionViewCell.swift in Sources */,
 				5429FAA120160AE6001D2F63 /* ArtistTableViewController.swift in Sources */,
+				54984E822018DC9F002D8203 /* Downloader.swift in Sources */,
 				5489AA282014FB2800B26F62 /* LibraryArtistInitialCollectionViewController.swift in Sources */,
 				5489AA202014C3DB00B26F62 /* LibraryTableViewController.swift in Sources */,
 				5429FAA4201617A4001D2F63 /* ArtistTableViewCell.swift in Sources */,

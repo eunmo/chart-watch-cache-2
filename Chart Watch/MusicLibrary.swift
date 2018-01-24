@@ -82,8 +82,9 @@ class MusicLibrary {
     var artistMap = [Int: Artist]()
     var initials = [Character: [Artist]]()
     
+    let downloader = Downloader()
+    
     let dateFormatter: DateFormatter = DateFormatter()
-    let serverAddress = "http://192.168.219.137:3000"
     
     static let DocumentsDirectory = FileManager().urls(for: .documentDirectory, in: .userDomainMask).first!
     static let ArchiveURL = DocumentsDirectory.appendingPathComponent("library")
@@ -110,7 +111,7 @@ class MusicLibrary {
             self.artists = archive.artists
             buildMaps()
         } else {
-            testParse()
+            downloader.fetch(completion: parse)
         }
     }
     
@@ -142,44 +143,33 @@ class MusicLibrary {
         return string.replacingOccurrences(of: "`", with: "'")
     }
     
-    func testParse() {
-        let decoder = JSONDecoder()
-        decoder.dateDecodingStrategy = .formatted(dateFormatter)
-        
-        let urlAsString = "\(serverAddress)/ios/fetch2"
-        let url = URL(string: urlAsString)!
-        let urlSession = URLSession.shared
-        
-        print(url)
-        
-        let query = urlSession.dataTask(with: url, completionHandler: { data, response, error -> Void in
-            if data != nil {
-                do {
-                    let json = try decoder.decode(ServerJSON.self, from: data!)
-                    
-                    for var song in json.songs {
-                        song.title = self.normalizeString(string: song.title)
-                        self.songs.append(song)
-                    }
-                    
-                    for var album in json.albums {
-                        album.title = self.normalizeString(string: album.title)
-                        self.albums.append(album)
-                    }
-                    
-                    for var artist in json.artists {
-                        artist.name = self.normalizeString(string: artist.name)
-                        self.artists.append(artist)
-                    }
-                    
-                    self.save()
-                } catch {
-                    print("\(error)")
-                }
+    func parse(data: Data) {
+        do {
+            let decoder = JSONDecoder()
+            decoder.dateDecodingStrategy = .formatted(dateFormatter)
+            let json = try decoder.decode(ServerJSON.self, from: data)
+            
+            for var song in json.songs {
+                song.title = self.normalizeString(string: song.title)
+                songs.append(song)
             }
-        })
-        
-        query.resume()
+            
+            for var album in json.albums {
+                album.title = self.normalizeString(string: album.title)
+                albums.append(album)
+            }
+            
+            for var artist in json.artists {
+                artist.name = self.normalizeString(string: artist.name)
+                artists.append(artist)
+            }
+            
+            buildMaps()
+            
+            save()
+        } catch {
+            print("\(error)")
+        }
     }
     
     // MARK: Handle Initials
