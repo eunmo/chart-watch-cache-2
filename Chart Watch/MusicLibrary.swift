@@ -390,12 +390,21 @@ class MusicLibrary {
         return fullSongs
     }
     
+    func sortByTracks(songA: FullSong, songB: FullSong) -> Bool {
+        let a = songA.track!
+        let b = songB.track!
+        
+        return a.disk != b.disk ? a.disk < b.disk : a.track < b.track
+    }
+    
     func getSongs(by album: AlbumS) -> [FullSong] {
         var albumSongs = [FullSong]()
         
         for track in album.tracks {
             albumSongs.append(makeFullSong(song: songMap[track.id]!, track: track))
         }
+        
+        albumSongs.sort(by: sortByTracks)
         
         return albumSongs
     }
@@ -414,6 +423,8 @@ class MusicLibrary {
                     albumSongs.append(makeFullSong(song: song, track: track))
                 }
             }
+            
+            albumSongs.sort(by: sortByTracks)
             
             return albumSongs
         }
