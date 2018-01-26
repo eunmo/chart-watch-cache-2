@@ -101,6 +101,7 @@ class MusicLibrary {
     var songMap = [Int: Song]()
     var albumMap = [Int: Album]()
     var artistMap = [Int: Artist]()
+    var artistAlbums = [Int: [Int]]()
     var initials = [Character: [Artist]]()
     
     let downloader = Downloader()
@@ -148,6 +149,13 @@ class MusicLibrary {
         
         for artist in artists {
             artistMap[artist.id] = artist
+            artistAlbums[artist.id] = [Int]()
+        }
+        
+        for album in albums {
+            for artist in album.info.artists {
+                artistAlbums[artist]!.append(album.id)
+            }
         }
         
         var initial: Character
@@ -157,7 +165,16 @@ class MusicLibrary {
         }
         
         for (key, array) in initials {
-            initials[key] = array.sorted{ $0.nameNorm.lowercased() < $1.nameNorm.lowercased() }
+            initials[key] = array.sorted(by: {
+                let album0 = artistAlbums[$0.id]!.count
+                let album1 = artistAlbums[$1.id]!.count
+                
+                if album0 * album1 > 0 {
+                    return $0.nameNorm.lowercased() < $1.nameNorm.lowercased()
+                } else {
+                    return album0 > album1
+                }
+            })
         }
     }
     
@@ -276,6 +293,22 @@ class MusicLibrary {
         }
         
         return albums
+    }
+    
+    func getLatestAlbum(by artist: Artist) -> AlbumS? {
+        let albumIds = artistAlbums[artist.id]!
+        var albums = [AlbumS]()
+        
+        for albumId in albumIds {
+            albums.append(albumMap[albumId]!.info)
+        }
+        
+        if (albums.count > 0) {
+            albums.sort(by: { $0.release > $1.release })
+            return albums[0]
+        }
+        
+        return nil
     }
     
     func getAlbumsByArtist(artist: Artist) -> [AlbumS] {

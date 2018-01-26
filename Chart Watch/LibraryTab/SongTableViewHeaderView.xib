@@ -28,7 +28,7 @@
                             </constraints>
                         </imageView>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bRU-jy-ZNu">
-                            <rect key="frame" x="8" y="164" width="367" height="1"/>
+                            <rect key="frame" x="28" y="164" width="347" height="1"/>
                             <color key="backgroundColor" red="0.75406885150000003" green="0.75408679249999999" blue="0.75407713649999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="0.5" id="OTU-Zk-8MQ"/>
@@ -68,7 +68,7 @@
                         <constraint firstItem="4dt-IE-TQP" firstAttribute="leading" secondItem="abb-XG-Me1" secondAttribute="trailing" constant="8" id="nOC-4D-weW"/>
                         <constraint firstItem="IeP-Gp-Fc2" firstAttribute="top" secondItem="4dt-IE-TQP" secondAttribute="bottom" id="rZU-UR-SZD"/>
                         <constraint firstAttribute="trailingMargin" secondItem="IeP-Gp-Fc2" secondAttribute="trailing" id="ua6-fQ-trb"/>
-                        <constraint firstItem="bRU-jy-ZNu" firstAttribute="leading" secondItem="2UU-yX-KIm" secondAttribute="leadingMargin" id="yp6-GT-IVK"/>
+                        <constraint firstItem="bRU-jy-ZNu" firstAttribute="leading" secondItem="2UU-yX-KIm" secondAttribute="leadingMargin" constant="20" id="yp6-GT-IVK"/>
                         <constraint firstItem="abb-XG-Me1" firstAttribute="leading" secondItem="2UU-yX-KIm" secondAttribute="leadingMargin" id="zDD-I5-zdX"/>
                     </constraints>
                 </view>
@@ -86,6 +86,7 @@
                 <outlet property="releaseLabel" destination="wo9-Zu-xZs" id="i8D-qo-7SJ"/>
                 <outlet property="titleLabel" destination="4dt-IE-TQP" id="N7L-uh-UdR"/>
             </connections>
+            <point key="canvasLocation" x="24.5" y="51.5"/>
         </view>
     </objects>
 </document>

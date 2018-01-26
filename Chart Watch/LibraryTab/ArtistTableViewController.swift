@@ -30,6 +30,8 @@ class ArtistTableViewController: UITableViewController {
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         library = appDelegate.library
         artists = library!.getArtistsByInitial(initial: initial.first!)
+        
+        self.tableView.separatorInset = UIEdgeInsetsMake(0, 59, 0, 0)
     }
 
     override func didReceiveMemoryWarning() {
@@ -54,7 +56,9 @@ class ArtistTableViewController: UITableViewController {
 
         // Configure the cell...
         if let artistCell = cell as? ArtistTableViewCell {
-            artistCell.name = artists[indexPath.row].name
+            let artist = artists[indexPath.row]
+            artistCell.name = artist.name
+            artistCell.album = library!.getLatestAlbum(by: artist)
         }
 
         return cell

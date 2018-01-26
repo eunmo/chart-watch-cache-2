@@ -38,6 +38,14 @@ class SongTableViewHeaderView: UITableViewHeaderFooterView {
         }
     }
     
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        // Initialization code
+        
+        imageView.layer.masksToBounds = true
+        imageView.layer.cornerRadius = CGFloat(20)
+    }
+    
     static var nib: UINib {
         return UINib(nibName: identifier, bundle: nil)
     }

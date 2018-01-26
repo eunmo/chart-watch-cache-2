@@ -103,6 +103,10 @@ class SongTableViewController: UITableViewController {
         
         return nil
     }
+    
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return self.album != nil ? CGFloat(165) : CGFloat(0)
+    }
 
     /*
     // Override to support conditional editing of the table view.

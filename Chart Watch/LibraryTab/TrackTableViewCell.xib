@@ -30,13 +30,13 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9pu-mO-jUm">
-                        <rect key="frame" x="54" y="5" width="42" height="20.5"/>
+                        <rect key="frame" x="54" y="5" width="250" height="20.5"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="v99-1n-GbC">
-                        <rect key="frame" x="54" y="25.5" width="31" height="14.5"/>
+                        <rect key="frame" x="54" y="25.5" width="250" height="14.5"/>
                         <fontDescription key="fontDescription" type="system" pointSize="12"/>
                         <color key="textColor" red="0.75406885150000003" green="0.75408679249999999" blue="0.75407713649999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <nil key="highlightedColor"/>
@@ -46,9 +46,12 @@
                     <constraint firstItem="riK-Ly-9iZ" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="21o-ME-MwR"/>
                     <constraint firstItem="riK-Ly-9iZ" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="6HZ-85-LNx"/>
                     <constraint firstItem="9pu-mO-jUm" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="5" id="AOu-MH-BPa"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="v99-1n-GbC" secondAttribute="trailing" id="BkO-8W-bQl"/>
+                    <constraint firstItem="v99-1n-GbC" firstAttribute="trailing" secondItem="H2p-sc-9uM" secondAttribute="trailingMargin" id="FvQ-dZ-XMM"/>
                     <constraint firstItem="v99-1n-GbC" firstAttribute="top" secondItem="9pu-mO-jUm" secondAttribute="bottom" id="K5F-Fa-4mL"/>
                     <constraint firstItem="9pu-mO-jUm" firstAttribute="leading" secondItem="riK-Ly-9iZ" secondAttribute="trailing" constant="8" id="Phz-Uq-Ccn"/>
                     <constraint firstItem="v99-1n-GbC" firstAttribute="leading" secondItem="9pu-mO-jUm" secondAttribute="leading" id="T99-pJ-kfO"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="9pu-mO-jUm" secondAttribute="trailing" id="bzr-Qu-Axk"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>

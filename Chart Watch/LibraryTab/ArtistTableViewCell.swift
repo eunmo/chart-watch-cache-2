@@ -11,6 +11,7 @@ import UIKit
 class ArtistTableViewCell: UITableViewCell {
 
     @IBOutlet weak var nameLabel: UILabel!
+    @IBOutlet weak var albumView: UIImageView!
     
     var name: String? {
         didSet {
@@ -18,9 +19,24 @@ class ArtistTableViewCell: UITableViewCell {
         }
     }
     
+    var album: AlbumS? {
+        didSet {
+            if let a = album {
+                let imageUrl = MusicLibrary.getImageLocalUrl(a.id)
+                albumView.image = UIImage(contentsOfFile: imageUrl.path)
+            } else {
+                albumView.image = nil
+            }
+        }
+    }
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+        
+        let layer = albumView.layer
+        layer.masksToBounds = true
+        layer.cornerRadius = CGFloat(10)
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -36,5 +52,4 @@ class ArtistTableViewCell: UITableViewCell {
     static var identifier: String {
         return String(describing: self)
     }
-    
 }
