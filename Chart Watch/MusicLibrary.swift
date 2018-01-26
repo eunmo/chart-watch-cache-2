@@ -20,7 +20,7 @@ struct Track: Codable {
     let track: Int
 }
 
-struct Album: Codable {
+struct AlbumS: Codable {
     let id: Int
     let tracks: [Track]
     let artists: [Int]
@@ -28,6 +28,27 @@ struct Album: Codable {
     let format: String?
     let format2: String?
     let release: Date
+}
+
+class Album: Codable {
+    let info: AlbumS
+    var downloaded = false
+    
+    var id: Int {
+        get {
+            return info.id
+        }
+    }
+    
+    var title: String {
+        get {
+            return info.title
+        }
+    }
+    
+    init(info: AlbumS) {
+        self.info = info
+    }
 }
 
 struct Song: Codable {
@@ -46,7 +67,7 @@ struct ServerJSON: Decodable {
     let uncharted: [Int]
     let favorites: [Int]
     let songs: [Song]
-    let albums: [Album]
+    let albums: [AlbumS]
     let artists: [Artist]
 }
 
@@ -110,6 +131,7 @@ class MusicLibrary {
             self.albums = archive.albums
             self.artists = archive.artists
             buildMaps()
+            startDownload()
         } else {
             downloader.fetch(completion: parse)
         }
@@ -121,7 +143,7 @@ class MusicLibrary {
         }
         
         for album in albums {
-            albumMap[album.id] = album
+            albumMap[album.info.id] = album
         }
         
         for artist in artists {
@@ -154,8 +176,9 @@ class MusicLibrary {
                 songs.append(song)
             }
             
-            for var album in json.albums {
-                album.title = self.normalizeString(string: album.title)
+            for var albumS in json.albums {
+                albumS.title = self.normalizeString(string: albumS.title)
+                let album = Album(info: albumS)
                 albums.append(album)
             }
             
@@ -167,8 +190,45 @@ class MusicLibrary {
             buildMaps()
             
             save()
+            
+            startDownload()
         } catch {
             print("\(error)")
+        }
+    }
+    
+    // MARK: URLs
+    
+    static func getImageLocalUrl(_ id: Int) -> URL {
+        return MusicLibrary.DocumentsDirectory.appendingPathComponent("\(id).jpg")
+    }
+    
+    static func getMediaLocalUrl(_ id: Int) -> URL {
+        return MusicLibrary.DocumentsDirectory.appendingPathComponent("\(id).mp3")
+    }
+    
+    // MARK: Initiate Downloads
+    
+    func albumDownloadDone() -> Bool {
+        for album in albums {
+            if album.downloaded == false {
+                return false
+            }
+        }
+        
+        return true
+    }
+    
+    func startDownload() {
+        for album in albums {
+            if album.downloaded != true {
+                downloader.requestImage(id: album.id, callback: {
+                    album.downloaded = true
+                    if self.albumDownloadDone() {
+                        self.save()
+                    }
+                })
+            }
         }
     }
     
@@ -208,11 +268,21 @@ class MusicLibrary {
         return initials[initial]!.count > 0
     }
     
-    func getAlbumsByArtist(artist: Artist) -> [Album] {
+    func getAllAlbums() -> [AlbumS] {
+        var albums = [AlbumS]()
+        
+        for album in self.albums {
+            albums.append(album.info)
+        }
+        
+        return albums
+    }
+    
+    func getAlbumsByArtist(artist: Artist) -> [AlbumS] {
         var albumIdSet = Set<Int>()
         
         for album in albums {
-            if album.artists.contains(artist.id) {
+            if album.info.artists.contains(artist.id) {
                 albumIdSet.insert(album.id)
             }
         }
@@ -220,7 +290,7 @@ class MusicLibrary {
         for song in songs {
             if song.artists.contains(artist.id) || song.features.contains(artist.id) {
                 for album in albums {
-                    for track in album.tracks {
+                    for track in album.info.tracks {
                         if track.id == song.id {
                             albumIdSet.insert(album.id)
                         }
@@ -229,10 +299,10 @@ class MusicLibrary {
             }
         }
         
-        var artistAlbums = [Album]()
+        var artistAlbums = [AlbumS]()
         
         for albumId in albumIdSet {
-            artistAlbums.append(albumMap[albumId]!)
+            artistAlbums.append(albumMap[albumId]!.info)
         }
         
         return artistAlbums
@@ -275,7 +345,7 @@ class MusicLibrary {
         return fullSongs
     }
     
-    func getSongs(by album: Album) -> [FullSong] {
+    func getSongs(by album: AlbumS) -> [FullSong] {
         var albumSongs = [FullSong]()
         
         for track in album.tracks {
@@ -285,7 +355,7 @@ class MusicLibrary {
         return albumSongs
     }
     
-    func getSongs(by album: Album, filterBy artist: Artist) -> [FullSong] {
+    func getSongs(by album: AlbumS, filterBy artist: Artist) -> [FullSong] {
         
         if album.artists.contains(artist.id) {
             return getSongs(by: album)
