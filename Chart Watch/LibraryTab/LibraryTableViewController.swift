@@ -11,7 +11,7 @@ import UIKit
 class LibraryTableViewController: UITableViewController {
     
     let section1 = ["Artists", "Albums", "Songs"]
-    var library: MusicLibray?
+    var library: MusicLibrary?
 
     override func viewDidLoad() {
         super.viewDidLoad()

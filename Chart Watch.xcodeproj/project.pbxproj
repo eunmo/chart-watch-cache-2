@@ -123,8 +123,7 @@
 				5429FAB420179CD3001D2F63 /* TrackTableViewCell.swift */,
 				5429FAB520179CD3001D2F63 /* TrackTableViewCell.xib */,
 			);
-			name = LibraryTab;
-			path = "New Group";
+			path = LibraryTab;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

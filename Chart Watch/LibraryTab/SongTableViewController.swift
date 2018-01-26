@@ -11,9 +11,9 @@ import UIKit
 class SongTableViewController: UITableViewController {
     
     var artist: Artist?
-    var album: Album?
+    var album: AlbumS?
     var songs = [FullSong]()
-    var library: MusicLibray?
+    var library: MusicLibrary?
     var showTrack = false
 
     override func viewDidLoad() {
@@ -40,7 +40,6 @@ class SongTableViewController: UITableViewController {
             self.title = album.title
         } else {
             songs = library!.getSongs()
-            self.title = "Songs"
         }
         
         if showTrack {

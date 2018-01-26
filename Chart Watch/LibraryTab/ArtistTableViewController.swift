@@ -12,7 +12,7 @@ class ArtistTableViewController: UITableViewController {
     
     var initial: String = ""
     var artists = [Artist]()
-    var library: MusicLibray?
+    var library: MusicLibrary?
     
     override func viewDidLoad() {
         super.viewDidLoad()

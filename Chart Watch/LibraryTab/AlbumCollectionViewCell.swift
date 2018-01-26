@@ -11,10 +11,23 @@ import UIKit
 class AlbumCollectionViewCell: UICollectionViewCell {
     
     @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet weak var artistLabel: UILabel!
+    @IBOutlet weak var imageView: UIImageView!
     
-    var album: Album? {
+    var album: AlbumS? {
         didSet {
-            titleLabel.text = album?.title
+            if let a = album {
+                titleLabel.text = a.title
+                
+                let imageUrl = MusicLibrary.getImageLocalUrl(a.id)
+                imageView.image = UIImage(contentsOfFile: imageUrl.path)
+            }
+        }
+    }
+    
+    var artists: String? {
+        didSet {
+            artistLabel.text = artists
         }
     }
 

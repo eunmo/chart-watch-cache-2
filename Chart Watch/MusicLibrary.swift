@@ -308,6 +308,18 @@ class MusicLibrary {
         return artistAlbums
     }
     
+    func getAlbumArtistString(id: Int) -> String {
+        let album = albumMap[id]!
+        
+        var artistString = ""
+        for artistId in album.info.artists {
+            let artist = artistMap[artistId]!
+            artistString += (artistString == "") ? "\(artist.name)" : ", \(artist.name)"
+        }
+        
+        return artistString
+    }
+    
     func makeFullSong(song: Song, track: Track? = nil) -> FullSong {
         var songArtists = [Artist]()
         var songFeatures = [Artist]()

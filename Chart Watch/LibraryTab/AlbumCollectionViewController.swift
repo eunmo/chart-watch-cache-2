@@ -10,9 +10,9 @@ import UIKit
 
 class AlbumCollectionViewController: UICollectionViewController {
     
-    var albums = [Album]()
+    var albums = [AlbumS]()
     var artist: Artist?
-    var library: MusicLibray?
+    var library: MusicLibrary?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,8 +32,7 @@ class AlbumCollectionViewController: UICollectionViewController {
             self.title = a.name
             self.albums = library!.getAlbumsByArtist(artist: a)
         } else {
-            self.title = "Albums"
-            self.albums = library!.albums
+            self.albums = library!.getAllAlbums()
         }
         
         albums.sort(by: { $0.release > $1.release })
@@ -72,7 +71,9 @@ class AlbumCollectionViewController: UICollectionViewController {
     
         // Configure the cell
         if let albumCell = cell as? AlbumCollectionViewCell {
-            albumCell.album = albums[indexPath.row]
+            let album = albums[indexPath.row]
+            albumCell.album = album
+            albumCell.artists = library?.getAlbumArtistString(id: album.id)
         }
     
         return cell
