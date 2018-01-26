@@ -15,7 +15,9 @@ class SongTableViewController: UITableViewController {
     var songs = [FullSong]()
     var library: MusicLibrary?
     var showTrack = false
-
+    
+    @IBOutlet weak var navItem: UINavigationItem!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -27,6 +29,7 @@ class SongTableViewController: UITableViewController {
         
         self.tableView.register(SongTableViewCell.nib, forCellReuseIdentifier: SongTableViewCell.identifier)
         self.tableView.register(TrackTableViewCell.nib, forCellReuseIdentifier: TrackTableViewCell.identifier)
+        self.tableView.register(SongTableViewHeaderView.nib, forHeaderFooterViewReuseIdentifier: SongTableViewHeaderView.identifier)
         
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         library = appDelegate.library
@@ -37,7 +40,9 @@ class SongTableViewController: UITableViewController {
             } else {
                 songs = library!.getSongs(by: album)
             }
-            self.title = album.title
+            navItem.largeTitleDisplayMode = .never
+            self.title = ""
+            self.tableView.sectionHeaderHeight = CGFloat(165)
         } else {
             songs = library!.getSongs()
         }
@@ -85,6 +90,18 @@ class SongTableViewController: UITableViewController {
 
             return cell
         }
+    }
+    
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        if let album = self.album {
+            if let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SongTableViewHeaderView.identifier) as? SongTableViewHeaderView {
+                headerView.album = album
+                headerView.artists = library?.getAlbumArtistString(id: album.id)
+                return headerView
+            }
+        }
+        
+        return nil
     }
 
     /*

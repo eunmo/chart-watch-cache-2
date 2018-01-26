@@ -160,6 +160,10 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Songs" id="mFi-qS-8uS"/>
+                    <connections>
+                        <outlet property="navItem" destination="mFi-qS-8uS" id="QGW-G9-FGQ"/>
+                        <outlet property="navigationItem" destination="mFi-qS-8uS" id="U1m-hA-cal"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gFr-cw-ffw" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -220,7 +224,7 @@
         <image name="glyphicons-201-download" width="26" height="26"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="IBn-nd-ojm"/>
-        <segue reference="NJi-gu-kiK"/>
+        <segue reference="ISJ-i4-7KE"/>
+        <segue reference="QId-DK-kKf"/>
     </inferredMetricsTieBreakers>
 </document>
