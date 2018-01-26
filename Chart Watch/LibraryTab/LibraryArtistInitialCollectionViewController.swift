@@ -12,6 +12,7 @@ class LibraryArtistInitialCollectionViewController: UICollectionViewController {
     
     let initialOrder = Array("ㄱㄴㄷㄹㅁㅂㅅㅇㅈㅊㅋㅌㅍㅎABCDEFGHIJKLMNOPQRSTUVWXYZ#")
     var initials = [Character]()
+    var counts = [Int]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,8 +29,10 @@ class LibraryArtistInitialCollectionViewController: UICollectionViewController {
         let library = appDelegate.library
         
         for char in initialOrder {
-            if library.checkInitialExists(initial: char) {
+            let count = library.getInitialCount(initial: char)
+            if count > 0 {
                 initials.append(char)
+                counts.append(count)
             }
         }
     }
@@ -67,6 +70,7 @@ class LibraryArtistInitialCollectionViewController: UICollectionViewController {
         
         if let initialCell = cell as? LibraryArtistInitialCollectionViewCell {
             initialCell.initial = initials[indexPath.row]
+            initialCell.count = counts[indexPath.row]
         }
     
         // Configure the cell

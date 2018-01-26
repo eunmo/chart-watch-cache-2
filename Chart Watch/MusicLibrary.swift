@@ -281,8 +281,8 @@ class MusicLibrary {
         return initials[initial]!
     }
     
-    func checkInitialExists(initial: Character) -> Bool {
-        return initials[initial]!.count > 0
+    func getInitialCount(initial: Character) -> Int {
+        return initials[initial]!.count
     }
     
     func getAllAlbums() -> [AlbumS] {

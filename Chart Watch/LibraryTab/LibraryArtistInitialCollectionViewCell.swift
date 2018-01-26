@@ -11,10 +11,17 @@ import UIKit
 class LibraryArtistInitialCollectionViewCell: UICollectionViewCell {
 
     @IBOutlet weak var initialLabel: UILabel!
+    @IBOutlet weak var countLabel: UILabel!
     
     var initial: Character? {
         didSet {
             initialLabel.text = "\(initial!)"
+        }
+    }
+    
+    var count: Int? {
+        didSet {
+            countLabel.text = "\(count!)"
         }
     }
     
