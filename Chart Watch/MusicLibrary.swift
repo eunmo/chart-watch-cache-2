@@ -51,7 +51,7 @@ class Album: Codable {
     }
 }
 
-struct Song: Codable {
+struct SongS: Codable {
     let id: Int
     var title: String
     let plays: Int
@@ -60,13 +60,36 @@ struct Song: Codable {
     let features: [Int]
 }
 
+class Song: Codable {
+    let info: SongS
+    var playCount: Int?
+    var lastPlayed: Date?
+    var downloaded = false
+    
+    var id: Int {
+        get {
+            return info.id
+        }
+    }
+    
+    var title: String {
+        get {
+            return info.title
+        }
+    }
+    
+    init(info: SongS) {
+        self.info = info
+    }
+}
+
 struct ServerJSON: Decodable {
     let singleCharts: [Int]
     let albumCharts: [Int]
     let charted: [Int]
     let uncharted: [Int]
     let favorites: [Int]
-    let songs: [Song]
+    let songs: [SongS]
     let albums: [AlbumS]
     let artists: [Artist]
 }
@@ -140,16 +163,18 @@ class MusicLibrary {
     
     func load() {
         if let data = NSKeyedUnarchiver.unarchiveObject(withFile: MusicLibrary.ArchiveURL.path) as? Data {
-            let archive = try! PropertyListDecoder().decode(Archive.self, from: data)
-            self.songs = archive.songs
-            self.albums = archive.albums
-            self.artists = archive.artists
-            self.playlists = archive.playlists
-            buildMaps()
-            startDownload()
-        } else {
-            downloader.fetch(completion: parse)
+            if let archive = try? PropertyListDecoder().decode(Archive.self, from: data) {
+                self.songs = archive.songs
+                self.albums = archive.albums
+                self.artists = archive.artists
+                self.playlists = archive.playlists
+                buildMaps()
+                startDownload()
+                return
+            }
         }
+        
+        downloader.fetch(completion: parse)
     }
     
     func buildMaps() {
@@ -212,8 +237,9 @@ class MusicLibrary {
             decoder.dateDecodingStrategy = .formatted(dateFormatter)
             let json = try decoder.decode(ServerJSON.self, from: data)
             
-            for var song in json.songs {
-                song.title = self.normalizeString(string: song.title)
+            for var songS in json.songs {
+                songS.title = self.normalizeString(string: songS.title)
+                let song = Song(info: songS)
                 songs.append(song)
             }
             
@@ -256,9 +282,15 @@ class MusicLibrary {
     
     // MARK: Initiate Downloads
     
-    func albumDownloadDone() -> Bool {
+    func downloadDone() -> Bool {
         for album in albums {
             if album.downloaded == false {
+                return false
+            }
+        }
+        
+        for song in songs {
+            if song.downloaded == false {
                 return false
             }
         }
@@ -269,10 +301,32 @@ class MusicLibrary {
     func startDownload() {
         for album in albums {
             if album.downloaded != true {
+                if FileManager.default.fileExists(atPath: MusicLibrary.getImageLocalUrl(album.id).path) {
+                    album.downloaded = true
+                    continue
+                }
+                
                 downloader.requestImage(id: album.id, callback: {
                     album.downloaded = true
-                    if self.albumDownloadDone() {
-                        print("all albums downloaded")
+                    if self.downloadDone() {
+                        print("all files downloaded")
+                        self.save()
+                    }
+                })
+            }
+        }
+        
+        for song in songs {
+            if song.downloaded != true {
+                if FileManager.default.fileExists(atPath: MusicLibrary.getMediaLocalUrl(song.id).path) {
+                    song.downloaded = true
+                    continue
+                }
+                
+                downloader.requestMedia(id: song.id, callback: {
+                    song.downloaded = true
+                    if self.downloadDone() {
+                        print("all files downloaded")
                         self.save()
                     }
                 })
@@ -352,7 +406,7 @@ class MusicLibrary {
         }
         
         for song in songs {
-            if song.artists.contains(artist.id) || song.features.contains(artist.id) {
+            if song.info.artists.contains(artist.id) || song.info.features.contains(artist.id) {
                 for album in albums {
                     for track in album.info.tracks {
                         if track.id == song.id {
@@ -384,7 +438,7 @@ class MusicLibrary {
         return artistString
     }
     
-    func makeFullSong(song: Song, track: Track? = nil, album: AlbumS? = nil) -> FullSong {
+    func makeFullSong(song: SongS, track: Track? = nil, album: AlbumS? = nil) -> FullSong {
         var songArtists = [Artist]()
         var songFeatures = [Artist]()
         var artist: Artist
@@ -417,7 +471,7 @@ class MusicLibrary {
         var fullSongs = [FullSong]()
         
         for song in songs {
-            fullSongs.append(makeFullSong(song: song))
+            fullSongs.append(makeFullSong(song: song.info))
         }
         
         return fullSongs
@@ -434,7 +488,7 @@ class MusicLibrary {
         var albumSongs = [FullSong]()
         
         for track in album.tracks {
-            albumSongs.append(makeFullSong(song: songMap[track.id]!, track: track, album: album))
+            albumSongs.append(makeFullSong(song: songMap[track.id]!.info, track: track, album: album))
         }
         
         albumSongs.sort(by: sortByTracks)
@@ -452,8 +506,8 @@ class MusicLibrary {
             for track in album.tracks {
                 let song = songMap[track.id]!
                 
-                if song.artists.contains(artist.id) || song.features.contains(artist.id) {
-                    albumSongs.append(makeFullSong(song: song, track: track, album: album))
+                if song.info.artists.contains(artist.id) || song.info.features.contains(artist.id) {
+                    albumSongs.append(makeFullSong(song: song.info, track: track, album: album))
                 }
             }
             
@@ -498,7 +552,7 @@ class MusicLibrary {
         var playlistSongs = [FullSong]()
         
         for songId in playlist.list {
-            playlistSongs.append(makeFullSong(song: songMap[songId]!))
+            playlistSongs.append(makeFullSong(song: songMap[songId]!.info))
         }
         
         return playlistSongs

@@ -20,7 +20,7 @@ class TrackTableViewController: UITableViewController {
     var songs = [FullSong]()
     var disks = [Disk]()
     var library: MusicLibrary?
-    var player: Player?
+    var player: MusicPlayer?
     
     var min: Int?
     var max: Int?

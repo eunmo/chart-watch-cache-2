@@ -13,7 +13,7 @@ class SongTableViewController: UITableViewController {
     var songs = [FullSong]()
     var playlist: Playlist?
     var library: MusicLibrary?
-    var player: Player?
+    var player: MusicPlayer?
     
     override func viewDidLoad() {
         super.viewDidLoad()

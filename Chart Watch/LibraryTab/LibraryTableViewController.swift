@@ -26,12 +26,24 @@ class LibraryTableViewController: UITableViewController {
         self.tableView.register(LibraryBasicTableViewCell.nib, forCellReuseIdentifier: LibraryBasicTableViewCell.identifier)
         self.tableView.register(LibraryPlaylistTableViewCell.nib, forCellReuseIdentifier: LibraryPlaylistTableViewCell.identifier)
         
+        NotificationCenter.default.addObserver(self, selector: #selector(LibraryTableViewController.receiveNotification), name: NSNotification.Name(rawValue: Downloader.notificationKey), object: nil)
+        
         self.tableView.rowHeight = UITableViewAutomaticDimension
         self.tableView.estimatedRowHeight = 66.0
         
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         library = appDelegate.library
         playlists = library!.playlists
+    }
+    
+    func update() {
+        tableView.reloadData()
+    }
+    
+    @objc func receiveNotification() {
+        DispatchQueue.main.async(execute: { () -> Void in
+            self.update()
+        })
     }
 
     override func didReceiveMemoryWarning() {
@@ -53,8 +65,18 @@ class LibraryTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.section == 0 {
-            if let cell = tableView.dequeueReusableCell(withIdentifier: LibraryBasicTableViewCell.identifier, for: indexPath) as? LibraryBasicTableViewCell {
-                cell.title = "\(section1[indexPath.row])"
+            if let cell = tableView.dequeueReusableCell(withIdentifier: LibraryBasicTableViewCell.identifier, for: indexPath) as?   LibraryBasicTableViewCell {
+                if indexPath.row == 3 {
+                    let (done, all) = library!.downloader.getStatus()
+                    
+                    if done != all {
+                        cell.title = "Downloading... \(done)/\(all)"
+                    } else {
+                        cell.title = (all == 0) ? "" : "Download Done"
+                    }
+                } else {
+                    cell.title = "\(section1[indexPath.row])"
+                }
                 return cell
             }
         } else if indexPath.section == 1 {

@@ -7,11 +7,15 @@
 //
 
 import Foundation
+import AVFoundation
+import MediaPlayer
 
-class Player {
+class MusicPlayer {
+    
     var playing = false
     var currentSong: FullSong?
     var nextSongs = [FullSong]()
+    var player = AVAudioPlayer()
     
     static let updateNotificationKey = "PlayerUpdateNotificationKey"
     
@@ -37,6 +41,22 @@ class Player {
     }
     
     func notify() {
-        NotificationCenter.default.post(name: Notification.Name(rawValue: Player.updateNotificationKey), object: self)
+        NotificationCenter.default.post(name: Notification.Name(rawValue: MusicPlayer.updateNotificationKey), object: self)
+    }
+    
+    func play() {
+        
+    }
+    
+    func pause() {
+        
+    }
+    
+    func skip() {
+        
+    }
+    
+    func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
+        
     }
 }

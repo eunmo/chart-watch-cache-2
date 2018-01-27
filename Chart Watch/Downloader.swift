@@ -28,6 +28,8 @@ class Downloader {
     let serverAddress = "http://192.168.219.137:3000"
     let simultaneousDownloadLimit = 8
     
+    static let notificationKey = "DownloaderNotificationKey"
+    
     class DownloadRequest {
         let id: Int
         var type: DownloadType
@@ -117,6 +119,7 @@ class Downloader {
                     if success {
                         request.status = .done
                         request.callback()
+                        self.notify()
                     } else {
                         request.status = .failed
                     }
@@ -136,5 +139,29 @@ class Downloader {
         let request = DownloadRequest(id: id, type: .image, callback: callback, localUrl: localUrl, serverUrl: serverUrl)
         requests.append(request)
         resume()
+    }
+    
+    func requestMedia(id: Int, callback: @escaping () -> Void) {
+        let localUrl = MusicLibrary.getMediaLocalUrl(id)
+        let serverUrl = URL(string: "\(serverAddress)/music/\(id).mp3")!
+        let request = DownloadRequest(id: id, type: .image, callback: callback, localUrl: localUrl, serverUrl: serverUrl)
+        requests.append(request)
+        resume()
+    }
+    
+    func getStatus() -> (Int, Int) {
+        var doneCount = 0;
+        
+        for request in requests {
+            if request.status == .done {
+                doneCount += 1
+            }
+        }
+        
+        return (doneCount, requests.count)
+    }
+    
+    func notify() {
+        NotificationCenter.default.post(name: Notification.Name(rawValue: Downloader.notificationKey), object: self)
     }
 }

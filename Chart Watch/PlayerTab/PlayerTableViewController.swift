@@ -20,7 +20,7 @@ class PlayerTableViewController: UITableViewController {
     @IBOutlet weak var separatorView: UIView!
     
     var library: MusicLibrary?
-    var player: Player?
+    var player: MusicPlayer?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,7 +33,7 @@ class PlayerTableViewController: UITableViewController {
         
         self.tableView.register(SongTableViewCell.nib, forCellReuseIdentifier: SongTableViewCell.identifier)
         
-        NotificationCenter.default.addObserver(self, selector: #selector(PlayerTableViewController.receiveNotification), name: NSNotification.Name(rawValue: Player.updateNotificationKey), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(PlayerTableViewController.receiveNotification), name: NSNotification.Name(rawValue: MusicPlayer.updateNotificationKey), object: nil)
         
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         library = appDelegate.library
