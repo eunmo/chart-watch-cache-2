@@ -77,7 +77,7 @@ struct FullSong {
     let artists: [Artist]
     let features: [Artist]
     let artistString: String
-    let album: Album?
+    let album: AlbumS?
     let track: Track?
 }
 
@@ -384,7 +384,7 @@ class MusicLibrary {
         return artistString
     }
     
-    func makeFullSong(song: Song, track: Track? = nil) -> FullSong {
+    func makeFullSong(song: Song, track: Track? = nil, album: AlbumS? = nil) -> FullSong {
         var songArtists = [Artist]()
         var songFeatures = [Artist]()
         var artist: Artist
@@ -406,9 +406,9 @@ class MusicLibrary {
             artistString += " feat. \(featureString)"
         }
         
-        let album = albumMap[songAlbums[song.id]![0]]!
+        let songAlbum = album != nil ? album : albumMap[songAlbums[song.id]![0]]!.info
         
-        let fullSong = FullSong(id: song.id, title: song.title, artists: songArtists, features: songFeatures, artistString: artistString, album: album, track: track)
+        let fullSong = FullSong(id: song.id, title: song.title, artists: songArtists, features: songFeatures, artistString: artistString, album: songAlbum, track: track)
         
         return fullSong
     }
@@ -434,7 +434,7 @@ class MusicLibrary {
         var albumSongs = [FullSong]()
         
         for track in album.tracks {
-            albumSongs.append(makeFullSong(song: songMap[track.id]!, track: track))
+            albumSongs.append(makeFullSong(song: songMap[track.id]!, track: track, album: album))
         }
         
         albumSongs.sort(by: sortByTracks)
@@ -453,7 +453,7 @@ class MusicLibrary {
                 let song = songMap[track.id]!
                 
                 if song.artists.contains(artist.id) || song.features.contains(artist.id) {
-                    albumSongs.append(makeFullSong(song: song, track: track))
+                    albumSongs.append(makeFullSong(song: song, track: track, album: album))
                 }
             }
             

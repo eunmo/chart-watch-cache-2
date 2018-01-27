@@ -20,6 +20,7 @@ class TrackTableViewController: UITableViewController {
     var songs = [FullSong]()
     var disks = [Disk]()
     var library: MusicLibrary?
+    var player: Player?
     
     var min: Int?
     var max: Int?
@@ -41,6 +42,7 @@ class TrackTableViewController: UITableViewController {
         
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         library = appDelegate.library
+        player = appDelegate.player
         
         if let album = self.album {
             if let artist = self.artist {
@@ -130,6 +132,40 @@ class TrackTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return section == 0 ? "" : "DISK \(disks[section - 1].num)"
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let song = disks[indexPath.section - 1].songs[indexPath.row]
+        
+        let playSongAction = UIAlertAction(title: "Play Now", style: .destructive) { (action) in
+            self.player?.playNow(song)
+            self.tabBarController?.selectedIndex = 1
+        }
+        
+        let addSongsAction = UIAlertAction(title: "Add Songs", style: .default) { (action) in
+            var newSongs = [FullSong]()
+            
+            for index in indexPath.row..<self.disks[indexPath.section - 1].songs.count {
+                newSongs.append(self.disks[indexPath.section - 1].songs[index])
+            }
+            
+            for section in (indexPath.section)..<self.disks.count {
+                newSongs.append(contentsOf: self.disks[section].songs)
+            }
+            
+            self.player?.addSongs(newSongs)
+            self.tabBarController?.selectedIndex = 1
+        }
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (action) in
+            print("cancel!")
+        }
+        
+        let alert = UIAlertController(title: song.title, message: "", preferredStyle: .actionSheet)
+        alert.addAction(playSongAction)
+        alert.addAction(addSongsAction)
+        alert.addAction(cancelAction)
+        self.present(alert, animated: true)
     }
 
     /*

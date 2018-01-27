@@ -1,17 +1,24 @@
 //
-//  SongTableViewController.swift
+//  PlayerTableViewController.swift
 //  Chart Watch
 //
-//  Created by Eunmo Yang on 1/23/18.
+//  Created by Eunmo Yang on 1/27/18.
 //  Copyright © 2018 Eunmo Yang. All rights reserved.
 //
 
 import UIKit
 
-class SongTableViewController: UITableViewController {
+class PlayerTableViewController: UITableViewController {
+
+    @IBOutlet weak var imageView: UIImageView!
+    @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet weak var artistLabel: UILabel!
+    @IBOutlet weak var playButton: UIButton!
+    @IBOutlet weak var pauseButton: UIButton!
+    @IBOutlet weak var skipButton: UIButton!
+    @IBOutlet weak var nextUpLabel: UILabel!
+    @IBOutlet weak var separatorView: UIView!
     
-    var songs = [FullSong]()
-    var playlist: Playlist?
     var library: MusicLibrary?
     var player: Player?
     
@@ -26,18 +33,47 @@ class SongTableViewController: UITableViewController {
         
         self.tableView.register(SongTableViewCell.nib, forCellReuseIdentifier: SongTableViewCell.identifier)
         
+        NotificationCenter.default.addObserver(self, selector: #selector(PlayerTableViewController.receiveNotification), name: NSNotification.Name(rawValue: Player.updateNotificationKey), object: nil)
+        
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         library = appDelegate.library
         player = appDelegate.player
         
-        if let pl = playlist {
-            songs = library!.getPlaylistSongs(pl)
-            self.title = pl.name
-        } else {
-            songs = library!.getSongs().sorted(by: { $0.id > $1.id })
-        }
+        imageView.layer.masksToBounds = true
+        imageView.layer.cornerRadius = CGFloat(20)
+        
+        pauseButton.isHidden = true
         
         self.tableView.separatorInset = UIEdgeInsetsMake(0, 59, 0, 0)
+        
+        updateTopView()
+    }
+    
+    func updateTopView() {
+        if let currentSong = player?.currentSong {
+            let imageUrl = MusicLibrary.getImageLocalUrl(currentSong.album!.id)
+            imageView.image = UIImage(contentsOfFile: imageUrl.path)
+            titleLabel.text = currentSong.title
+            artistLabel.text = currentSong.artistString
+        }
+        
+        let noMoreSongs = (player!.nextSongs.count == 0)
+        nextUpLabel.isHidden = noMoreSongs
+        separatorView.isHidden = noMoreSongs
+        if noMoreSongs == false {
+            nextUpLabel.text = "Next Up: \(player!.nextSongs.count)"
+        }
+    }
+    
+    func update() {
+        updateTopView()
+        tableView.reloadData()
+    }
+    
+    @objc func receiveNotification() {
+        DispatchQueue.main.async(execute: { () -> Void in
+            self.update()
+        })
     }
 
     override func didReceiveMemoryWarning() {
@@ -54,7 +90,7 @@ class SongTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return songs.count
+        return player!.nextSongs.count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -62,42 +98,10 @@ class SongTableViewController: UITableViewController {
 
         // Configure the cell...
         if let songCell = cell as? SongTableViewCell {
-            songCell.song = songs[indexPath.row]
+            songCell.song = player?.nextSongs[indexPath.row]
         }
 
         return cell
-    }
-    
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let song = songs[indexPath.row]
-        
-        let playSongAction = UIAlertAction(title: "Play Now", style: .destructive) { (action) in
-            self.player?.playNow(song)
-            self.tabBarController?.selectedIndex = 1
-        }
-        
-        let addSongsAction = UIAlertAction(title: "Add Songs", style: .default) { (action) in
-            var newSongs = [FullSong]()
-            
-            for index in indexPath.row..<self.songs.count {
-                newSongs.append(self.songs[index])
-            }
-            
-            self.player?.addSongs(newSongs)
-            self.tabBarController?.selectedIndex = 1
-        }
-        
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (action) in
-            print("cancel!")
-        }
-        
-        let alert = UIAlertController(title: song.title, message: "", preferredStyle: .actionSheet)
-        alert.addAction(playSongAction)
-        if self.playlist?.name == "Current Singles" {
-            alert.addAction(addSongsAction)
-        }
-        alert.addAction(cancelAction)
-        self.present(alert, animated: true)
     }
 
     /*
@@ -144,5 +148,15 @@ class SongTableViewController: UITableViewController {
         // Pass the selected object to the new view controller.
     }
     */
-
+    
+    @IBAction func playButtonPressed(_ sender: UIButton) {
+        playButton.isHidden = true
+        pauseButton.isHidden = false
+    }
+    
+    @IBAction func pauseButtonPressed(_ sender: UIButton) {
+        playButton.isHidden = false
+        pauseButton.isHidden = true
+    }
+    
 }

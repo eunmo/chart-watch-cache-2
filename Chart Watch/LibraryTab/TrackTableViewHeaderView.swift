@@ -26,8 +26,7 @@ class TrackTableViewHeaderView: UITableViewHeaderFooterView {
                 releaseLabel.text = "\(dateFormatter.string(from: a.release))"
                 
                 let imageUrl = MusicLibrary.getImageLocalUrl(a.id)
-                let image = UIImage(contentsOfFile: imageUrl.path)
-                imageView.image = image
+                imageView.image = UIImage(contentsOfFile: imageUrl.path)
             }
         }
     }
