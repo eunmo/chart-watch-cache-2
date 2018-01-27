@@ -79,7 +79,6 @@ struct FullSong {
     let artistString: String
     let album: Album?
     let track: Track?
-    let order: Int?
 }
 
 struct Archive: Codable {
@@ -407,7 +406,9 @@ class MusicLibrary {
             artistString += " feat. \(featureString)"
         }
         
-        let fullSong = FullSong(id: song.id, title: song.title, artists: songArtists, features: songFeatures, artistString: artistString, album: nil, track: track, order: nil)
+        let album = albumMap[songAlbums[song.id]![0]]!
+        
+        let fullSong = FullSong(id: song.id, title: song.title, artists: songArtists, features: songFeatures, artistString: artistString, album: album, track: track)
         
         return fullSong
     }

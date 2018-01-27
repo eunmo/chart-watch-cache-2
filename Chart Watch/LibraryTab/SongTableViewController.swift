@@ -34,6 +34,8 @@ class SongTableViewController: UITableViewController {
         } else {
             songs = library!.getSongs()
         }
+        
+        self.tableView.separatorInset = UIEdgeInsetsMake(0, 59, 0, 0)
     }
 
     override func didReceiveMemoryWarning() {

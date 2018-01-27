@@ -12,17 +12,27 @@ class SongTableViewCell: UITableViewCell {
 
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var artistLabel: UILabel!
+    @IBOutlet weak var albumView: UIImageView!
     
     var song: FullSong? {
         didSet {
             titleLabel.text = song?.title
             artistLabel.text = song?.artistString
+            
+            if let a = song?.album {
+                let imageUrl = MusicLibrary.getImageLocalUrl(a.id)
+                albumView.image = UIImage(contentsOfFile: imageUrl.path)
+            }
         }
     }
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        
         // Initialization code
+        let layer = albumView.layer
+        layer.masksToBounds = true
+        layer.cornerRadius = CGFloat(10)
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
