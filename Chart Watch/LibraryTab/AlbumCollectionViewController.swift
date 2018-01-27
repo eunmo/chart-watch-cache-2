@@ -12,6 +12,7 @@ class AlbumCollectionViewController: UICollectionViewController {
     
     var albums = [AlbumS]()
     var artist: Artist?
+    var playlist: Playlist?
     var library: MusicLibrary?
 
     override func viewDidLoad() {
@@ -28,7 +29,10 @@ class AlbumCollectionViewController: UICollectionViewController {
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         library = appDelegate.library
         
-        if let a = artist {
+        if let pl = playlist {
+            self.title = pl.name
+            self.albums = library!.getPlaylistAlbums(pl)
+        } else if let a = artist {
             self.title = a.name
             self.albums = library!.getAlbumsByArtist(artist: a)
         } else {

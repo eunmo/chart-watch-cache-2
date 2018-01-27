@@ -10,7 +10,8 @@ import UIKit
 
 class LibraryTableViewController: UITableViewController {
     
-    let section1 = ["Artists", "Albums", "Songs"]
+    let section1 = ["Artists", "Albums", "Songs", ""]
+    var playlists = [Playlist]()
     var library: MusicLibrary?
 
     override func viewDidLoad() {
@@ -23,9 +24,14 @@ class LibraryTableViewController: UITableViewController {
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
         
         self.tableView.register(LibraryBasicTableViewCell.nib, forCellReuseIdentifier: LibraryBasicTableViewCell.identifier)
+        self.tableView.register(LibraryPlaylistTableViewCell.nib, forCellReuseIdentifier: LibraryPlaylistTableViewCell.identifier)
+        
+        self.tableView.rowHeight = UITableViewAutomaticDimension
+        self.tableView.estimatedRowHeight = 66.0
         
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         library = appDelegate.library
+        playlists = library!.playlists
     }
 
     override func didReceiveMemoryWarning() {
@@ -37,19 +43,27 @@ class LibraryTableViewController: UITableViewController {
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return 1
+        return 2
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return 3
+        return section == 0 ? section1.count : playlists.count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        if let cell = tableView.dequeueReusableCell(withIdentifier: LibraryBasicTableViewCell.identifier, for: indexPath) as? LibraryBasicTableViewCell {
-            cell.title = "\(section1[indexPath.row])"
-            return cell
+        if indexPath.section == 0 {
+            if let cell = tableView.dequeueReusableCell(withIdentifier: LibraryBasicTableViewCell.identifier, for: indexPath) as? LibraryBasicTableViewCell {
+                cell.title = "\(section1[indexPath.row])"
+                return cell
+            }
+        } else if indexPath.section == 1 {
+            if let cell = tableView.dequeueReusableCell(withIdentifier: LibraryPlaylistTableViewCell.identifier, for: indexPath) as? LibraryPlaylistTableViewCell {
+                let playlist = playlists[indexPath.row]
+                cell.title = playlist.name
+                cell.albumIds = library?.getPlaylistAlbumIds(playlist)
+                return cell
+            }
         }
         
         return UITableViewCell()
@@ -70,6 +84,26 @@ class LibraryTableViewController: UITableViewController {
             default:
                 break
             }
+        } else if indexPath.section == 1 {
+            let playlist = playlists[indexPath.row]
+            
+            switch playlist.playlistType {
+            case .albumPlaylist:
+                performSegue(withIdentifier: "LibraryAlbumSegue", sender: self)
+                break
+            case .songPlaylist:
+                performSegue(withIdentifier: "LibrarySongSegue", sender: self)
+                break
+            }
+        }
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        switch indexPath.section {
+        case 1:
+            return 78.0
+        default:
+            return 44.0
         }
     }
 
@@ -108,4 +142,22 @@ class LibraryTableViewController: UITableViewController {
     }
     */
 
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        // Get the new view controller using segue.destinationViewController.
+        // Pass the selected object to the new view controller.
+        if let identifier = segue.identifier, let indexPath = tableView.indexPathForSelectedRow, indexPath.section == 1 {
+            switch identifier {
+            case "LibraryAlbumSegue":
+                if let vc = segue.destination as? AlbumCollectionViewController {
+                    vc.playlist = playlists[indexPath.row]
+                }
+            case "LibrarySongSegue":
+                if let vc = segue.destination as? SongTableViewController {
+                    vc.playlist = playlists[indexPath.row]
+                }
+            default:
+                break
+            }
+        }
+    }
 }

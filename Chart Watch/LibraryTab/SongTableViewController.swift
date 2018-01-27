@@ -11,6 +11,7 @@ import UIKit
 class SongTableViewController: UITableViewController {
     
     var songs = [FullSong]()
+    var playlist: Playlist?
     var library: MusicLibrary?
     
     override func viewDidLoad() {
@@ -27,7 +28,12 @@ class SongTableViewController: UITableViewController {
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         library = appDelegate.library
         
-        songs = library!.getSongs()
+        if let pl = playlist {
+            songs = library!.getPlaylistSongs(pl)
+            self.title = pl.name
+        } else {
+            songs = library!.getSongs()
+        }
     }
 
     override func didReceiveMemoryWarning() {

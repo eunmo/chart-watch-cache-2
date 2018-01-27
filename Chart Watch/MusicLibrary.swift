@@ -86,6 +86,18 @@ struct Archive: Codable {
     let songs: [Song]
     let albums: [Album]
     let artists: [Artist]
+    let playlists: [Playlist]
+}
+
+enum PlaylistType: Int, Codable {
+    case albumPlaylist
+    case songPlaylist
+}
+
+struct Playlist: Codable {
+    let playlistType: PlaylistType
+    let name: String
+    let list: [Int]
 }
 
 class MusicLibrary {
@@ -95,6 +107,7 @@ class MusicLibrary {
     var songs = [Song]()
     var albums = [Album]()
     var artists = [Artist]()
+    var playlists = [Playlist]()
     
     // MARK: indexed map
     
@@ -102,6 +115,7 @@ class MusicLibrary {
     var albumMap = [Int: Album]()
     var artistMap = [Int: Artist]()
     var artistAlbums = [Int: [Int]]()
+    var songAlbums = [Int: [Int]]()
     var initials = [Character: [Artist]]()
     
     let downloader = Downloader()
@@ -120,7 +134,7 @@ class MusicLibrary {
     }
     
     func save() {
-        let archive = Archive(songs: songs, albums: albums, artists: artists)
+        let archive = Archive(songs: songs, albums: albums, artists: artists, playlists: playlists)
         let data = try! PropertyListEncoder().encode(archive)
         NSKeyedArchiver.archiveRootObject(data, toFile: MusicLibrary.ArchiveURL.path)
     }
@@ -131,6 +145,7 @@ class MusicLibrary {
             self.songs = archive.songs
             self.albums = archive.albums
             self.artists = archive.artists
+            self.playlists = archive.playlists
             buildMaps()
             startDownload()
         } else {
@@ -141,6 +156,7 @@ class MusicLibrary {
     func buildMaps() {
         for song in songs {
             songMap[song.id] = song
+            songAlbums[song.id] = [Int]()
         }
         
         for album in albums {
@@ -155,6 +171,9 @@ class MusicLibrary {
         for album in albums {
             for artist in album.info.artists {
                 artistAlbums[artist]!.append(album.id)
+            }
+            for track in album.info.tracks {
+                songAlbums[track.id]!.append(album.id)
             }
         }
         
@@ -174,6 +193,12 @@ class MusicLibrary {
                 } else {
                     return album0 > album1
                 }
+            })
+        }
+        
+        for (key, array) in songAlbums {
+            songAlbums[key] = array.sorted(by: { (a, b) -> Bool in
+                return albumMap[a]!.info.release > albumMap[b]!.info.release
             })
         }
     }
@@ -203,6 +228,12 @@ class MusicLibrary {
                 artist.name = self.normalizeString(string: artist.name)
                 artists.append(artist)
             }
+            
+            playlists.append(Playlist(playlistType: .songPlaylist, name: "Current Singles", list: json.singleCharts))
+            playlists.append(Playlist(playlistType: .albumPlaylist, name: "Current Albums", list: json.albumCharts))
+            playlists.append(Playlist(playlistType: .songPlaylist, name: "Charted Songs", list: json.charted))
+            playlists.append(Playlist(playlistType: .songPlaylist, name: "Uncharted Songs", list: json.uncharted))
+            playlists.append(Playlist(playlistType: .albumPlaylist, name: "Favorite Artists", list: json.favorites))
             
             buildMaps()
             
@@ -242,6 +273,7 @@ class MusicLibrary {
                 downloader.requestImage(id: album.id, callback: {
                     album.downloaded = true
                     if self.albumDownloadDone() {
+                        print("all albums downloaded")
                         self.save()
                     }
                 })
@@ -428,5 +460,46 @@ class MusicLibrary {
             
             return albumSongs
         }
+    }
+    
+    func getPlaylistAlbumIds(_ playlist: Playlist) -> [Int] {
+        if playlist.playlistType == .albumPlaylist {
+            return playlist.list
+        }
+        
+        var albums = [Int]()
+        
+        for songId in playlist.list {
+            let albumId = songAlbums[songId]![0]
+            if albums.last != albumId {
+                albums.append(albumId)
+            }
+        }
+        
+        return albums
+    }
+    
+    func getPlaylistAlbums(_ playlist: Playlist) -> [AlbumS] {
+        if playlist.playlistType != .albumPlaylist {
+            return [AlbumS]()
+        }
+        
+        var albums = [AlbumS]()
+        
+        for albumId in playlist.list {
+            albums.append(albumMap[albumId]!.info)
+        }
+        
+        return albums
+    }
+    
+    func getPlaylistSongs(_ playlist: Playlist) -> [FullSong] {
+        var playlistSongs = [FullSong]()
+        
+        for songId in playlist.list {
+            playlistSongs.append(makeFullSong(song: songMap[songId]!))
+        }
+        
+        return playlistSongs
     }
 }

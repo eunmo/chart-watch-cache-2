@@ -21,6 +21,8 @@
 		5461410F201B6DA0000D6ED4 /* TrackTableViewHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5461410E201B6DA0000D6ED4 /* TrackTableViewHeaderView.xib */; };
 		54614113201B6DE5000D6ED4 /* TrackTableViewHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54614112201B6DE5000D6ED4 /* TrackTableViewHeaderView.swift */; };
 		54614115201C50D7000D6ED4 /* TrackTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54614114201C50D7000D6ED4 /* TrackTableViewController.swift */; };
+		54614118201C5AD7000D6ED4 /* LibraryPlaylistTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54614116201C5AD7000D6ED4 /* LibraryPlaylistTableViewCell.swift */; };
+		54614119201C5AD7000D6ED4 /* LibraryPlaylistTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 54614117201C5AD7000D6ED4 /* LibraryPlaylistTableViewCell.xib */; };
 		5489A9FC20146D6400B26F62 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5489A9FB20146D6400B26F62 /* AppDelegate.swift */; };
 		5489AA0320146D6400B26F62 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5489AA0120146D6400B26F62 /* Main.storyboard */; };
 		5489AA0520146D6400B26F62 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5489AA0420146D6400B26F62 /* Assets.xcassets */; };
@@ -50,6 +52,8 @@
 		5461410E201B6DA0000D6ED4 /* TrackTableViewHeaderView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TrackTableViewHeaderView.xib; sourceTree = "<group>"; };
 		54614112201B6DE5000D6ED4 /* TrackTableViewHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackTableViewHeaderView.swift; sourceTree = "<group>"; };
 		54614114201C50D7000D6ED4 /* TrackTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackTableViewController.swift; sourceTree = "<group>"; };
+		54614116201C5AD7000D6ED4 /* LibraryPlaylistTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryPlaylistTableViewCell.swift; sourceTree = "<group>"; };
+		54614117201C5AD7000D6ED4 /* LibraryPlaylistTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LibraryPlaylistTableViewCell.xib; sourceTree = "<group>"; };
 		5489A9F820146D6400B26F62 /* Chart Watch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Chart Watch.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5489A9FB20146D6400B26F62 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5489AA0220146D6400B26F62 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -114,6 +118,8 @@
 				5489AA1F2014C3DB00B26F62 /* LibraryTableViewController.swift */,
 				5489AA1B2014BA4D00B26F62 /* LibraryBasicTableViewCell.swift */,
 				5489AA1C2014BA4D00B26F62 /* LibraryBasicTableViewCell.xib */,
+				54614116201C5AD7000D6ED4 /* LibraryPlaylistTableViewCell.swift */,
+				54614117201C5AD7000D6ED4 /* LibraryPlaylistTableViewCell.xib */,
 				5489AA272014FB2800B26F62 /* LibraryArtistInitialCollectionViewController.swift */,
 				5489AA2B2015008100B26F62 /* LibraryArtistInitialCollectionViewCell.swift */,
 				5489AA2C2015008100B26F62 /* LibraryArtistInitialCollectionViewCell.xib */,
@@ -198,6 +204,7 @@
 				5429FAA5201617A4001D2F63 /* ArtistTableViewCell.xib in Resources */,
 				5489AA1E2014BA4D00B26F62 /* LibraryBasicTableViewCell.xib in Resources */,
 				5489AA0820146D6400B26F62 /* LaunchScreen.storyboard in Resources */,
+				54614119201C5AD7000D6ED4 /* LibraryPlaylistTableViewCell.xib in Resources */,
 				5461410F201B6DA0000D6ED4 /* TrackTableViewHeaderView.xib in Resources */,
 				5489AA0520146D6400B26F62 /* Assets.xcassets in Resources */,
 				5429FAAD20162F1F001D2F63 /* AlbumCollectionViewCell.xib in Resources */,
@@ -218,6 +225,7 @@
 				5489AA2D2015008100B26F62 /* LibraryArtistInitialCollectionViewCell.swift in Sources */,
 				5489AA1D2014BA4D00B26F62 /* LibraryBasicTableViewCell.swift in Sources */,
 				5489A9FC20146D6400B26F62 /* AppDelegate.swift in Sources */,
+				54614118201C5AD7000D6ED4 /* LibraryPlaylistTableViewCell.swift in Sources */,
 				5429FAA920162F0B001D2F63 /* AlbumCollectionViewController.swift in Sources */,
 				54614115201C50D7000D6ED4 /* TrackTableViewController.swift in Sources */,
 				5429FAB620179CD3001D2F63 /* TrackTableViewCell.swift in Sources */,
