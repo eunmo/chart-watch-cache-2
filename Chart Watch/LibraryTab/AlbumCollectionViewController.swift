@@ -35,11 +35,11 @@ class AlbumCollectionViewController: UICollectionViewController {
         } else if let a = artist {
             self.title = a.name
             self.albums = library!.getAlbumsByArtist(artist: a)
+            albums.sort(by: { $0.release > $1.release })
         } else {
             self.albums = library!.getAllAlbums()
+            albums.sort(by: { $0.release > $1.release })
         }
-        
-        albums.sort(by: { $0.release > $1.release })
     }
 
     override func didReceiveMemoryWarning() {
