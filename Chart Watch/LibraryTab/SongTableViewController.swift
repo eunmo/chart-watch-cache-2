@@ -10,13 +10,8 @@ import UIKit
 
 class SongTableViewController: UITableViewController {
     
-    var artist: Artist?
-    var album: AlbumS?
     var songs = [FullSong]()
     var library: MusicLibrary?
-    var showTrack = false
-    
-    @IBOutlet weak var navItem: UINavigationItem!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,28 +23,11 @@ class SongTableViewController: UITableViewController {
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
         
         self.tableView.register(SongTableViewCell.nib, forCellReuseIdentifier: SongTableViewCell.identifier)
-        self.tableView.register(TrackTableViewCell.nib, forCellReuseIdentifier: TrackTableViewCell.identifier)
-        self.tableView.register(SongTableViewHeaderView.nib, forHeaderFooterViewReuseIdentifier: SongTableViewHeaderView.identifier)
         
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         library = appDelegate.library
         
-        if let album = self.album {
-            if let artist = self.artist {
-                songs = library!.getSongs(by: album, filterBy: artist)
-            } else {
-                songs = library!.getSongs(by: album)
-            }
-            navItem.largeTitleDisplayMode = .never
-            self.title = ""
-            self.tableView.sectionHeaderHeight = CGFloat(165)
-        } else {
-            songs = library!.getSongs()
-        }
-        
-        if showTrack {
-            self.tableView.separatorInset = UIEdgeInsetsMake(0, 54, 0, 0)
-        }
+        songs = library!.getSongs()
     }
 
     override func didReceiveMemoryWarning() {
@@ -70,42 +48,14 @@ class SongTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let song = songs[indexPath.row]
-        
-        if showTrack {
-            let cell = tableView.dequeueReusableCell(withIdentifier: TrackTableViewCell.identifier, for: indexPath)
-            
-            if let trackCell = cell as? TrackTableViewCell {
-                trackCell.song = song
-            }
-            
-            return cell
-        } else {
-            let cell = tableView.dequeueReusableCell(withIdentifier: SongTableViewCell.identifier, for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: SongTableViewCell.identifier, for: indexPath)
 
-            // Configure the cell...
-            if let songCell = cell as? SongTableViewCell {
-                songCell.song = song
-            }
+        // Configure the cell...
+        if let songCell = cell as? SongTableViewCell {
+            songCell.song = songs[indexPath.row]
+        }
 
-            return cell
-        }
-    }
-    
-    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        if let album = self.album {
-            if let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SongTableViewHeaderView.identifier) as? SongTableViewHeaderView {
-                headerView.album = album
-                headerView.artists = library?.getAlbumArtistString(id: album.id)
-                return headerView
-            }
-        }
-        
-        return nil
-    }
-    
-    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return self.album != nil ? CGFloat(165) : CGFloat(0)
+        return cell
     }
 
     /*

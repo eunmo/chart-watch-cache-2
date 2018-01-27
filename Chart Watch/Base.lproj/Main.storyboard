@@ -129,12 +129,44 @@
                     </collectionView>
                     <navigationItem key="navigationItem" title="Albums" id="Pd4-kO-2lH"/>
                     <connections>
-                        <segue destination="0eS-Ei-G0C" kind="show" identifier="AlbumSongSegue" id="IBn-nd-ojm"/>
+                        <segue destination="Acs-fb-yW8" kind="show" identifier="AlbumTrackSegue" id="IVx-gs-El7"/>
                     </connections>
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="p5A-8y-06j" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2326" y="0.0"/>
+        </scene>
+        <!--Title-->
+        <scene sceneID="VmZ-2P-5oc">
+            <objects>
+                <tableViewController id="Acs-fb-yW8" customClass="TrackTableViewController" customModule="Chart_Watch" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="HUO-WG-QcQ">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="lMz-B8-L71">
+                                <rect key="frame" x="0.0" y="28" width="375" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="lMz-B8-L71" id="7Sg-m6-X7x">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.666666666666664"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="Acs-fb-yW8" id="gU1-xY-2Sp"/>
+                            <outlet property="delegate" destination="Acs-fb-yW8" id="daO-De-lyu"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="Title" id="3EZ-tz-368"/>
+                    <connections>
+                        <outlet property="navItem" destination="3EZ-tz-368" id="5Oy-9h-UYr"/>
+                    </connections>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="6HZ-mK-ue1" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3121" y="0.0"/>
         </scene>
         <!--Songs-->
         <scene sceneID="pib-8W-nh1">
@@ -160,10 +192,6 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Songs" id="mFi-qS-8uS"/>
-                    <connections>
-                        <outlet property="navItem" destination="mFi-qS-8uS" id="QGW-G9-FGQ"/>
-                        <outlet property="navigationItem" destination="mFi-qS-8uS" id="U1m-hA-cal"/>
-                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gFr-cw-ffw" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -224,7 +252,6 @@
         <image name="glyphicons-201-download" width="26" height="26"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="ISJ-i4-7KE"/>
         <segue reference="QId-DK-kKf"/>
     </inferredMetricsTieBreakers>
 </document>
