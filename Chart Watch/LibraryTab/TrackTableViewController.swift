@@ -15,7 +15,7 @@ struct Disk {
 
 class TrackTableViewController: UITableViewController {
     
-    var artist: Artist?
+    var artist: ArtistInfo?
     var album: AlbumInfo?
     var songs = [FullSong]()
     var disks = [Disk]()

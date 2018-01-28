@@ -31,6 +31,7 @@ class Downloader {
     static let notificationKey = "DownloaderNotificationKey"
     static let notificationKeyPushDone = "DownloaderNotificationKey - Push"
     static let notificationKeyPullDone = "DownloaderNotificationKey - Pull"
+    static let notificationKeyFetchDone = "DownloaderNotificationKey - Fetch"
     
     class DownloadRequest {
         let id: Int
@@ -104,7 +105,7 @@ class Downloader {
             if let d = data {
                 completion(d)
             }
-            
+            self.notify(type: Downloader.notificationKeyFetchDone)
         })
         
         query.resume()

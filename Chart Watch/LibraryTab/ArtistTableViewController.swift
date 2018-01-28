@@ -11,7 +11,7 @@ import UIKit
 class ArtistTableViewController: UITableViewController {
     
     var initial: String = ""
-    var artists = [Artist]()
+    var artists = [ArtistInfo]()
     var library: MusicLibrary?
     
     override func viewDidLoad() {

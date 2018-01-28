@@ -27,6 +27,7 @@ class NetworkTableViewController: UITableViewController {
         
         NotificationCenter.default.addObserver(self, selector: #selector(NetworkTableViewController.receivePushDone), name: NSNotification.Name(rawValue: Downloader.notificationKeyPushDone), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(NetworkTableViewController.receivePullDone), name: NSNotification.Name(rawValue: Downloader.notificationKeyPullDone), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(NetworkTableViewController.receiveFetchDone), name: NSNotification.Name(rawValue: Downloader.notificationKeyFetchDone), object: nil)
         
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         library = appDelegate.library
@@ -50,6 +51,10 @@ class NetworkTableViewController: UITableViewController {
     
     @objc func receivePullDone() {
         optionDone(index: 1)
+    }
+    
+    @objc func receiveFetchDone() {
+        optionDone(index: 2)
     }
 
     override func didReceiveMemoryWarning() {
@@ -91,6 +96,10 @@ class NetworkTableViewController: UITableViewController {
             break
         case 1:
             library?.doPull()
+            break
+        case 2:
+            library?.doFetch()
+            break
         default:
             break
         }

@@ -8,10 +8,21 @@
 
 import Foundation
 
-struct Artist: Codable {
+struct ArtistInfo: Codable {
     let id: Int
     var name: String
     let nameNorm: String
+}
+
+class Artist: Codable {
+    var info: ArtistInfo
+    var id: Int { get { return info.id }}
+    var name: String { get { return info.name }}
+    var nameNorm: String { get { return info.nameNorm }}
+    
+    init(info: ArtistInfo) {
+        self.info = info
+    }
 }
 
 struct Track: Codable {
@@ -31,7 +42,7 @@ struct AlbumInfo: Codable {
 }
 
 class Album: Codable {
-    let info: AlbumInfo
+    var info: AlbumInfo
     var downloaded = false
     
     var id: Int {
@@ -90,7 +101,7 @@ struct ServerJSON: Decodable {
     let favorites: [Int]
     let songs: [SongInfo]
     let albums: [AlbumInfo]
-    let artists: [Artist]
+    let artists: [ArtistInfo]
 }
 
 struct FullSong {

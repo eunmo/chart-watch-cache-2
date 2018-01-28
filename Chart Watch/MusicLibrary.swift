@@ -61,8 +61,6 @@ class MusicLibrary {
                 return
             }
         }
-        
-        downloader.fetch(completion: parse)
     }
     
     func buildMaps() {
@@ -87,6 +85,10 @@ class MusicLibrary {
             for track in album.info.tracks {
                 songAlbums[track.id]!.append(album.id)
             }
+        }
+        
+        for (key, _) in initials {
+            initials[key] = [Artist]()
         }
         
         var initial: Character
@@ -114,50 +116,6 @@ class MusicLibrary {
             })
         }
     }
-    
-    func normalizeString(string: String) -> String {
-        return string.replacingOccurrences(of: "`", with: "'")
-    }
-    
-    func parse(data: Data) {
-        do {
-            let decoder = JSONDecoder()
-            decoder.dateDecodingStrategy = .formatted(dateFormatter)
-            let json = try decoder.decode(ServerJSON.self, from: data)
-            
-            for var songS in json.songs {
-                songS.title = self.normalizeString(string: songS.title)
-                let song = Song(info: songS)
-                songs.append(song)
-            }
-            
-            for var albumS in json.albums {
-                albumS.title = self.normalizeString(string: albumS.title)
-                let album = Album(info: albumS)
-                albums.append(album)
-            }
-            
-            for var artist in json.artists {
-                artist.name = self.normalizeString(string: artist.name)
-                artists.append(artist)
-            }
-            
-            playlists.append(Playlist(playlistType: .songPlaylist, name: "Current Singles", list: json.singleCharts))
-            playlists.append(Playlist(playlistType: .albumPlaylist, name: "Current Albums", list: json.albumCharts))
-            playlists.append(Playlist(playlistType: .songPlaylist, name: "Charted Songs", list: json.charted))
-            playlists.append(Playlist(playlistType: .songPlaylist, name: "Uncharted Songs", list: json.uncharted))
-            playlists.append(Playlist(playlistType: .albumPlaylist, name: "Favorite Artists", list: json.favorites))
-            
-            buildMaps()
-            
-            save()
-            
-            startDownload()
-        } catch {
-            print("\(error)")
-        }
-    }
-    
     // MARK: URLs
     
     static func getImageLocalUrl(_ id: Int) -> URL {
@@ -197,7 +155,6 @@ class MusicLibrary {
                 downloader.requestImage(id: album.id, callback: {
                     album.downloaded = true
                     if self.downloadDone() {
-                        print("all files downloaded")
                         self.save()
                     }
                 })
@@ -214,7 +171,6 @@ class MusicLibrary {
                 downloader.requestMedia(id: song.id, callback: {
                     song.downloaded = true
                     if self.downloadDone() {
-                        print("all files downloaded")
                         self.save()
                     }
                 })
@@ -250,8 +206,8 @@ class MusicLibrary {
         return "#".first!
     }
     
-    func getArtistsByInitial(initial: Character) -> [Artist] {
-        return initials[initial]!
+    func getArtistsByInitial(initial: Character) -> [ArtistInfo] {
+        return initials[initial]!.map({ $0.info })
     }
     
     func getInitialCount(initial: Character) -> Int {
@@ -268,7 +224,7 @@ class MusicLibrary {
         return albums
     }
     
-    func getLatestAlbum(by artist: Artist) -> AlbumInfo? {
+    func getLatestAlbum(by artist: ArtistInfo) -> AlbumInfo? {
         let albumIds = artistAlbums[artist.id]!
         var albums = [AlbumInfo]()
         
@@ -284,7 +240,7 @@ class MusicLibrary {
         return nil
     }
     
-    func getAlbumsByArtist(artist: Artist) -> [AlbumInfo] {
+    func getAlbumsByArtist(artist: ArtistInfo) -> [AlbumInfo] {
         var albumIdSet = Set<Int>()
         
         for album in albums {
@@ -327,21 +283,17 @@ class MusicLibrary {
     }
     
     func makeFullSong(song: SongInfo, track: Track? = nil, album: AlbumInfo? = nil) -> FullSong {
-        var songArtists = [Artist]()
-        var songFeatures = [Artist]()
-        var artist: Artist
+        var artist: ArtistInfo
         
         var artistString = ""
         for artistId in song.artists {
-            artist = artistMap[artistId]!
-            songArtists.append(artist)
+            artist = artistMap[artistId]!.info
             artistString += (artistString == "") ? "\(artist.name)" : ", \(artist.name)"
         }
         
         var featureString = ""
         for artistId in song.features {
-            artist = artistMap[artistId]!
-            songFeatures.append(artist)
+            artist = artistMap[artistId]!.info
             featureString += (featureString == "") ? "\(artist.name)" : ", \(artist.name)"
         }
         if featureString != "" {
@@ -384,7 +336,7 @@ class MusicLibrary {
         return albumSongs
     }
     
-    func getSongs(by album: AlbumInfo, filterBy artist: Artist) -> [FullSong] {
+    func getSongs(by album: AlbumInfo, filterBy artist: ArtistInfo) -> [FullSong] {
         
         if album.artists.contains(artist.id) {
             return getSongs(by: album)
@@ -548,5 +500,72 @@ class MusicLibrary {
     
     func doPull() {
         downloader.pull(pullData: getPullData(), completion: updatePlays)
+    }
+    
+    func normalizeString(string: String) -> String {
+        return string.replacingOccurrences(of: "`", with: "'")
+    }
+    
+    func parse(data: Data) {
+        do {
+            let decoder = JSONDecoder()
+            decoder.dateDecodingStrategy = .formatted(dateFormatter)
+            let json = try decoder.decode(ServerJSON.self, from: data)
+            
+            for var songInfo in json.songs {
+                songInfo.title = self.normalizeString(string: songInfo.title)
+                if let song = songMap[songInfo.id] {
+                    song.info = songInfo
+                    
+                    if let plays = song.playCount {
+                        if plays <= song.info.plays {
+                            song.playCount = nil
+                            song.lastPlayed = nil
+                        } else {
+                            updatePlay(song: song, playCount: plays)
+                        }
+                    }
+                } else {
+                    songs.append(Song(info: songInfo))
+                }
+            }
+            
+            for var albumInfo in json.albums {
+                albumInfo.title = self.normalizeString(string: albumInfo.title)
+                if let album = albumMap[albumInfo.id] {
+                    album.info = albumInfo
+                } else {
+                    albums.append(Album(info: albumInfo))
+                }
+            }
+            
+            for var artistInfo in json.artists {
+                artistInfo.name = self.normalizeString(string: artistInfo.name)
+                if let artist = artistMap[artistInfo.id] {
+                    artist.info = artistInfo
+                } else {
+                    artists.append(Artist(info: artistInfo))
+                }
+            }
+            
+            playlists = [Playlist]()
+            playlists.append(Playlist(playlistType: .songPlaylist, name: "Current Singles", list: json.singleCharts))
+            playlists.append(Playlist(playlistType: .albumPlaylist, name: "Current Albums", list: json.albumCharts))
+            playlists.append(Playlist(playlistType: .songPlaylist, name: "Charted Songs", list: json.charted))
+            playlists.append(Playlist(playlistType: .songPlaylist, name: "Uncharted Songs", list: json.uncharted))
+            playlists.append(Playlist(playlistType: .albumPlaylist, name: "Favorite Artists", list: json.favorites))
+            
+            buildMaps()
+            save()
+            notifyUpdate()
+            startDownload()
+        } catch {
+            print("\(error)")
+        }
+    }
+    
+    
+    func doFetch() {
+        downloader.fetch(completion: parse)
     }
 }

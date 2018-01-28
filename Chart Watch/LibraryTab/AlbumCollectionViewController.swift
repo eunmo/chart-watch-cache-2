@@ -11,7 +11,7 @@ import UIKit
 class AlbumCollectionViewController: UICollectionViewController {
     
     var albums = [AlbumInfo]()
-    var artist: Artist?
+    var artist: ArtistInfo?
     var playlist: Playlist?
     var library: MusicLibrary?
 
