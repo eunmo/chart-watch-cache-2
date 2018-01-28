@@ -27,16 +27,18 @@ class LibraryTableViewController: UITableViewController {
         self.tableView.register(LibraryPlaylistTableViewCell.nib, forCellReuseIdentifier: LibraryPlaylistTableViewCell.identifier)
         
         NotificationCenter.default.addObserver(self, selector: #selector(LibraryTableViewController.receiveNotification), name: NSNotification.Name(rawValue: Downloader.notificationKey), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(LibraryTableViewController.receiveNotification), name: NSNotification.Name(rawValue: MusicLibrary.notificationKey), object: nil)
         
         self.tableView.rowHeight = UITableViewAutomaticDimension
         self.tableView.estimatedRowHeight = 66.0
         
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         library = appDelegate.library
-        playlists = library!.playlists
+        playlists = library!.getPlaylists()
     }
     
     func update() {
+        playlists = library!.getPlaylists()
         tableView.reloadData()
     }
     

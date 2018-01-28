@@ -52,10 +52,10 @@ class MusicLibrary {
     func load() {
         if let data = NSKeyedUnarchiver.unarchiveObject(withFile: MusicLibrary.ArchiveURL.path) as? Data {
             if let archive = try? PropertyListDecoder().decode(Archive.self, from: data) {
-                self.songs = archive.songs
-                self.albums = archive.albums
-                self.artists = archive.artists
-                self.playlists = archive.playlists
+                songs = archive.songs
+                albums = archive.albums
+                artists = archive.artists
+                playlists = archive.playlists
                 buildMaps()
                 startDownload()
                 return
@@ -444,6 +444,28 @@ class MusicLibrary {
         }
         
         return playlistSongs
+    }
+    
+    func getLocallyPlayedPlaylist() -> Playlist {
+        var locallyPlayed = [Song]()
+        
+        for song in songs {
+            if song.lastPlayed != nil {
+                locallyPlayed.append(song)
+            }
+        }
+        
+        locallyPlayed.sort(by: { $0.lastPlayed! < $1.lastPlayed! })
+        
+        return Playlist(playlistType: .songPlaylist, name: "Locally Played", list: locallyPlayed.map({ $0.id }))
+    }
+    
+    func getPlaylists() -> [Playlist] {
+        var newArray = [Playlist]()
+        newArray.append(contentsOf: playlists)
+        newArray.append(getLocallyPlayedPlaylist())
+        
+        return newArray
     }
     
     func recordPlay(_ fullSong: FullSong) {
