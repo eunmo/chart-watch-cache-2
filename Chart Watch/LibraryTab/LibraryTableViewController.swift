@@ -74,7 +74,7 @@ class LibraryTableViewController: UITableViewController {
                     if done != all {
                         cell.title = "Downloading... \(done)/\(all)"
                     } else {
-                        cell.title = (all == 0) ? "Network" : "Download Done"
+                        cell.title = (all == 0) ? "Manage" : "Download Done"
                     }
                 } else {
                     cell.title = "\(section1[indexPath.row])"

@@ -389,6 +389,10 @@ class MusicLibrary {
     }
     
     func getPlaylistSongs(_ playlist: Playlist) -> [FullSong] {
+        if playlist.playlistType != .songPlaylist {
+            return [FullSong]()
+        }
+        
         var playlistSongs = [FullSong]()
         
         for songId in playlist.list {
@@ -506,7 +510,45 @@ class MusicLibrary {
         return string.replacingOccurrences(of: "`", with: "'")
     }
     
-    func parse(data: Data) {
+    func replaceData(data: Data) -> Bool {
+        do {
+            let decoder = JSONDecoder()
+            decoder.dateDecodingStrategy = .formatted(dateFormatter)
+            let json = try decoder.decode(ServerJSON.self, from: data)
+            
+            songs = [Song]()
+            for var songInfo in json.songs {
+                songInfo.title = self.normalizeString(string: songInfo.title)
+                songs.append(Song(info: songInfo))
+            }
+            
+            albums = [Album]()
+            for var albumInfo in json.albums {
+                albumInfo.title = self.normalizeString(string: albumInfo.title)
+                albums.append(Album(info: albumInfo))
+            }
+            
+            artists = [Artist]()
+            for var artistInfo in json.artists {
+                artistInfo.name = self.normalizeString(string: artistInfo.name)
+                artists.append(Artist(info: artistInfo))
+            }
+            
+            playlists = [Playlist]()
+            playlists.append(Playlist(playlistType: .songPlaylist, name: "Current Singles", list: json.singleCharts))
+            playlists.append(Playlist(playlistType: .albumPlaylist, name: "Current Albums", list: json.albumCharts))
+            playlists.append(Playlist(playlistType: .songPlaylist, name: "Charted Songs", list: json.charted))
+            playlists.append(Playlist(playlistType: .songPlaylist, name: "Uncharted Songs", list: json.uncharted))
+            playlists.append(Playlist(playlistType: .albumPlaylist, name: "Favorite Artists", list: json.favorites))
+            
+            return true
+        } catch {
+            print("\(error)")
+            return false
+        }
+    }
+    
+    func updateData(data: Data) -> Bool {
         do {
             let decoder = JSONDecoder()
             decoder.dateDecodingStrategy = .formatted(dateFormatter)
@@ -555,12 +597,28 @@ class MusicLibrary {
             playlists.append(Playlist(playlistType: .songPlaylist, name: "Uncharted Songs", list: json.uncharted))
             playlists.append(Playlist(playlistType: .albumPlaylist, name: "Favorite Artists", list: json.favorites))
             
+            return true
+        } catch {
+            print("\(error)")
+            return false
+        }
+    }
+    
+    func parse(data: Data) {
+        let locallyPlayed = getLocallyPlayedPlaylist()
+        var rc = false
+        
+        if locallyPlayed.list.count > 0 {
+            rc = updateData(data: data)
+        } else {
+            rc = replaceData(data: data)
+        }
+        
+        if rc {
             buildMaps()
             save()
             notifyUpdate()
             startDownload()
-        } catch {
-            print("\(error)")
         }
     }
     
