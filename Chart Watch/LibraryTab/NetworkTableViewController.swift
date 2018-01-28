@@ -123,6 +123,10 @@ class NetworkTableViewController: UITableViewController {
         if let networkCell = cell as? NetworkTableViewCell {
             let item = items[indexPath.row]
             networkCell.item = item
+            
+            if indexPath.row == doAllIndex {
+                cell.backgroundColor = UIColor(red: 90/255, green: 200/255, blue: 250/255, alpha: 1)
+            }
         }
 
         return cell
