@@ -20,7 +20,7 @@ struct Track: Codable {
     let track: Int
 }
 
-struct AlbumS: Codable {
+struct AlbumInfo: Codable {
     let id: Int
     let tracks: [Track]
     let artists: [Int]
@@ -31,7 +31,7 @@ struct AlbumS: Codable {
 }
 
 class Album: Codable {
-    let info: AlbumS
+    let info: AlbumInfo
     var downloaded = false
     
     var id: Int {
@@ -46,12 +46,12 @@ class Album: Codable {
         }
     }
     
-    init(info: AlbumS) {
+    init(info: AlbumInfo) {
         self.info = info
     }
 }
 
-struct SongS: Codable {
+struct SongInfo: Codable {
     let id: Int
     var title: String
     let plays: Int
@@ -61,7 +61,7 @@ struct SongS: Codable {
 }
 
 class Song: Codable {
-    let info: SongS
+    let info: SongInfo
     var playCount: Int?
     var lastPlayed: Date?
     var downloaded = false
@@ -78,7 +78,7 @@ class Song: Codable {
         }
     }
     
-    init(info: SongS) {
+    init(info: SongInfo) {
         self.info = info
     }
 }
@@ -89,18 +89,16 @@ struct ServerJSON: Decodable {
     let charted: [Int]
     let uncharted: [Int]
     let favorites: [Int]
-    let songs: [SongS]
-    let albums: [AlbumS]
+    let songs: [SongInfo]
+    let albums: [AlbumInfo]
     let artists: [Artist]
 }
 
 struct FullSong {
     let id: Int
     let title: String
-    let artists: [Artist]
-    let features: [Artist]
     let artistString: String
-    let album: AlbumS?
+    let albumId: Int
     let track: Track?
 }
 
@@ -370,8 +368,8 @@ class MusicLibrary {
         return initials[initial]!.count
     }
     
-    func getAllAlbums() -> [AlbumS] {
-        var albums = [AlbumS]()
+    func getAllAlbums() -> [AlbumInfo] {
+        var albums = [AlbumInfo]()
         
         for album in self.albums {
             albums.append(album.info)
@@ -380,9 +378,9 @@ class MusicLibrary {
         return albums
     }
     
-    func getLatestAlbum(by artist: Artist) -> AlbumS? {
+    func getLatestAlbum(by artist: Artist) -> AlbumInfo? {
         let albumIds = artistAlbums[artist.id]!
-        var albums = [AlbumS]()
+        var albums = [AlbumInfo]()
         
         for albumId in albumIds {
             albums.append(albumMap[albumId]!.info)
@@ -396,7 +394,7 @@ class MusicLibrary {
         return nil
     }
     
-    func getAlbumsByArtist(artist: Artist) -> [AlbumS] {
+    func getAlbumsByArtist(artist: Artist) -> [AlbumInfo] {
         var albumIdSet = Set<Int>()
         
         for album in albums {
@@ -417,7 +415,7 @@ class MusicLibrary {
             }
         }
         
-        var artistAlbums = [AlbumS]()
+        var artistAlbums = [AlbumInfo]()
         
         for albumId in albumIdSet {
             artistAlbums.append(albumMap[albumId]!.info)
@@ -438,7 +436,7 @@ class MusicLibrary {
         return artistString
     }
     
-    func makeFullSong(song: SongS, track: Track? = nil, album: AlbumS? = nil) -> FullSong {
+    func makeFullSong(song: SongInfo, track: Track? = nil, album: AlbumInfo? = nil) -> FullSong {
         var songArtists = [Artist]()
         var songFeatures = [Artist]()
         var artist: Artist
@@ -462,7 +460,7 @@ class MusicLibrary {
         
         let songAlbum = album != nil ? album : albumMap[songAlbums[song.id]![0]]!.info
         
-        let fullSong = FullSong(id: song.id, title: song.title, artists: songArtists, features: songFeatures, artistString: artistString, album: songAlbum, track: track)
+        let fullSong = FullSong(id: song.id, title: song.title, artistString: artistString, albumId: songAlbum!.id, track: track)
         
         return fullSong
     }
@@ -484,7 +482,7 @@ class MusicLibrary {
         return a.disk != b.disk ? a.disk < b.disk : a.track < b.track
     }
     
-    func getSongs(by album: AlbumS) -> [FullSong] {
+    func getSongs(by album: AlbumInfo) -> [FullSong] {
         var albumSongs = [FullSong]()
         
         for track in album.tracks {
@@ -496,7 +494,7 @@ class MusicLibrary {
         return albumSongs
     }
     
-    func getSongs(by album: AlbumS, filterBy artist: Artist) -> [FullSong] {
+    func getSongs(by album: AlbumInfo, filterBy artist: Artist) -> [FullSong] {
         
         if album.artists.contains(artist.id) {
             return getSongs(by: album)
@@ -534,12 +532,12 @@ class MusicLibrary {
         return albums
     }
     
-    func getPlaylistAlbums(_ playlist: Playlist) -> [AlbumS] {
+    func getPlaylistAlbums(_ playlist: Playlist) -> [AlbumInfo] {
         if playlist.playlistType != .albumPlaylist {
-            return [AlbumS]()
+            return [AlbumInfo]()
         }
         
-        var albums = [AlbumS]()
+        var albums = [AlbumInfo]()
         
         for albumId in playlist.list {
             albums.append(albumMap[albumId]!.info)

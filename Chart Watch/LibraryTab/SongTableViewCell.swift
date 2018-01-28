@@ -19,8 +19,8 @@ class SongTableViewCell: UITableViewCell {
             titleLabel.text = song?.title
             artistLabel.text = song?.artistString
             
-            if let a = song?.album {
-                let imageUrl = MusicLibrary.getImageLocalUrl(a.id)
+            if let id = song?.albumId {
+                let imageUrl = MusicLibrary.getImageLocalUrl(id)
                 albumView.image = UIImage(contentsOfFile: imageUrl.path)
             }
         }

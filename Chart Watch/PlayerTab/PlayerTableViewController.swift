@@ -51,7 +51,7 @@ class PlayerTableViewController: UITableViewController {
     
     func updateTopView() {
         if let currentSong = player?.currentSong {
-            let imageUrl = MusicLibrary.getImageLocalUrl(currentSong.album!.id)
+            let imageUrl = MusicLibrary.getImageLocalUrl(currentSong.albumId)
             imageView.image = UIImage(contentsOfFile: imageUrl.path)
             titleLabel.text = currentSong.title
             artistLabel.text = currentSong.artistString

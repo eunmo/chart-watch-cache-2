@@ -16,7 +16,7 @@ struct Disk {
 class TrackTableViewController: UITableViewController {
     
     var artist: Artist?
-    var album: AlbumS?
+    var album: AlbumInfo?
     var songs = [FullSong]()
     var disks = [Disk]()
     var library: MusicLibrary?
@@ -161,7 +161,7 @@ class TrackTableViewController: UITableViewController {
             print("cancel!")
         }
         
-        let alert = UIAlertController(title: song.title, message: "", preferredStyle: .actionSheet)
+        let alert = UIAlertController(title: song.title, message: song.artistString, preferredStyle: .actionSheet)
         alert.addAction(playSongAction)
         alert.addAction(addSongsAction)
         alert.addAction(cancelAction)

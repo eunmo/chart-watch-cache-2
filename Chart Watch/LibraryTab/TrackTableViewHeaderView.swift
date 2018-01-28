@@ -15,7 +15,7 @@ class TrackTableViewHeaderView: UITableViewHeaderFooterView {
     @IBOutlet weak var artistLabel: UILabel!
     @IBOutlet weak var releaseLabel: UILabel!
     
-    var album: AlbumS? {
+    var album: AlbumInfo? {
         didSet {
             if let a = album {
                 titleLabel.text = a.title

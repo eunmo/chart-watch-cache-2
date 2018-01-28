@@ -19,7 +19,7 @@ class ArtistTableViewCell: UITableViewCell {
         }
     }
     
-    var album: AlbumS? {
+    var album: AlbumInfo? {
         didSet {
             if let a = album {
                 let imageUrl = MusicLibrary.getImageLocalUrl(a.id)

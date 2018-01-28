@@ -91,7 +91,7 @@ class SongTableViewController: UITableViewController {
             print("cancel!")
         }
         
-        let alert = UIAlertController(title: song.title, message: "", preferredStyle: .actionSheet)
+        let alert = UIAlertController(title: song.title, message: song.artistString, preferredStyle: .actionSheet)
         alert.addAction(playSongAction)
         if self.playlist?.name == "Current Singles" {
             alert.addAction(addSongsAction)

@@ -14,7 +14,7 @@ class AlbumCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var artistLabel: UILabel!
     @IBOutlet weak var imageView: UIImageView!
     
-    var album: AlbumS? {
+    var album: AlbumInfo? {
         didSet {
             if let a = album {
                 titleLabel.text = a.title
