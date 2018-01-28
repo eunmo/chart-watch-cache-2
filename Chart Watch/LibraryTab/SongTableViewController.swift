@@ -113,7 +113,7 @@ class SongTableViewController: UITableViewController {
         
         let alert = UIAlertController(title: song.title, message: song.artistString, preferredStyle: .actionSheet)
         alert.addAction(playSongAction)
-        if self.playlist?.name == "Current Singles" {
+        if self.playlist?.name == "Current Singles" || self.playlist?.name == "Seasonal Songs" {
             alert.addAction(addSongsAction)
         }
         alert.addAction(cancelAction)
