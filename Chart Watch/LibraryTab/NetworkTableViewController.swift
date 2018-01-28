@@ -26,6 +26,7 @@ class NetworkTableViewController: UITableViewController {
         self.tableView.register(NetworkTableViewCell.nib, forCellReuseIdentifier: NetworkTableViewCell.identifier)
         
         NotificationCenter.default.addObserver(self, selector: #selector(NetworkTableViewController.receivePushDone), name: NSNotification.Name(rawValue: Downloader.notificationKeyPushDone), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(NetworkTableViewController.receivePullDone), name: NSNotification.Name(rawValue: Downloader.notificationKeyPullDone), object: nil)
         
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         library = appDelegate.library
@@ -35,11 +36,20 @@ class NetworkTableViewController: UITableViewController {
         tableView.reloadData()
     }
     
-    @objc func receivePushDone() {
+    func optionDone(index: Int) {
         DispatchQueue.main.async(execute: { () -> Void in
-            self.status[0] = .done
+            self.status[index] = .done
             self.update()
         })
+        
+    }
+    
+    @objc func receivePushDone() {
+        optionDone(index: 0)
+    }
+    
+    @objc func receivePullDone() {
+        optionDone(index: 1)
     }
 
     override func didReceiveMemoryWarning() {
@@ -72,11 +82,15 @@ class NetworkTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        status[indexPath.row] = .ongoing
+        update()
+        
         switch indexPath.row {
         case 0:
-            status[indexPath.row] = .ongoing
             library?.doPush()
             break
+        case 1:
+            library?.doPull()
         default:
             break
         }

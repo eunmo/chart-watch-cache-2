@@ -55,13 +55,12 @@ struct SongInfo: Codable {
     let id: Int
     var title: String
     let plays: Int
-    let lastPlayed: Date?
     let artists: [Int]
     let features: [Int]
 }
 
 class Song: Codable {
-    let info: SongInfo
+    var info: SongInfo
     var playCount: Int?
     var lastPlayed: Date?
     var downloaded = false
@@ -124,4 +123,9 @@ struct PushData: Codable {
     let id: Int
     let plays: Int
     let lastPlayed: String
+}
+
+struct PullData: Codable {
+    let id: Int
+    let plays: Int    
 }

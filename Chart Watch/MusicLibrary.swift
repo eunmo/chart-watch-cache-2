@@ -473,4 +473,41 @@ class MusicLibrary {
     func doPush() {
         downloader.push(pushData: getPushData())
     }
+    
+    func getPullData() -> [Int] {
+        return songs.map({ $0.id })
+    }
+    
+    func updatePlays(data: Data) {
+        do {
+            let decoder = JSONDecoder()
+            decoder.dateDecodingStrategy = .formatted(dateFormatter)
+            let json = try decoder.decode([PullData].self, from: data)
+            
+            for data in json {
+                if let song = songMap[data.id] {
+                    if let plays = song.playCount {
+                        if plays <= data.plays {
+                            song.playCount = nil
+                            song.lastPlayed = nil
+                        }
+                    }
+                    
+                    if song.info.plays != data.plays {
+                        let info = song.info
+                        let newInfo = SongInfo(id: info.id, title: info.title, plays: data.plays, artists: info.artists, features: info.features)
+                        song.info = newInfo
+                    }
+                }
+            }
+            
+            save()
+        } catch {
+            print("\(error)")
+        }
+    }
+    
+    func doPull() {
+        downloader.pull(pullData: getPullData(), completion: updatePlays)
+    }
 }

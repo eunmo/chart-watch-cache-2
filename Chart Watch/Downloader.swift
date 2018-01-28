@@ -30,6 +30,7 @@ class Downloader {
     
     static let notificationKey = "DownloaderNotificationKey"
     static let notificationKeyPushDone = "DownloaderNotificationKey - Push"
+    static let notificationKeyPullDone = "DownloaderNotificationKey - Pull"
     
     class DownloadRequest {
         let id: Int
@@ -49,6 +50,11 @@ class Downloader {
     }
     
     func push(pushData: [PushData]) {
+        if pushData.count == 0 {
+            notify(type: Downloader.notificationKeyPushDone)
+            return
+        }
+        
         if let data = try? JSONEncoder().encode(pushData) {
             
             let urlAsString = "\(serverAddress)/ios/plays/push"
@@ -62,6 +68,28 @@ class Downloader {
             
             let task = urlSession.dataTask(with: request, completionHandler: { data, response, error -> Void in
                 self.notify(type: Downloader.notificationKeyPushDone)
+            })
+            task.resume()
+        }
+    }
+    
+    func pull(pullData: [Int], completion: @escaping (Data) -> Void) {
+        if let data = try? JSONEncoder().encode(pullData) {
+            
+            let urlAsString = "\(serverAddress)/ios/plays/pull"
+            let url = URL(string: urlAsString)!
+            let urlSession = URLSession.shared
+            
+            var request = URLRequest(url: url)
+            request.httpMethod = "PUT"
+            request.httpBody = data
+            request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+            
+            let task = urlSession.dataTask(with: request, completionHandler: { data, response, error -> Void in
+                if let d = data {
+                    completion(d)
+                }
+                self.notify(type: Downloader.notificationKeyPullDone)
             })
             task.resume()
         }
