@@ -96,9 +96,10 @@ class Song: Codable {
 struct ServerJSON: Decodable {
     let singleCharts: [Int]
     let albumCharts: [Int]
+    let favorites: [Int]
+    let seasonal: [Int]
     let charted: [Int]
     let uncharted: [Int]
-    let favorites: [Int]
     let songs: [SongInfo]
     let albums: [AlbumInfo]
     let artists: [ArtistInfo]

@@ -422,8 +422,8 @@ class MusicLibrary {
         
         let locallyPlayed = getLocallyPlayedPlaylist()
         if locallyPlayed.list.count > 0 {
-            newArray.append(contentsOf: playlists)
             newArray.append(getLocallyPlayedPlaylist())
+            newArray.append(contentsOf: playlists)
             return newArray
         }
         
@@ -511,6 +511,16 @@ class MusicLibrary {
         return string.replacingOccurrences(of: "`", with: "'")
     }
     
+    func addPlaylists(json: ServerJSON) {
+        playlists = [Playlist]()
+        playlists.append(Playlist(playlistType: .songPlaylist, name: "Current Singles", list: json.singleCharts))
+        playlists.append(Playlist(playlistType: .albumPlaylist, name: "Current Albums", list: json.albumCharts))
+        playlists.append(Playlist(playlistType: .albumPlaylist, name: "Favorite Artists", list: json.favorites))
+        playlists.append(Playlist(playlistType: .songPlaylist, name: "Seasonal Songs", list: json.seasonal))
+        playlists.append(Playlist(playlistType: .songPlaylist, name: "Charted Songs", list: json.charted))
+        playlists.append(Playlist(playlistType: .songPlaylist, name: "Uncharted Songs", list: json.uncharted))
+    }
+    
     func replaceData(data: Data) -> Bool {
         do {
             let decoder = JSONDecoder()
@@ -535,12 +545,7 @@ class MusicLibrary {
                 artists.append(Artist(info: artistInfo))
             }
             
-            playlists = [Playlist]()
-            playlists.append(Playlist(playlistType: .songPlaylist, name: "Current Singles", list: json.singleCharts))
-            playlists.append(Playlist(playlistType: .albumPlaylist, name: "Current Albums", list: json.albumCharts))
-            playlists.append(Playlist(playlistType: .songPlaylist, name: "Charted Songs", list: json.charted))
-            playlists.append(Playlist(playlistType: .songPlaylist, name: "Uncharted Songs", list: json.uncharted))
-            playlists.append(Playlist(playlistType: .albumPlaylist, name: "Favorite Artists", list: json.favorites))
+            addPlaylists(json: json)
             
             return true
         } catch {
@@ -591,12 +596,7 @@ class MusicLibrary {
                 }
             }
             
-            playlists = [Playlist]()
-            playlists.append(Playlist(playlistType: .songPlaylist, name: "Current Singles", list: json.singleCharts))
-            playlists.append(Playlist(playlistType: .albumPlaylist, name: "Current Albums", list: json.albumCharts))
-            playlists.append(Playlist(playlistType: .songPlaylist, name: "Charted Songs", list: json.charted))
-            playlists.append(Playlist(playlistType: .songPlaylist, name: "Uncharted Songs", list: json.uncharted))
-            playlists.append(Playlist(playlistType: .albumPlaylist, name: "Favorite Artists", list: json.favorites))
+            addPlaylists(json: json)
             
             return true
         } catch {
