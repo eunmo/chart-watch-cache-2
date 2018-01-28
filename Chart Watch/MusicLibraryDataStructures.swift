@@ -66,6 +66,7 @@ struct SongInfo: Codable {
     let id: Int
     var title: String
     let plays: Int
+    let minRank: Int?
     let artists: [Int]
     let features: [Int]
 }
@@ -111,6 +112,7 @@ struct FullSong {
     let artistString: String
     let albumId: Int
     let plays: Int
+    let minRank: Int?
     let track: Track?
 }
 

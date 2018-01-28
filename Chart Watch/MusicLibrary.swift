@@ -303,7 +303,7 @@ class MusicLibrary {
         
         let songAlbum = album != nil ? album : albumMap[songAlbums[song.id]![0]]!.info
         
-        let fullSong = FullSong(id: song.id, title: song.title, artistString: artistString, albumId: songAlbum!.id, plays: song.plays, track: track)
+        let fullSong = FullSong(id: song.id, title: song.title, artistString: artistString, albumId: songAlbum!.id, plays: song.plays, minRank: song.minRank, track: track)
         
         return fullSong
     }
@@ -471,7 +471,7 @@ class MusicLibrary {
     
     func updatePlay(song: Song, playCount: Int) {
         let info = song.info
-        let newInfo = SongInfo(id: info.id, title: info.title, plays: playCount, artists: info.artists, features: info.features)
+        let newInfo = SongInfo(id: info.id, title: info.title, plays: playCount, minRank: info.minRank, artists: info.artists, features: info.features)
         song.info = newInfo
     }
     
@@ -518,7 +518,7 @@ class MusicLibrary {
         playlists.append(Playlist(playlistType: .albumPlaylist, name: "Favorite Artists", list: json.favorites))
         playlists.append(Playlist(playlistType: .songPlaylist, name: "Seasonal Songs", list: json.seasonal))
         playlists.append(Playlist(playlistType: .songPlaylist, name: "Charted Songs", list: json.charted))
-        playlists.append(Playlist(playlistType: .songPlaylist, name: "Uncharted Songs", list: json.uncharted))
+        playlists.append(Playlist(playlistType: .songPlaylist, name: "Unfamiliar Songs", list: json.uncharted))
     }
     
     func replaceData(data: Data) -> Bool {

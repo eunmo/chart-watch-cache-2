@@ -24,6 +24,16 @@ class TrackTableViewCell: UITableViewCell {
             if let track = song?.track?.track {
                 trackLabel.text = "\(track)"
             }
+            
+            if let minRank = song?.minRank {
+                if minRank == 1 {
+                    playCountLabel.backgroundColor = UIColor(red: 255/255, green: 45/255, blue: 85/255, alpha: 1) // apple pink
+                } else if minRank <= 5 {
+                    playCountLabel.backgroundColor = UIColor(red: 88/255, green: 86/255, blue: 214/255, alpha: 1) // apple purple
+                } else {
+                    playCountLabel.backgroundColor = UIColor(red: 0/255, green: 122/255, blue: 255/255, alpha: 1) // apple blue
+                }
+            }
         }
     }
     
