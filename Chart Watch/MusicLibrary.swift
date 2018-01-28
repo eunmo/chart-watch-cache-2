@@ -456,7 +456,9 @@ class MusicLibrary {
         }
         
         song.lastPlayed = Date()
+        updatePlay(song: song, playCount: song.playCount!)
         save()
+        notifyUpdate()
     }
     
     func getPushData() -> [PushData] {
@@ -483,6 +485,12 @@ class MusicLibrary {
         NotificationCenter.default.post(name: Notification.Name(rawValue: MusicLibrary.notificationKey), object: self)
     }
     
+    func updatePlay(song: Song, playCount: Int) {
+        let info = song.info
+        let newInfo = SongInfo(id: info.id, title: info.title, plays: playCount, artists: info.artists, features: info.features)
+        song.info = newInfo
+    }
+    
     func updatePlays(data: Data) {
         do {
             let decoder = JSONDecoder()
@@ -499,14 +507,13 @@ class MusicLibrary {
                     }
                     
                     if song.info.plays != data.plays {
-                        let info = song.info
-                        let newInfo = SongInfo(id: info.id, title: info.title, plays: data.plays, artists: info.artists, features: info.features)
-                        song.info = newInfo
+                        updatePlay(song: song, playCount: data.plays)
                     }
                 }
             }
             
             save()
+            notifyUpdate()
         } catch {
             print("\(error)")
         }

@@ -64,6 +64,7 @@ class TrackTableViewController: UITableViewController {
         }
         
         var diskMap = [Int: [FullSong]]()
+        disks = [Disk]()
         
         for song in songs {
             let disk = song.track!.disk
