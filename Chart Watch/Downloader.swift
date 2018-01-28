@@ -29,6 +29,7 @@ class Downloader {
     let simultaneousDownloadLimit = 8
     
     static let notificationKey = "DownloaderNotificationKey"
+    static let notificationKeyPushDone = "DownloaderNotificationKey - Push"
     
     class DownloadRequest {
         let id: Int
@@ -44,6 +45,27 @@ class Downloader {
             self.callback = callback
             self.localUrl = localUrl
             self.serverUrl = serverUrl
+        }
+    }
+    
+    func push(pushData: [PushData]) {
+        if let data = try? JSONEncoder().encode(pushData) {
+            
+            let urlAsString = "\(serverAddress)/ios/plays/push"
+            let url = URL(string: urlAsString)!
+            let urlSession = URLSession.shared
+            
+            var request = URLRequest(url: url)
+            request.httpMethod = "PUT"
+            request.httpBody = data
+            request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+            
+            print(String(data: data, encoding: .utf8)!)
+            
+            let task = urlSession.dataTask(with: request, completionHandler: { data, response, error -> Void in
+                self.notify(type: Downloader.notificationKeyPushDone)
+            })
+            task.resume()
         }
     }
     
@@ -119,7 +141,7 @@ class Downloader {
                     if success {
                         request.status = .done
                         request.callback()
-                        self.notify()
+                        self.notify(type: Downloader.notificationKey)
                     } else {
                         request.status = .failed
                     }
@@ -161,7 +183,7 @@ class Downloader {
         return (doneCount, requests.count)
     }
     
-    func notify() {
-        NotificationCenter.default.post(name: Notification.Name(rawValue: Downloader.notificationKey), object: self)
+    func notify(type: String) {
+        NotificationCenter.default.post(name: Notification.Name(rawValue: type), object: self)
     }
 }

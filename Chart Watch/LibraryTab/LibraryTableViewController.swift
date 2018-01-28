@@ -72,7 +72,7 @@ class LibraryTableViewController: UITableViewController {
                     if done != all {
                         cell.title = "Downloading... \(done)/\(all)"
                     } else {
-                        cell.title = (all == 0) ? "" : "Download Done"
+                        cell.title = (all == 0) ? "Network" : "Download Done"
                     }
                 } else {
                     cell.title = "\(section1[indexPath.row])"
@@ -102,6 +102,9 @@ class LibraryTableViewController: UITableViewController {
                 break
             case 2:
                 performSegue(withIdentifier: "LibrarySongSegue", sender: self)
+                break
+            case 3:
+                performSegue(withIdentifier: "LibraryNetworkSegue", sender: self)
                 break
             default:
                 break

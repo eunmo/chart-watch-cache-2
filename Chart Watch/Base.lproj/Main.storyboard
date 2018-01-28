@@ -59,6 +59,7 @@
                         <segue destination="jPL-Fn-EcY" kind="show" identifier="LibraryArtistSegue" id="nwW-Gq-FPi"/>
                         <segue destination="1tE-eK-Pxj" kind="show" identifier="LibraryAlbumSegue" id="QId-DK-kKf"/>
                         <segue destination="0eS-Ei-G0C" kind="show" identifier="LibrarySongSegue" id="ISJ-i4-7KE"/>
+                        <segue destination="GRF-UC-kKM" kind="show" identifier="LibraryNetworkSegue" id="NLD-Px-oM2"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fmL-hu-yIr" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -214,6 +215,35 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xd5-5P-MCR" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="780" y="-744.0886699507389"/>
+        </scene>
+        <!--Network-->
+        <scene sceneID="J7W-eN-831">
+            <objects>
+                <tableViewController id="GRF-UC-kKM" customClass="NetworkTableViewController" customModule="Chart_Watch" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="lGE-Uo-pCJ">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="sAH-aF-2SU">
+                                <rect key="frame" x="0.0" y="28" width="375" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="sAH-aF-2SU" id="36l-PC-caK">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.666666666666664"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="GRF-UC-kKM" id="uuI-QD-jGx"/>
+                            <outlet property="delegate" destination="GRF-UC-kKM" id="7eK-vs-T56"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="Network" id="7ko-Of-xSo"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="wW9-KV-VD9" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1548" y="-744"/>
         </scene>
         <!--Artist Initials-->
         <scene sceneID="13e-om-03n">
