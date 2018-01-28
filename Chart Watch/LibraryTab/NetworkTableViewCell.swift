@@ -13,16 +13,12 @@ class NetworkTableViewCell: UITableViewCell {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
-    var title: String? {
+    var item: ManagementItem? {
         didSet {
-            titleLabel.text = title
-        }
-    }
-    
-    var status: DownloadStatus? {
-        didSet {
-            if let s = status {
-                switch s {
+            titleLabel.text = item?.name
+            
+            if let status = item?.status {
+                switch status {
                 case .ongoing:
                     self.accessoryType = .none
                     activityIndicator.startAnimating()

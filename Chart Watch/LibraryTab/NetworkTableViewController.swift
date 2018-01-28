@@ -8,11 +8,38 @@
 
 import UIKit
 
+enum ManagementStatus {
+    case ready
+    case ongoing
+    case done
+}
+
+class ManagementItem {
+    let name: String
+    var status: ManagementStatus = .ready
+    let function: () -> Void
+    
+    init(name: String, function: @escaping () -> Void) {
+        self.name = name
+        self.function = function
+    }
+    
+    func start() {
+        status = .ongoing
+        function()
+    }
+    
+    func done() {
+        status = .done
+    }
+}
+
 class NetworkTableViewController: UITableViewController {
     
-    let options = ["Push", "Pull", "Fetch", "Clean Up"]
-    var status: [DownloadStatus] = [.ready, .ready, .ready, .ready]
     var library: MusicLibrary?
+    var items = [ManagementItem]()
+    var doingAll = false
+    var doAllIndex = 0
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,9 +55,17 @@ class NetworkTableViewController: UITableViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(NetworkTableViewController.receivePushDone), name: NSNotification.Name(rawValue: Downloader.notificationKeyPushDone), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(NetworkTableViewController.receivePullDone), name: NSNotification.Name(rawValue: Downloader.notificationKeyPullDone), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(NetworkTableViewController.receiveFetchDone), name: NSNotification.Name(rawValue: Downloader.notificationKeyFetchDone), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(NetworkTableViewController.receiveCleanUpDone), name: NSNotification.Name(rawValue: MusicLibrary.notificationKeyCleanUpDone), object: nil)
         
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         library = appDelegate.library
+        
+        items.append(ManagementItem(name: "Push", function: { self.library?.doPush() }))
+        items.append(ManagementItem(name: "Pull", function: { self.library?.doPull() }))
+        items.append(ManagementItem(name: "Fetch", function: { self.library?.doFetch() }))
+        items.append(ManagementItem(name: "Clean Up", function: { self.library?.doCleanUp() }))
+        items.append(ManagementItem(name: "Do All", function: { self.doAll() }))
+        doAllIndex = items.count - 1
     }
     
     func update() {
@@ -39,7 +74,10 @@ class NetworkTableViewController: UITableViewController {
     
     func optionDone(index: Int) {
         DispatchQueue.main.async(execute: { () -> Void in
-            self.status[index] = .done
+            self.items[index].done()
+            if self.doingAll {
+                self.doAll()
+            }
             self.update()
         })
         
@@ -56,6 +94,10 @@ class NetworkTableViewController: UITableViewController {
     @objc func receiveFetchDone() {
         optionDone(index: 2)
     }
+    
+    @objc func receiveCleanUpDone() {
+        optionDone(index: 3)
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -71,7 +113,7 @@ class NetworkTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return options.count
+        return items.count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -79,30 +121,28 @@ class NetworkTableViewController: UITableViewController {
 
         // Configure the cell...
         if let networkCell = cell as? NetworkTableViewCell {
-            networkCell.title = options[indexPath.row]
-            networkCell.status = status[indexPath.row]
+            let item = items[indexPath.row]
+            networkCell.item = item
         }
 
         return cell
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        status[indexPath.row] = .ongoing
+        items[indexPath.row].start()
         update()
-        
-        switch indexPath.row {
-        case 0:
-            library?.doPush()
-            break
-        case 1:
-            library?.doPull()
-            break
-        case 2:
-            library?.doFetch()
-            break
-        default:
-            break
+    }
+    
+    func doAll() {
+        doingAll = true
+        for item in items {
+            if item.status == .ready {
+                item.start()
+                return
+            }
         }
+        doingAll = false
+        optionDone(index: doAllIndex)
     }
 
     /*

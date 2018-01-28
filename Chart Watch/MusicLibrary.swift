@@ -34,6 +34,7 @@ class MusicLibrary {
     static let DocumentsDirectory = FileManager().urls(for: .documentDirectory, in: .userDomainMask).first!
     static let ArchiveURL = DocumentsDirectory.appendingPathComponent("library")
     static let notificationKey = "MusicPlayerNotificationKey"
+    static let notificationKeyCleanUpDone = "MusicPlayerNotificationKey - CleanUp"
     
     init() {
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
@@ -625,5 +626,34 @@ class MusicLibrary {
     
     func doFetch() {
         downloader.fetch(completion: parse)
+    }
+    
+    func doCleanUp() {
+        do {
+            let files = try FileManager.default.contentsOfDirectory(at: MusicLibrary.DocumentsDirectory, includingPropertiesForKeys: [], options: [])
+            var imageCount = 0
+            var mediaCount = 0
+            
+            for file in files {
+                switch file.pathExtension {
+                case "mp3":
+                    if let song = Int((file.deletingPathExtension().lastPathComponent)) , songMap[song] == nil {
+                        try FileManager.default.removeItem(at: file)
+                        mediaCount += 1
+                    }
+                case "jpg":
+                    if let album = Int((file.deletingPathExtension().lastPathComponent)) , albumMap[album] == nil {
+                        try FileManager.default.removeItem(at: file)
+                        imageCount += 1
+                    }
+                default:
+                    break
+                }
+            }
+        } catch {
+            
+        }
+        
+        NotificationCenter.default.post(name: Notification.Name(rawValue: MusicLibrary.notificationKeyCleanUpDone), object: self)
     }
 }
