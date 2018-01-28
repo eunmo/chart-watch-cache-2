@@ -21,13 +21,13 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UuB-bo-nqh">
-                        <rect key="frame" x="59" y="25.5" width="245" height="14.5"/>
+                        <rect key="frame" x="59" y="25.5" width="202" height="14.5"/>
                         <fontDescription key="fontDescription" type="system" pointSize="12"/>
                         <color key="textColor" red="0.75406885150000003" green="0.75408679249999999" blue="0.75407713649999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ERx-1b-81q">
-                        <rect key="frame" x="59" y="5" width="245" height="20.5"/>
+                        <rect key="frame" x="59" y="5" width="202" height="20.5"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
@@ -39,22 +39,35 @@
                             <constraint firstAttribute="width" constant="35" id="IY4-Le-uPa"/>
                         </constraints>
                     </imageView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="#" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="35" translatesAutoresizingMaskIntoConstraints="NO" id="Fxt-yE-fA0">
+                        <rect key="frame" x="269" y="4" width="35" height="35"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="35" id="lKT-uU-NWl"/>
+                            <constraint firstAttribute="height" constant="35" id="rAc-2x-NVw"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <nil key="highlightedColor"/>
+                    </label>
                 </subviews>
                 <constraints>
                     <constraint firstItem="UuB-bo-nqh" firstAttribute="leading" secondItem="ERx-1b-81q" secondAttribute="leading" id="1Dq-aa-nq4"/>
+                    <constraint firstItem="Fxt-yE-fA0" firstAttribute="trailing" secondItem="H2p-sc-9uM" secondAttribute="trailingMargin" id="1tJ-JD-5sl"/>
+                    <constraint firstItem="Fxt-yE-fA0" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="AAR-YG-gTo"/>
+                    <constraint firstItem="Fxt-yE-fA0" firstAttribute="leading" secondItem="ERx-1b-81q" secondAttribute="trailing" constant="8" id="JF1-fd-bgJ"/>
                     <constraint firstItem="UuB-bo-nqh" firstAttribute="top" secondItem="ERx-1b-81q" secondAttribute="bottom" id="MMV-li-v19"/>
                     <constraint firstItem="9lp-N5-AJi" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="Uq1-43-tbh"/>
-                    <constraint firstAttribute="trailingMargin" secondItem="ERx-1b-81q" secondAttribute="trailing" id="dNk-hO-9AO"/>
+                    <constraint firstItem="Fxt-yE-fA0" firstAttribute="leading" secondItem="UuB-bo-nqh" secondAttribute="trailing" constant="8" id="iPW-1C-YsA"/>
                     <constraint firstItem="ERx-1b-81q" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="5" id="mmi-ff-F6D"/>
                     <constraint firstItem="9lp-N5-AJi" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="oxe-zd-NAj"/>
                     <constraint firstItem="ERx-1b-81q" firstAttribute="leading" secondItem="9lp-N5-AJi" secondAttribute="trailing" constant="8" id="ruu-uP-3fs"/>
-                    <constraint firstAttribute="trailingMargin" secondItem="UuB-bo-nqh" secondAttribute="trailing" id="uxd-Ty-fCg"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
             <connections>
                 <outlet property="albumView" destination="9lp-N5-AJi" id="pZk-aT-OvT"/>
                 <outlet property="artistLabel" destination="UuB-bo-nqh" id="BOO-ee-LT6"/>
+                <outlet property="playCountLabel" destination="Fxt-yE-fA0" id="zKI-2r-pdV"/>
                 <outlet property="titleLabel" destination="ERx-1b-81q" id="Qlp-Pb-VBE"/>
             </connections>
         </tableViewCell>

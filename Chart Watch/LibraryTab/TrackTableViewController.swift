@@ -40,26 +40,29 @@ class TrackTableViewController: UITableViewController {
         self.tableView.register(TrackTableViewCell.nib, forCellReuseIdentifier: TrackTableViewCell.identifier)
         self.tableView.register(TrackTableViewHeaderView.nib, forHeaderFooterViewReuseIdentifier: TrackTableViewHeaderView.identifier)
         
+        NotificationCenter.default.addObserver(self, selector: #selector(TrackTableViewController.receiveNotification), name: NSNotification.Name(rawValue: MusicLibrary.notificationKey), object: nil)
+        
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         library = appDelegate.library
         player = appDelegate.player
         
+        getSongs()
+        
+        navItem.largeTitleDisplayMode = .never
+        self.title = ""
+        
+        self.tableView.separatorInset = UIEdgeInsetsMake(0, 54, 0, 0)
+    }
+    
+    func getSongs() {
         if let album = self.album {
             if let artist = self.artist {
                 songs = library!.getSongs(by: album, filterBy: artist)
             } else {
                 songs = library!.getSongs(by: album)
             }
-            navItem.largeTitleDisplayMode = .never
-            self.title = ""
         }
         
-        mapToDisks()
-        
-        self.tableView.separatorInset = UIEdgeInsetsMake(0, 54, 0, 0)
-    }
-    
-    func mapToDisks() {
         var diskMap = [Int: [FullSong]]()
         
         for song in songs {
@@ -76,6 +79,17 @@ class TrackTableViewController: UITableViewController {
         }
         
         disks.sort(by: { $0.num < $1.num })
+    }
+    
+    func update() {
+        getSongs()
+        tableView.reloadData()
+    }
+    
+    @objc func receiveNotification() {
+        DispatchQueue.main.async(execute: { () -> Void in
+            self.update()
+        })
     }
 
     override func didReceiveMemoryWarning() {

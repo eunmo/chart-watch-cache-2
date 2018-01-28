@@ -26,18 +26,38 @@ class SongTableViewController: UITableViewController {
         
         self.tableView.register(SongTableViewCell.nib, forCellReuseIdentifier: SongTableViewCell.identifier)
         
+        NotificationCenter.default.addObserver(self, selector: #selector(SongTableViewController.receiveNotification), name: NSNotification.Name(rawValue: MusicLibrary.notificationKey), object: nil)
+        
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         library = appDelegate.library
         player = appDelegate.player
         
+        getSongs()
+        
+        if let pl = playlist {
+            self.title = pl.name
+        }
+        
+        self.tableView.separatorInset = UIEdgeInsetsMake(0, 59, 0, 59)
+    }
+    
+    func getSongs() {
         if let pl = playlist {
             songs = library!.getPlaylistSongs(pl)
-            self.title = pl.name
         } else {
             songs = library!.getSongs().sorted(by: { $0.id > $1.id })
         }
-        
-        self.tableView.separatorInset = UIEdgeInsetsMake(0, 59, 0, 0)
+    }
+    
+    func update() {
+        getSongs()
+        tableView.reloadData()
+    }
+    
+    @objc func receiveNotification() {
+        DispatchQueue.main.async(execute: { () -> Void in
+            self.update()
+        })
     }
 
     override func didReceiveMemoryWarning() {

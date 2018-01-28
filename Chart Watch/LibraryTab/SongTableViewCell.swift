@@ -13,11 +13,13 @@ class SongTableViewCell: UITableViewCell {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var artistLabel: UILabel!
     @IBOutlet weak var albumView: UIImageView!
+    @IBOutlet weak var playCountLabel: UILabel!
     
     var song: FullSong? {
         didSet {
             titleLabel.text = song?.title
             artistLabel.text = song?.artistString
+            playCountLabel.text = "\(song?.plays ?? 0)"
             
             if let id = song?.albumId {
                 let imageUrl = MusicLibrary.getImageLocalUrl(id)
@@ -26,13 +28,18 @@ class SongTableViewCell: UITableViewCell {
         }
     }
     
+    func makeLayerCircular(layer: CALayer) {
+        layer.masksToBounds = true
+        layer.cornerRadius = 17.5
+    }
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         
         // Initialization code
-        let layer = albumView.layer
-        layer.masksToBounds = true
-        layer.cornerRadius = CGFloat(10)
+        playCountLabel.backgroundColor = UIColor(red: 90/255, green: 200/255, blue: 250/255, alpha: 1) // apple teal blue
+        makeLayerCircular(layer: playCountLabel.layer)
+        makeLayerCircular(layer: albumView.layer)
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

@@ -98,6 +98,7 @@ struct FullSong {
     let title: String
     let artistString: String
     let albumId: Int
+    let plays: Int
     let track: Track?
 }
 

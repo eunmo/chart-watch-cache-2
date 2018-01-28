@@ -33,6 +33,7 @@ class MusicLibrary {
     
     static let DocumentsDirectory = FileManager().urls(for: .documentDirectory, in: .userDomainMask).first!
     static let ArchiveURL = DocumentsDirectory.appendingPathComponent("library")
+    static let notificationKey = "MusicPlayerNotificationKey"
     
     init() {
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
@@ -349,7 +350,7 @@ class MusicLibrary {
         
         let songAlbum = album != nil ? album : albumMap[songAlbums[song.id]![0]]!.info
         
-        let fullSong = FullSong(id: song.id, title: song.title, artistString: artistString, albumId: songAlbum!.id, track: track)
+        let fullSong = FullSong(id: song.id, title: song.title, artistString: artistString, albumId: songAlbum!.id, plays: song.plays, track: track)
         
         return fullSong
     }
@@ -476,6 +477,10 @@ class MusicLibrary {
     
     func getPullData() -> [Int] {
         return songs.map({ $0.id })
+    }
+    
+    func notifyUpdate() {
+        NotificationCenter.default.post(name: Notification.Name(rawValue: MusicLibrary.notificationKey), object: self)
     }
     
     func updatePlays(data: Data) {
