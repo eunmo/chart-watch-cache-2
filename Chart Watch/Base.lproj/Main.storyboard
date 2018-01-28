@@ -87,8 +87,8 @@
                                     <rect key="frame" x="22.666666666666657" y="384" width="329" height="2"/>
                                 </progressView>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="-2:34" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jWL-Or-dtk">
-                                    <rect key="frame" x="309" y="394" width="43" height="20.333333333333314"/>
-                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                    <rect key="frame" x="313.33333333333331" y="390" width="38.666666666666686" height="18"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                     <color key="textColor" red="0.75406885150000003" green="0.75408679249999999" blue="0.75407713649999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <nil key="highlightedColor"/>
                                 </label>
@@ -133,6 +133,9 @@
                                         <constraint firstAttribute="height" constant="50" id="LeX-9s-v2F"/>
                                     </constraints>
                                     <state key="normal" title="Button" image="icons8-fast-forward-filled-100"/>
+                                    <connections>
+                                        <action selector="skipButtonPressed:" destination="Ens-0A-FEm" eventType="touchUpInside" id="jBT-8s-CiB"/>
+                                    </connections>
                                 </button>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Next Up" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="24C-KI-uzU">
                                     <rect key="frame" x="58.999999999999993" y="608.33333333333337" width="81.333333333333314" height="27.666666666666629"/>
@@ -163,7 +166,7 @@
                                 <constraint firstItem="g1A-0Z-bEb" firstAttribute="centerX" secondItem="573-rb-QAX" secondAttribute="centerX" id="O9T-nB-jsS"/>
                                 <constraint firstItem="twa-po-trK" firstAttribute="top" secondItem="Qgr-jR-ZfN" secondAttribute="bottom" constant="60" id="Qde-fg-nni"/>
                                 <constraint firstItem="e2c-i5-fU1" firstAttribute="leading" secondItem="DHG-ME-l8f" secondAttribute="leadingMargin" constant="15" id="RYq-X4-kjr"/>
-                                <constraint firstItem="jWL-Or-dtk" firstAttribute="top" secondItem="Qgr-jR-ZfN" secondAttribute="bottom" constant="8" id="Vg5-X6-jDc"/>
+                                <constraint firstItem="jWL-Or-dtk" firstAttribute="top" secondItem="Qgr-jR-ZfN" secondAttribute="bottom" constant="4" id="Vg5-X6-jDc"/>
                                 <constraint firstItem="Qgr-jR-ZfN" firstAttribute="width" secondItem="WuK-yZ-1Qy" secondAttribute="width" id="WIs-qy-hd5"/>
                                 <constraint firstItem="24C-KI-uzU" firstAttribute="leading" secondItem="DHG-ME-l8f" secondAttribute="leadingMargin" constant="51" id="XbH-gO-cp2"/>
                                 <constraint firstItem="Qgr-jR-ZfN" firstAttribute="top" secondItem="WuK-yZ-1Qy" secondAttribute="bottom" constant="25" id="XpU-X9-Bsh"/>
@@ -201,6 +204,8 @@
                         <outlet property="nextUpLabel" destination="24C-KI-uzU" id="2vZ-ae-51O"/>
                         <outlet property="pauseButton" destination="g1A-0Z-bEb" id="YRP-6m-eju"/>
                         <outlet property="playButton" destination="573-rb-QAX" id="cgg-cK-Ey3"/>
+                        <outlet property="progressView" destination="Qgr-jR-ZfN" id="703-Xq-eqH"/>
+                        <outlet property="remainingTimeLabel" destination="jWL-Or-dtk" id="tS5-gj-J1d"/>
                         <outlet property="separatorView" destination="PTG-zm-BlX" id="J0a-jW-Ftk"/>
                         <outlet property="skipButton" destination="WMQ-yC-kL1" id="L1p-yD-1Jz"/>
                         <outlet property="titleLabel" destination="twa-po-trK" id="DHI-5p-9Fz"/>

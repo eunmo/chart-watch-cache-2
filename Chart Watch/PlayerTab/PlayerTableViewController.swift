@@ -18,9 +18,16 @@ class PlayerTableViewController: UITableViewController {
     @IBOutlet weak var skipButton: UIButton!
     @IBOutlet weak var nextUpLabel: UILabel!
     @IBOutlet weak var separatorView: UIView!
+    @IBOutlet weak var progressView: UIProgressView!
+    @IBOutlet weak var remainingTimeLabel: UILabel! {
+        didSet {
+            remainingTimeLabel.font = UIFont.monospacedDigitSystemFont(ofSize: remainingTimeLabel.font.pointSize, weight: UIFont.Weight.regular)
+        }
+    }
     
     var library: MusicLibrary?
     var player: MusicPlayer?
+    var timer: Timer?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -43,6 +50,8 @@ class PlayerTableViewController: UITableViewController {
         imageView.layer.cornerRadius = CGFloat(20)
         
         pauseButton.isHidden = true
+        progressView.progress = 0
+        remainingTimeLabel.text = ""
         
         self.tableView.separatorInset = UIEdgeInsetsMake(0, 59, 0, 0)
         
@@ -55,13 +64,33 @@ class PlayerTableViewController: UITableViewController {
             imageView.image = UIImage(contentsOfFile: imageUrl.path)
             titleLabel.text = currentSong.title
             artistLabel.text = currentSong.artistString
+            progressView.isHidden = false
+            remainingTimeLabel.isHidden = false
+        } else {
+            imageView.image = nil
+            titleLabel.text = "Chart Watch Cache"
+            artistLabel.text = "Player"
+            progressView.isHidden = true
+            remainingTimeLabel.isHidden = true
         }
         
-        let noMoreSongs = (player!.nextSongs.count == 0)
-        nextUpLabel.isHidden = noMoreSongs
-        separatorView.isHidden = noMoreSongs
-        if noMoreSongs == false {
-            nextUpLabel.text = "Next Up: \(player!.nextSongs.count)"
+        if let p = player, p.isPlaying == true {
+            playButton.isHidden = true
+            pauseButton.isHidden = false
+            startTimer()
+        } else {
+            playButton.isHidden = false
+            pauseButton.isHidden = true
+            stopTimer()
+        }
+        
+        if let count = player?.nextSongs.count {
+            let noMoreSongs = (count == 0)
+            nextUpLabel.isHidden = noMoreSongs
+            separatorView.isHidden = noMoreSongs
+            if count > 0 {
+                nextUpLabel.text = "Next Up: \(count == 1 ? "" : "\(count) Songs")"
+            }
         }
     }
     
@@ -149,14 +178,43 @@ class PlayerTableViewController: UITableViewController {
     }
     */
     
+    func getRemainingTimeString(_ time: Double?) -> String {
+        if let double = time {
+            let time = Int(double)
+            let minute = time / 60
+            let second = time - 60 * minute
+            return String(format: "–\u{2009}%02d:%02d", minute, second) // \u{2009} == 'thin space'
+        } else {
+            return ""
+        }
+    }
+    
+    @objc func updatePlayerProgress() {
+        progressView.setProgress(player?.progress ?? 0, animated: false)
+        remainingTimeLabel.text = getRemainingTimeString(player?.remainingTime)
+    }
+    
+    func startTimer() {
+        timer?.invalidate()
+        updatePlayerProgress()
+        timer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: (#selector(PlayerTableViewController.updatePlayerProgress)), userInfo: nil, repeats: true)
+    }
+    
+    func stopTimer() {
+        updatePlayerProgress()
+        timer?.invalidate()
+        timer = nil
+    }
+    
     @IBAction func playButtonPressed(_ sender: UIButton) {
-        playButton.isHidden = true
-        pauseButton.isHidden = false
+        player?.play()
     }
     
     @IBAction func pauseButtonPressed(_ sender: UIButton) {
-        playButton.isHidden = false
-        pauseButton.isHidden = true
+        player?.pause()
     }
     
+    @IBAction func skipButtonPressed(_ sender: UIButton) {
+        player?.skip()
+    }
 }

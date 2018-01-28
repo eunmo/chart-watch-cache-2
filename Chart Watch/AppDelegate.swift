@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import AVFoundation
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -19,6 +20,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         print("start")
         library.load()
+        
+        _ = try? AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback, with: [])
+        _ = try? AVAudioSession.sharedInstance().setActive(true, with: [])
+        
+        UIApplication.shared.beginReceivingRemoteControlEvents()
         return true
     }
 
@@ -44,6 +50,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
 
-
+    override func remoteControlReceived(with event: UIEvent?) {
+        switch event!.subtype {
+        case .remoteControlPlay:
+            player.play()
+        case .remoteControlPause:
+            player.pause()
+        case .remoteControlNextTrack:
+            player.skip()
+        default:break
+        }
+    }
 }
 
