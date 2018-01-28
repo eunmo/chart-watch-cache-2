@@ -51,7 +51,7 @@ class TrackTableViewController: UITableViewController {
         navItem.largeTitleDisplayMode = .never
         self.title = ""
         
-        self.tableView.separatorInset = UIEdgeInsetsMake(0, 54, 0, 0)
+        self.tableView.separatorInset = UIEdgeInsetsMake(0, 54, 0, 59)
     }
     
     func getSongs() {
