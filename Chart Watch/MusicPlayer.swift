@@ -15,6 +15,7 @@ class MusicPlayer: NSObject, AVAudioPlayerDelegate{
     var currentSong: FullSong?
     var nextSongs = [FullSong]()
     var player: AVAudioPlayer?
+    var library: MusicLibrary?
     
     var isPlaying: Bool {
         get {
@@ -137,6 +138,7 @@ class MusicPlayer: NSObject, AVAudioPlayerDelegate{
     }
     
     func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
-        
+        library?.recordPlay(currentSong!)
+        playNext()
     }
 }

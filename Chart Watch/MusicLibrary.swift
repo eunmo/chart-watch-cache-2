@@ -139,6 +139,7 @@ class MusicLibrary {
     var initials = [Character: [Artist]]()
     
     let downloader = Downloader()
+    var player: MusicPlayer?
     
     let dateFormatter: DateFormatter = DateFormatter()
     
@@ -554,5 +555,18 @@ class MusicLibrary {
         }
         
         return playlistSongs
+    }
+    
+    func recordPlay(_ fullSong: FullSong) {
+        let song = songMap[fullSong.id]!
+        
+        if song.playCount == nil {
+            song.playCount = song.info.plays + 1
+        } else {
+            song.playCount! += 1
+        }
+        
+        song.lastPlayed = Date()
+        save()
     }
 }

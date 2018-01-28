@@ -20,6 +20,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         print("start")
         library.load()
+        player.library = library
+        library.player = player
         
         _ = try? AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback, with: [])
         _ = try? AVAudioSession.sharedInstance().setActive(true, with: [])
