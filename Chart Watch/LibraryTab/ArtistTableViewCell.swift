@@ -36,7 +36,7 @@ class ArtistTableViewCell: UITableViewCell {
         
         let layer = albumView.layer
         layer.masksToBounds = true
-        layer.cornerRadius = CGFloat(10)
+        layer.cornerRadius = 17.5
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

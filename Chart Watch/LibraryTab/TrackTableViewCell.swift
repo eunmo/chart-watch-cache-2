@@ -33,6 +33,8 @@ class TrackTableViewCell: UITableViewCell {
                 } else {
                     playCountLabel.backgroundColor = UIColor(red: 0/255, green: 122/255, blue: 255/255, alpha: 1) // apple blue
                 }
+            } else {
+                playCountLabel.backgroundColor = UIColor(red: 90/255, green: 200/255, blue: 250/255, alpha: 1) // apple teal blue
             }
         }
     }
@@ -46,7 +48,6 @@ class TrackTableViewCell: UITableViewCell {
         super.awakeFromNib()
         
         // Initialization code
-        playCountLabel.backgroundColor = UIColor(red: 90/255, green: 200/255, blue: 250/255, alpha: 1) // apple teal blue
         makeLayerCircular(layer: playCountLabel.layer)
     }
 

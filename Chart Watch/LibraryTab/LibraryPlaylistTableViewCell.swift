@@ -53,7 +53,7 @@ class LibraryPlaylistTableViewCell: UITableViewCell {
         for imageView in imageViews {
             if let layer = imageView?.layer {
                 layer.masksToBounds = true
-                layer.cornerRadius = CGFloat(10)
+                layer.cornerRadius = 17.5
             }
         }
     }
