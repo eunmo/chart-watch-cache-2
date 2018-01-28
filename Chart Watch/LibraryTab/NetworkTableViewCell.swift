@@ -19,12 +19,23 @@ class NetworkTableViewCell: UITableViewCell {
         }
     }
     
-    var isActive: Bool? {
+    var status: DownloadStatus? {
         didSet {
-            if isActive == true {
-                activityIndicator.startAnimating()
-            } else {
-                activityIndicator.stopAnimating()
+            if let s = status {
+                switch s {
+                case .ongoing:
+                    self.accessoryType = .none
+                    activityIndicator.startAnimating()
+                    break
+                case .done:
+                    self.accessoryType = .checkmark
+                    activityIndicator.stopAnimating()
+                    break
+                default:
+                    self.accessoryType = .none
+                    activityIndicator.stopAnimating()
+                    break
+                }
             }
         }
     }

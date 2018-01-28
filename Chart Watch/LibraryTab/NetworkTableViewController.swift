@@ -11,7 +11,7 @@ import UIKit
 class NetworkTableViewController: UITableViewController {
     
     let options = ["Push", "Pull", "Fetch", "Clean Up"]
-    var active = [false, false, false, false]
+    var status: [DownloadStatus] = [.ready, .ready, .ready, .ready]
     var library: MusicLibrary?
 
     override func viewDidLoad() {
@@ -37,7 +37,7 @@ class NetworkTableViewController: UITableViewController {
     
     @objc func receivePushDone() {
         DispatchQueue.main.async(execute: { () -> Void in
-            self.active[0] = false
+            self.status[0] = .done
             self.update()
         })
     }
@@ -65,6 +65,7 @@ class NetworkTableViewController: UITableViewController {
         // Configure the cell...
         if let networkCell = cell as? NetworkTableViewCell {
             networkCell.title = options[indexPath.row]
+            networkCell.status = status[indexPath.row]
         }
 
         return cell
@@ -73,7 +74,7 @@ class NetworkTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch indexPath.row {
         case 0:
-            active[indexPath.row] = true
+            status[indexPath.row] = .ongoing
             library?.doPush()
             break
         default:

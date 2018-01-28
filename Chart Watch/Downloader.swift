@@ -60,8 +60,6 @@ class Downloader {
             request.httpBody = data
             request.addValue("application/json", forHTTPHeaderField: "Content-Type")
             
-            print(String(data: data, encoding: .utf8)!)
-            
             let task = urlSession.dataTask(with: request, completionHandler: { data, response, error -> Void in
                 self.notify(type: Downloader.notificationKeyPushDone)
             })
