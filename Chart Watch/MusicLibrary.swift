@@ -462,10 +462,15 @@ class MusicLibrary {
     
     func getPlaylists() -> [Playlist] {
         var newArray = [Playlist]()
-        newArray.append(contentsOf: playlists)
-        newArray.append(getLocallyPlayedPlaylist())
         
-        return newArray
+        let locallyPlayed = getLocallyPlayedPlaylist()
+        if locallyPlayed.list.count > 0 {
+            newArray.append(contentsOf: playlists)
+            newArray.append(getLocallyPlayedPlaylist())
+            return newArray
+        }
+        
+        return playlists
     }
     
     func recordPlay(_ fullSong: FullSong) {
