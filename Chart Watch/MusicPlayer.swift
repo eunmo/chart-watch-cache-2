@@ -27,7 +27,7 @@ class MusicPlayer: NSObject, AVAudioPlayerDelegate{
     
     var progress: Float {
         get {
-            if let p = player, p.isPlaying {
+            if let p = player {
                 return Float(p.currentTime / p.duration)
             } else {
                 return 0
