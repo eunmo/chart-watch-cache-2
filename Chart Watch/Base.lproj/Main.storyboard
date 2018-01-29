@@ -226,7 +226,7 @@
                             <outlet property="delegate" destination="Ens-0A-FEm" id="qKC-al-9TL"/>
                         </connections>
                     </tableView>
-                    <tabBarItem key="tabBarItem" title="Player" image="glyphicons-221-play-button" id="Wyu-Iv-T3G"/>
+                    <tabBarItem key="tabBarItem" title="Player" image="musical notes" id="Wyu-Iv-T3G"/>
                     <connections>
                         <outlet property="artistLabel" destination="e2c-i5-fU1" id="Axq-hM-JLk"/>
                         <outlet property="imageView" destination="WuK-yZ-1Qy" id="XjJ-jV-PRp"/>
@@ -446,7 +446,7 @@
         <scene sceneID="W0b-pt-wBr">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="8vh-sL-6SX" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Library" image="glyphicons-201-download" id="153-Vs-VgP"/>
+                    <tabBarItem key="tabBarItem" title="Library" image="music library" id="153-Vs-VgP"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" largeTitles="YES" id="xXN-GZ-LMS">
                         <rect key="frame" x="0.0" y="44" width="375" height="96"/>
@@ -471,7 +471,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="KXC-zd-VIq"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Server" image="glyphicons-61-compass" id="1fb-8m-OPG"/>
+                    <tabBarItem key="tabBarItem" title="Server" image="compass" id="1fb-8m-OPG"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Yym-RH-bcD" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -479,13 +479,13 @@
         </scene>
     </scenes>
     <resources>
-        <image name="glyphicons-201-download" width="26" height="26"/>
-        <image name="glyphicons-221-play-button" width="26" height="26"/>
-        <image name="glyphicons-61-compass" width="24" height="24"/>
+        <image name="compass" width="30" height="30"/>
         <image name="icons8-fast-forward-filled-100" width="100" height="100"/>
         <image name="icons8-pause-filled-100" width="100" height="100"/>
         <image name="icons8-play-filled-100" width="100" height="100"/>
         <image name="icons8-shuffle-100-2" width="100" height="100"/>
+        <image name="music library" width="30" height="30"/>
+        <image name="musical notes" width="30" height="30"/>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="QId-DK-kKf"/>
