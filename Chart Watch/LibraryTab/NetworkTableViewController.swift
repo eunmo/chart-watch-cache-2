@@ -145,8 +145,8 @@ class NetworkTableViewController: UITableViewController {
                 return
             }
         }
-        doingAll = false
-        optionDone(index: doAllIndex)
+        
+        navigationController?.popViewController(animated: true)
     }
 
     /*
