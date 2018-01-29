@@ -656,4 +656,10 @@ class MusicLibrary {
         
         NotificationCenter.default.post(name: Notification.Name(rawValue: MusicLibrary.notificationKeyCleanUpDone), object: self)
     }
+    
+    func getRandomSong() -> FullSong {
+        let randomIndex = Int(arc4random_uniform(UInt32(songs.count)))
+        let song = songs[randomIndex]
+        return makeFullSong(song: song.info)
+    }
 }

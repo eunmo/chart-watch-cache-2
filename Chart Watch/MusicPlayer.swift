@@ -16,6 +16,8 @@ class MusicPlayer: NSObject, AVAudioPlayerDelegate{
     var nextSongs = [FullSong]()
     var player: AVAudioPlayer?
     var library: MusicLibrary?
+    var inShuffle = false
+    let shuffleLimit = 10
     
     var isPlaying: Bool {
         get {
@@ -46,10 +48,8 @@ class MusicPlayer: NSObject, AVAudioPlayerDelegate{
     static let updateNotificationKey = "PlayerUpdateNotificationKey"
     
     func playNow(_ newSong: FullSong) {
-        nextSongs = [newSong]
-        
-        notify()
-        skip()
+        clearPlayer()
+        addSongs([newSong])
     }
     
     func addSongs(_ newSongs: [FullSong]) {
@@ -59,10 +59,11 @@ class MusicPlayer: NSObject, AVAudioPlayerDelegate{
         
         nextSongs.append(contentsOf: newSongs)
         
-        if player?.isPlaying != true {
+        if currentSong == nil {
             playNext()
+        } else {
+            notify()
         }
-        notify()
     }
     
     func notify() {
@@ -99,8 +100,11 @@ class MusicPlayer: NSObject, AVAudioPlayerDelegate{
     
     private func clearPlayer() {
         currentSong = nil
+        nextSongs = [FullSong]()
+        player?.stop()
         player = nil
         MPNowPlayingInfoCenter.default().nowPlayingInfo = nil
+        inShuffle = false
         notify()
     }
     
@@ -112,6 +116,11 @@ class MusicPlayer: NSObject, AVAudioPlayerDelegate{
         
         let song = nextSongs.remove(at: 0)
         currentSong = song
+        
+        if inShuffle {
+            addShuffleSongs()
+        }
+        
         notify()
         
         if let player = try? AVAudioPlayer(contentsOf: MusicLibrary.getMediaLocalUrl(song.id)) {
@@ -140,5 +149,31 @@ class MusicPlayer: NSObject, AVAudioPlayerDelegate{
     func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
         library?.recordPlay(currentSong!)
         playNext()
+    }
+    
+    private func addShuffleSongs() {
+        while nextSongs.count < shuffleLimit {
+            let newSong = library!.getRandomSong()
+            if currentSong?.id != newSong.id && nextSongs.contains(where: { $0.id == newSong.id }) == false {
+                nextSongs.append(newSong)
+            }
+        }
+    }
+    
+    func replaceShuffle() {
+        clearPlayer()
+        inShuffle = true
+        addShuffleSongs()
+        playNext()
+    }
+    
+    func addSongsShuffle() {
+        inShuffle = true
+        addShuffleSongs()
+        if currentSong == nil {
+            playNext()
+        } else {
+            notify()
+        }
     }
 }

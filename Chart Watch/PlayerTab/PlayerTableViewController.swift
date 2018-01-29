@@ -39,6 +39,7 @@ class PlayerTableViewController: UITableViewController {
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
         
         self.tableView.register(SongTableViewCell.nib, forCellReuseIdentifier: SongTableViewCell.identifier)
+        self.tableView.register(PlayerShuffleTableViewCell.nib, forCellReuseIdentifier: PlayerShuffleTableViewCell.identifier)
         
         NotificationCenter.default.addObserver(self, selector: #selector(PlayerTableViewController.receiveNotification), name: NSNotification.Name(rawValue: MusicPlayer.updateNotificationKey), object: nil)
         
@@ -119,18 +120,24 @@ class PlayerTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return player!.nextSongs.count
+        return player!.nextSongs.count + (player?.inShuffle == true ? 1 : 0)
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: SongTableViewCell.identifier, for: indexPath)
+        if player?.inShuffle == true && indexPath.row == player!.nextSongs.count {
+            let cell = tableView.dequeueReusableCell(withIdentifier: PlayerShuffleTableViewCell.identifier, for: indexPath)
+            
+            return cell
+        } else {
+            let cell = tableView.dequeueReusableCell(withIdentifier: SongTableViewCell.identifier, for: indexPath)
 
-        // Configure the cell...
-        if let songCell = cell as? SongTableViewCell {
-            songCell.song = player?.nextSongs[indexPath.row]
+            // Configure the cell...
+            if let songCell = cell as? SongTableViewCell {
+                songCell.song = player?.nextSongs[indexPath.row]
+            }
+
+            return cell
         }
-
-        return cell
     }
 
     /*
@@ -216,5 +223,28 @@ class PlayerTableViewController: UITableViewController {
     
     @IBAction func skipButtonPressed(_ sender: UIButton) {
         player?.skip()
+    }
+    
+    @IBAction func shuffleButtonPressed(_ sender: UIButton) {
+        if player?.currentSong == nil {
+            player?.addSongsShuffle()
+            return
+        }
+        
+        let replaceAction = UIAlertAction(title: "Replace", style: .destructive) { (action) in
+            self.player?.replaceShuffle()
+        }
+        
+        let addSongsAction = UIAlertAction(title: "Add Songs", style: .default) { (action) in
+            self.player?.addSongsShuffle()
+        }
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
+        
+        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        alert.addAction(replaceAction)
+        alert.addAction(addSongsAction)
+        alert.addAction(cancelAction)
+        self.present(alert, animated: true)
     }
 }

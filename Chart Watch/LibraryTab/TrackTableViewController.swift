@@ -172,9 +172,7 @@ class TrackTableViewController: UITableViewController {
             self.tabBarController?.selectedIndex = 1
         }
         
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (action) in
-            print("cancel!")
-        }
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
         
         let alert = UIAlertController(title: song.title, message: song.artistString, preferredStyle: .actionSheet)
         alert.addAction(playSongAction)

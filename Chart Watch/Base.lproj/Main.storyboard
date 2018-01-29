@@ -86,6 +86,8 @@
                                 </imageView>
                                 <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="Qgr-jR-ZfN">
                                     <rect key="frame" x="22.666666666666657" y="384" width="329" height="2"/>
+                                    <color key="progressTintColor" red="0.26051741839999998" green="0.2605243921" blue="0.260520637" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    <color key="trackTintColor" red="0.75406885150000003" green="0.75408679249999999" blue="0.75407713649999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </progressView>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="-2:34" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jWL-Or-dtk">
                                     <rect key="frame" x="313.33333333333331" y="390" width="38.666666666666686" height="18"/>
@@ -151,11 +153,23 @@
                                         <constraint firstAttribute="height" constant="0.5" id="aPa-6g-QuB"/>
                                     </constraints>
                                 </view>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="b4L-yK-23m">
+                                    <rect key="frame" x="23" y="541.66666666666663" width="50" height="50"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="50" id="URL-wl-ZLV"/>
+                                        <constraint firstAttribute="width" constant="50" id="vLT-yT-Xvy"/>
+                                    </constraints>
+                                    <state key="normal" title="Button" image="icons8-shuffle-100-2"/>
+                                    <connections>
+                                        <action selector="shuffleButtonPressed:" destination="Ens-0A-FEm" eventType="touchUpInside" id="7hf-7c-eef"/>
+                                    </connections>
+                                </button>
                             </subviews>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <constraints>
                                 <constraint firstItem="WMQ-yC-kL1" firstAttribute="centerY" secondItem="573-rb-QAX" secondAttribute="centerY" id="2Bq-YC-ImK"/>
                                 <constraint firstAttribute="bottom" secondItem="PTG-zm-BlX" secondAttribute="bottom" id="3gk-ke-TZy"/>
+                                <constraint firstItem="b4L-yK-23m" firstAttribute="centerY" secondItem="573-rb-QAX" secondAttribute="centerY" id="6AT-Hc-Fhf"/>
                                 <constraint firstItem="573-rb-QAX" firstAttribute="top" secondItem="e2c-i5-fU1" secondAttribute="bottom" constant="33" id="6bO-pc-B1i"/>
                                 <constraint firstItem="573-rb-QAX" firstAttribute="centerX" secondItem="DHG-ME-l8f" secondAttribute="centerX" id="9Ga-m5-0ny"/>
                                 <constraint firstAttribute="bottom" secondItem="24C-KI-uzU" secondAttribute="bottom" constant="4" id="Acx-Ij-MPr"/>
@@ -180,6 +194,7 @@
                                 <constraint firstItem="PTG-zm-BlX" firstAttribute="leading" secondItem="DHG-ME-l8f" secondAttribute="leadingMargin" constant="51" id="pnf-Jm-RdQ"/>
                                 <constraint firstAttribute="trailing" secondItem="PTG-zm-BlX" secondAttribute="trailing" id="w5P-RL-27h"/>
                                 <constraint firstItem="twa-po-trK" firstAttribute="centerX" secondItem="DHG-ME-l8f" secondAttribute="centerX" id="y2q-Y6-7FR"/>
+                                <constraint firstItem="b4L-yK-23m" firstAttribute="leading" secondItem="WuK-yZ-1Qy" secondAttribute="leading" id="yO0-Z6-qkP"/>
                                 <constraint firstAttribute="trailingMargin" secondItem="e2c-i5-fU1" secondAttribute="trailing" constant="15" id="zHK-4h-zY8"/>
                             </constraints>
                         </view>
@@ -439,6 +454,7 @@
         <image name="icons8-fast-forward-filled-100" width="100" height="100"/>
         <image name="icons8-pause-filled-100" width="100" height="100"/>
         <image name="icons8-play-filled-100" width="100" height="100"/>
+        <image name="icons8-shuffle-100-2" width="100" height="100"/>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="QId-DK-kKf"/>
