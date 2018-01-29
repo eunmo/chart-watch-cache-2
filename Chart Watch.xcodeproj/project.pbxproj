@@ -21,6 +21,7 @@
 		5438ED9B201F1A58007EE34D /* PlayerShuffleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5438ED99201F1A57007EE34D /* PlayerShuffleTableViewCell.swift */; };
 		5438ED9C201F1A58007EE34D /* PlayerShuffleTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5438ED9A201F1A58007EE34D /* PlayerShuffleTableViewCell.xib */; };
 		5438ED9E201F3513007EE34D /* CommonUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5438ED9D201F3513007EE34D /* CommonUI.swift */; };
+		5438EDA0201F9F28007EE34D /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5438ED9F201F9F28007EE34D /* WebViewController.swift */; };
 		5461410F201B6DA0000D6ED4 /* TrackTableViewHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5461410E201B6DA0000D6ED4 /* TrackTableViewHeaderView.xib */; };
 		54614113201B6DE5000D6ED4 /* TrackTableViewHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54614112201B6DE5000D6ED4 /* TrackTableViewHeaderView.swift */; };
 		54614115201C50D7000D6ED4 /* TrackTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54614114201C50D7000D6ED4 /* TrackTableViewController.swift */; };
@@ -61,6 +62,7 @@
 		5438ED99201F1A57007EE34D /* PlayerShuffleTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerShuffleTableViewCell.swift; sourceTree = "<group>"; };
 		5438ED9A201F1A58007EE34D /* PlayerShuffleTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PlayerShuffleTableViewCell.xib; sourceTree = "<group>"; };
 		5438ED9D201F3513007EE34D /* CommonUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonUI.swift; sourceTree = "<group>"; };
+		5438ED9F201F9F28007EE34D /* WebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
 		5461410E201B6DA0000D6ED4 /* TrackTableViewHeaderView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TrackTableViewHeaderView.xib; sourceTree = "<group>"; };
 		54614112201B6DE5000D6ED4 /* TrackTableViewHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackTableViewHeaderView.swift; sourceTree = "<group>"; };
 		54614114201C50D7000D6ED4 /* TrackTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackTableViewController.swift; sourceTree = "<group>"; };
@@ -135,6 +137,7 @@
 				54614123201DCDCE000D6ED4 /* MusicLibraryDataStructures.swift */,
 				5461411C201C9868000D6ED4 /* MusicPlayer.swift */,
 				5438ED9D201F3513007EE34D /* CommonUI.swift */,
+				5438ED9F201F9F28007EE34D /* WebViewController.swift */,
 				5461411E201C9E01000D6ED4 /* PlayerTab */,
 				549A23312017A40900CE1F2D /* LibraryTab */,
 				5489AA0420146D6400B26F62 /* Assets.xcassets */,
@@ -276,6 +279,7 @@
 				54614115201C50D7000D6ED4 /* TrackTableViewController.swift in Sources */,
 				5429FAB620179CD3001D2F63 /* TrackTableViewCell.swift in Sources */,
 				5461411B201C7F5A000D6ED4 /* PlayerTableViewController.swift in Sources */,
+				5438EDA0201F9F28007EE34D /* WebViewController.swift in Sources */,
 				5429FAAC20162F1F001D2F63 /* AlbumCollectionViewCell.swift in Sources */,
 				5429FAA120160AE6001D2F63 /* ArtistTableViewController.swift in Sources */,
 				54984E822018DC9F002D8203 /* Downloader.swift in Sources */,

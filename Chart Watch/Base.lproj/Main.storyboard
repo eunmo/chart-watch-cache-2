@@ -10,6 +10,7 @@
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Baseline standard spacing" minToolsVersion="9.0"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -25,6 +26,7 @@
                     <connections>
                         <segue destination="8vh-sL-6SX" kind="relationship" relationship="viewControllers" id="nKd-Ai-zDz"/>
                         <segue destination="Ens-0A-FEm" kind="relationship" relationship="viewControllers" id="1Un-fE-b9P"/>
+                        <segue destination="ZUv-eg-XL0" kind="relationship" relationship="viewControllers" id="3yZ-d7-fwc"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HuB-VB-40B" sceneMemberID="firstResponder"/>
@@ -151,7 +153,7 @@
                                     </connections>
                                 </button>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Next Up" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="24C-KI-uzU">
-                                    <rect key="frame" x="58.999999999999993" y="608.33333333333337" width="81.333333333333314" height="27.666666666666629"/>
+                                    <rect key="frame" x="59" y="608.33333333333337" width="308" height="27.666666666666629"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="23"/>
                                     <nil key="textColor"/>
                                     <nil key="highlightedColor"/>
@@ -197,15 +199,14 @@
                                 <constraint firstItem="Qgr-jR-ZfN" firstAttribute="top" secondItem="WuK-yZ-1Qy" secondAttribute="bottom" constant="25" id="XpU-X9-Bsh"/>
                                 <constraint firstItem="Qgr-jR-ZfN" firstAttribute="leading" secondItem="jWL-Or-dtk" secondAttribute="trailing" constant="16" id="Y8m-Eb-DrO"/>
                                 <constraint firstAttribute="trailingMargin" secondItem="6Tx-O4-UhY" secondAttribute="trailing" constant="8" id="Yyt-FX-7Ip"/>
-                                <constraint firstItem="e2c-i5-fU1" firstAttribute="centerX" secondItem="DHG-ME-l8f" secondAttribute="centerX" id="ZRm-iY-mCd"/>
                                 <constraint firstItem="g1A-0Z-bEb" firstAttribute="centerY" secondItem="573-rb-QAX" secondAttribute="centerY" id="cTX-4T-qoj"/>
                                 <constraint firstItem="jWL-Or-dtk" firstAttribute="centerY" secondItem="Qgr-jR-ZfN" secondAttribute="centerY" id="dDc-ph-bM7"/>
                                 <constraint firstItem="WuK-yZ-1Qy" firstAttribute="top" secondItem="DHG-ME-l8f" secondAttribute="top" constant="30" id="elL-Di-Adg"/>
                                 <constraint firstItem="jWL-Or-dtk" firstAttribute="leading" secondItem="DHG-ME-l8f" secondAttribute="leadingMargin" constant="8" id="h5b-0d-PUm"/>
                                 <constraint firstAttribute="trailingMargin" secondItem="WuK-yZ-1Qy" secondAttribute="trailing" constant="15" id="iv1-gv-e0s"/>
+                                <constraint firstAttribute="trailingMargin" secondItem="24C-KI-uzU" secondAttribute="trailing" id="lg9-yO-uKS"/>
                                 <constraint firstItem="PTG-zm-BlX" firstAttribute="leading" secondItem="DHG-ME-l8f" secondAttribute="leadingMargin" constant="51" id="pnf-Jm-RdQ"/>
                                 <constraint firstAttribute="trailing" secondItem="PTG-zm-BlX" secondAttribute="trailing" id="w5P-RL-27h"/>
-                                <constraint firstItem="twa-po-trK" firstAttribute="centerX" secondItem="DHG-ME-l8f" secondAttribute="centerX" id="y2q-Y6-7FR"/>
                                 <constraint firstItem="b4L-yK-23m" firstAttribute="leading" secondItem="WuK-yZ-1Qy" secondAttribute="leading" id="yO0-Z6-qkP"/>
                                 <constraint firstAttribute="trailingMargin" secondItem="e2c-i5-fU1" secondAttribute="trailing" constant="15" id="zHK-4h-zY8"/>
                             </constraints>
@@ -460,10 +461,27 @@
             </objects>
             <point key="canvasLocation" x="780" y="0.0"/>
         </scene>
+        <!--Server-->
+        <scene sceneID="7gO-zi-dua">
+            <objects>
+                <viewController id="ZUv-eg-XL0" customClass="WebViewController" customModule="Chart_Watch" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="vD3-dW-Xji">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="KXC-zd-VIq"/>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="Server" image="glyphicons-61-compass" id="1fb-8m-OPG"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Yym-RH-bcD" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="780" y="712"/>
+        </scene>
     </scenes>
     <resources>
         <image name="glyphicons-201-download" width="26" height="26"/>
         <image name="glyphicons-221-play-button" width="26" height="26"/>
+        <image name="glyphicons-61-compass" width="24" height="24"/>
         <image name="icons8-fast-forward-filled-100" width="100" height="100"/>
         <image name="icons8-pause-filled-100" width="100" height="100"/>
         <image name="icons8-play-filled-100" width="100" height="100"/>

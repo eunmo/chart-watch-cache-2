@@ -212,4 +212,8 @@ class MusicPlayer: NSObject, AVAudioPlayerDelegate{
     func addSongsNetworkShuffle() {
         library?.doNetworkShuffle()
     }
+    
+    func addSongsFromWebView(data: Data) {
+        library?.parseThenPlayWebviewSongs(data: data)
+    }
 }

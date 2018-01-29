@@ -680,7 +680,7 @@ class MusicLibrary {
         return fullSong
     }
     
-    func parseShuffleSongs(data: Data) {
+    private func parseNetworkSongs(data: Data) {
         do {
             let json = try decoder.decode([NetworkSong].self, from: data)
             var songs = [FullSong]()
@@ -711,6 +711,10 @@ class MusicLibrary {
     }
     
     func doNetworkShuffle() {
-        downloader.shuffle(completion: parseShuffleSongs)
+        downloader.shuffle(completion: parseNetworkSongs)
+    }
+    
+    func parseThenPlayWebviewSongs(data: Data) {
+        parseNetworkSongs(data: data)
     }
 }
