@@ -24,6 +24,7 @@ class PlayerTableViewController: UITableViewController {
             remainingTimeLabel.font = UIFont.monospacedDigitSystemFont(ofSize: remainingTimeLabel.font.pointSize, weight: UIFont.Weight.regular)
         }
     }
+    @IBOutlet weak var playCountLabel: UILabel!
     
     var library: MusicLibrary?
     var player: MusicPlayer?
@@ -56,6 +57,8 @@ class PlayerTableViewController: UITableViewController {
         
         self.tableView.separatorInset = UIEdgeInsetsMake(0, 59, 0, 0)
         
+        CommonUI.makeSmallLayerCircular(layer: playCountLabel.layer)
+        
         updateTopView()
     }
     
@@ -67,12 +70,15 @@ class PlayerTableViewController: UITableViewController {
             artistLabel.text = currentSong.artistString
             progressView.isHidden = false
             remainingTimeLabel.isHidden = false
+            playCountLabel.isHidden = false
+            CommonUI.setPlayCountLabel(song: currentSong, label: playCountLabel)
         } else {
             imageView.image = nil
             titleLabel.text = "Chart Watch Cache"
             artistLabel.text = "Player"
             progressView.isHidden = true
             remainingTimeLabel.isHidden = true
+            playCountLabel.isHidden = true
         }
         
         if let p = player, p.isPlaying == true {

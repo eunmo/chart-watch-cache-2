@@ -52,16 +52,9 @@ class LibraryPlaylistTableViewCell: UITableViewCell {
         
         for imageView in imageViews {
             if let layer = imageView?.layer {
-                layer.masksToBounds = true
-                layer.cornerRadius = 17.5
+                CommonUI.makeSmallLayerCircular(layer: layer)
             }
         }
-    }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
     }
     
     static var nib: UINib {

@@ -32,17 +32,9 @@ class ArtistTableViewCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
         
-        let layer = albumView.layer
-        layer.masksToBounds = true
-        layer.cornerRadius = 17.5
-    }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
+        // Initialization code
+        CommonUI.makeSmallLayerCircular(layer: albumView.layer)
     }
     
     static var nib: UINib {

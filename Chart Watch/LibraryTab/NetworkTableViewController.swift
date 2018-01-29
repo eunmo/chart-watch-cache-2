@@ -125,7 +125,7 @@ class NetworkTableViewController: UITableViewController {
             networkCell.item = item
             
             if indexPath.row == doAllIndex {
-                cell.backgroundColor = UIColor(red: 90/255, green: 200/255, blue: 250/255, alpha: 1)
+                cell.backgroundColor = CommonUI.tealBlue
             }
         }
 

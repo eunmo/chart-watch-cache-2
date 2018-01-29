@@ -18,16 +18,7 @@ class PlayerShuffleTableViewCell: UITableViewCell {
         super.awakeFromNib()
         
         // Initialization code
-    }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
-        shuffleImageOuterView.layer.masksToBounds = true
-        shuffleImageOuterView.layer.cornerRadius = 17.5
-        shuffleImageOuterView.layer.borderWidth = 0.5
-        shuffleImageOuterView.layer.borderColor = UIColor.lightGray.cgColor
+        CommonUI.makeSmallLayerCircular(layer: shuffleImageOuterView.layer)
     }
     
     static var nib: UINib {
