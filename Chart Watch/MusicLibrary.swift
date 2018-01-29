@@ -609,7 +609,7 @@ class MusicLibrary {
         let locallyPlayed = getLocallyPlayedPlaylist()
         var rc = false
         
-        if locallyPlayed.list.count > 0 {
+        if locallyPlayed.list.count > 0 || player?.hasSomething == true {
             rc = updateData(data: data)
         } else {
             rc = replaceData(data: data)

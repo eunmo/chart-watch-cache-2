@@ -45,6 +45,12 @@ class MusicPlayer: NSObject, AVAudioPlayerDelegate{
         }
     }
     
+    var hasSomething: Bool {
+        get {
+            return (currentSong != nil || nextSongs.count > 0)
+        }
+    }
+    
     static let updateNotificationKey = "PlayerUpdateNotificationKey"
     
     func playNow(_ newSong: FullSong) {
