@@ -26,7 +26,6 @@ class PlayerTableViewController: UITableViewController {
     }
     @IBOutlet weak var playCountLabel: UILabel!
     
-    var library: MusicLibrary?
     var player: MusicPlayer?
     var timer: Timer?
     
@@ -45,7 +44,6 @@ class PlayerTableViewController: UITableViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(PlayerTableViewController.receiveNotification), name: NSNotification.Name(rawValue: MusicPlayer.updateNotificationKey), object: nil)
         
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        library = appDelegate.library
         player = appDelegate.player
         
         imageView.layer.masksToBounds = true
@@ -126,11 +124,11 @@ class PlayerTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return player!.nextSongs.count + (player?.inShuffle == true ? 1 : 0)
+        return player!.nextSongs.count + (player!.inShuffle  ? 1 : 0)
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if player?.inShuffle == true && indexPath.row == player!.nextSongs.count {
+        if player!.inShuffle && indexPath.row == player!.nextSongs.count {
             let cell = tableView.dequeueReusableCell(withIdentifier: PlayerShuffleTableViewCell.identifier, for: indexPath)
             
             return cell
@@ -237,19 +235,24 @@ class PlayerTableViewController: UITableViewController {
             return
         }
         
-        let replaceAction = UIAlertAction(title: "Replace", style: .destructive) { (action) in
+        let replaceLocalAction = UIAlertAction(title: "Replace", style: .destructive) { (action) in
             self.player?.replaceShuffle()
         }
         
-        let addSongsAction = UIAlertAction(title: "Add Songs", style: .default) { (action) in
+        let addSongsCachedAction = UIAlertAction(title: "Add Cached Songs", style: .default) { (action) in
             self.player?.addSongsShuffle()
+        }
+        
+        let addSongsStreamedAction = UIAlertAction(title: "Add Streamed Songs", style: .default) { (action) in
+            self.player?.addSongsNetworkShuffle()
         }
         
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
         
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-        alert.addAction(replaceAction)
-        alert.addAction(addSongsAction)
+        alert.addAction(replaceLocalAction)
+        alert.addAction(addSongsCachedAction)
+        alert.addAction(addSongsStreamedAction)
         alert.addAction(cancelAction)
         self.present(alert, animated: true)
     }

@@ -36,8 +36,6 @@ struct AlbumInfo: Codable {
     let tracks: [Track]
     let artists: [Int]
     var title: String
-    let format: String?
-    let format2: String?
     let release: Date
 }
 
@@ -114,6 +112,7 @@ struct FullSong {
     let plays: Int
     let minRank: Int?
     let track: Track?
+    let fromNetwork: Bool
 }
 
 struct Archive: Codable {
@@ -143,4 +142,19 @@ struct PushData: Codable {
 struct PullData: Codable {
     let id: Int
     let plays: Int    
+}
+
+struct NetworkArtist: Decodable {
+    let id: Int
+    let name: String
+}
+
+struct NetworkSong: Decodable {
+    let id: Int
+    var title: String
+    let plays: Int
+    let albumId: Int
+    let minRank: Int?
+    let artists: [NetworkArtist]
+    let features: [NetworkArtist]
 }

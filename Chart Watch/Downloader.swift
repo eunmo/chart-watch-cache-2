@@ -111,6 +111,20 @@ class Downloader {
         query.resume()
     }
     
+    func shuffle(completion: @escaping (Data) -> Void) {
+        let urlAsString = "\(serverAddress)/shuffle"
+        let url = URL(string: urlAsString)!
+        let urlSession = URLSession.shared
+        
+        let query = urlSession.dataTask(with: url, completionHandler: { data, response, error -> Void in
+            if let d = data {
+                completion(d)
+            }
+        })
+        
+        query.resume()
+    }
+    
     private func getNextRequest() -> DownloadRequest? {
         for request in requests{
             if request.status == .ready {

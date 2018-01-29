@@ -17,6 +17,7 @@ class MusicPlayer: NSObject, AVAudioPlayerDelegate{
     var player: AVAudioPlayer?
     var library: MusicLibrary?
     var inShuffle = false
+    var downloadedSongIds = Set<Int>()
     let shuffleLimit = 10
     
     var isPlaying: Bool {
@@ -120,8 +121,24 @@ class MusicPlayer: NSObject, AVAudioPlayerDelegate{
             return
         }
         
+        if nextSongs[0].fromNetwork {
+            let song = nextSongs[0]
+            
+            if downloadedSongIds.contains(song.id) == false {
+                library?.downloader.requestMedia(id: song.id, callback: {
+                    self.downloadedSongIds.insert(song.id)
+                    if self.nextSongs.isEmpty == false && song.id == self.nextSongs[0].id {
+                        self.playNext()
+                    }
+                })
+                
+                return
+            }
+        }
+        
         let song = nextSongs.remove(at: 0)
         currentSong = song
+        
         
         if inShuffle {
             addShuffleSongs()
@@ -181,5 +198,18 @@ class MusicPlayer: NSObject, AVAudioPlayerDelegate{
         } else {
             notify()
         }
+    }
+    
+    func addNetworkSongs(songs: [FullSong]) {
+        nextSongs.append(contentsOf: songs)
+        if currentSong == nil {
+            playNext()
+        } else {
+            notify()
+        }
+    }
+    
+    func addSongsNetworkShuffle() {
+        library?.doNetworkShuffle()
     }
 }

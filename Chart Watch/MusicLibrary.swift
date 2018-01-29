@@ -30,6 +30,7 @@ class MusicLibrary {
     var player: MusicPlayer?
     
     let dateFormatter: DateFormatter = DateFormatter()
+    let decoder: JSONDecoder
     
     static let DocumentsDirectory = FileManager().urls(for: .documentDirectory, in: .userDomainMask).first!
     static let ArchiveURL = DocumentsDirectory.appendingPathComponent("library")
@@ -42,6 +43,9 @@ class MusicLibrary {
         for char in Array("ㄱㄴㄷㄹㅁㅂㅅㅇㅈㅊㅋㅌㅍㅎ#ABCDEFGHIJKLMNOPQRSTUVWXYZ") {
             initials[char] = [Artist]()
         }
+        
+        decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .formatted(dateFormatter)
     }
     
     func save() {
@@ -303,7 +307,7 @@ class MusicLibrary {
         
         let songAlbum = album != nil ? album : albumMap[songAlbums[song.id]![0]]!.info
         
-        let fullSong = FullSong(id: song.id, title: song.title, artistString: artistString, albumId: songAlbum!.id, plays: song.plays, minRank: song.minRank, track: track)
+        let fullSong = FullSong(id: song.id, title: song.title, artistString: artistString, albumId: songAlbum!.id, plays: song.plays, minRank: song.minRank, track: track, fromNetwork: false)
         
         return fullSong
     }
@@ -477,8 +481,6 @@ class MusicLibrary {
     
     func updatePlays(data: Data) {
         do {
-            let decoder = JSONDecoder()
-            decoder.dateDecodingStrategy = .formatted(dateFormatter)
             let json = try decoder.decode([PullData].self, from: data)
             
             for data in json {
@@ -523,8 +525,6 @@ class MusicLibrary {
     
     func replaceData(data: Data) -> Bool {
         do {
-            let decoder = JSONDecoder()
-            decoder.dateDecodingStrategy = .formatted(dateFormatter)
             let json = try decoder.decode(ServerJSON.self, from: data)
             
             songs = [Song]()
@@ -556,8 +556,6 @@ class MusicLibrary {
     
     func updateData(data: Data) -> Bool {
         do {
-            let decoder = JSONDecoder()
-            decoder.dateDecodingStrategy = .formatted(dateFormatter)
             let json = try decoder.decode(ServerJSON.self, from: data)
             
             for var songInfo in json.songs {
@@ -661,5 +659,58 @@ class MusicLibrary {
         let randomIndex = Int(arc4random_uniform(UInt32(songs.count)))
         let song = songs[randomIndex]
         return makeFullSong(song: song.info)
+    }
+    
+    func makeFullSong(from song: NetworkSong) -> FullSong {
+        var artistString = ""
+        for artist in song.artists {
+            artistString += (artistString == "") ? "\(artist.name)" : ", \(artist.name)"
+        }
+        
+        var featureString = ""
+        for artist in song.features {
+            featureString += (featureString == "") ? "\(artist.name)" : ", \(artist.name)"
+        }
+        if featureString != "" {
+            artistString += " feat. \(featureString)"
+        }
+        
+        let fullSong = FullSong(id: song.id, title: song.title, artistString: artistString, albumId: song.albumId, plays: song.plays, minRank: song.minRank, track: nil, fromNetwork: true)
+        
+        return fullSong
+    }
+    
+    func parseShuffleSongs(data: Data) {
+        do {
+            let json = try decoder.decode([NetworkSong].self, from: data)
+            var songs = [FullSong]()
+            
+            for song in json {
+                if let song = songMap[song.id] {
+                    songs.append(makeFullSong(song: song.info))
+                } else {
+                    songs.append(makeFullSong(from: song))
+                }
+            }
+            
+            var albumSet = Set<Int>()
+            for song in songs {
+                if albumMap[song.albumId] == nil {
+                    albumSet.insert(song.albumId)
+                }
+            }
+            
+            let missingAlbumIds = Array(albumSet)
+            for id in missingAlbumIds {
+                downloader.requestImage(id: id, callback: {})
+            }            
+            player?.addNetworkSongs(songs: songs)
+        } catch {
+            print("\(error)")
+        }
+    }
+    
+    func doNetworkShuffle() {
+        downloader.shuffle(completion: parseShuffleSongs)
     }
 }
