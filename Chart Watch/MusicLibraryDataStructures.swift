@@ -160,7 +160,7 @@ struct NetworkSong: Decodable {
 
 struct PlayRecord: Codable {
     let id: Int
-    let fullSong: FullSong?
+    let fullSong: FullSong
     let plays: Int
     let lastPlayed: Date
 }

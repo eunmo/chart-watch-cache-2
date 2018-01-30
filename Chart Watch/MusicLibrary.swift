@@ -396,8 +396,8 @@ class MusicLibrary {
             
             if let songAlbums = songAlbums[songId] {
                 albumId = songAlbums[0]
-            } else if let record = playRecords[songId], let fullSong = record.fullSong {
-                albumId = fullSong.albumId
+            } else if let record = playRecords[songId] {
+                albumId = record.fullSong.albumId
             }
             
             if let albumId = albumId, albums.last != albumId {
@@ -432,8 +432,8 @@ class MusicLibrary {
         for songId in playlist.list {
             if let song = songMap[songId] {
                 playlistSongs.append(makeFullSong(song: song.info))
-            } else if let record = playRecords[songId], let fullSong = record.fullSong {
-                playlistSongs.append(fullSong)
+            } else if let record = playRecords[songId] {
+                playlistSongs.append(record.fullSong)
             }
         }
         
@@ -462,19 +462,21 @@ class MusicLibrary {
     func recordPlay(_ fullSong: FullSong) {
         let id = fullSong.id
         
+        var newPlayCount = fullSong.plays + 1
         if let song = songMap[id] {
-            var newPlayCount = song.info.plays + 1
-            if let record = playRecords[id] {
-                newPlayCount = max(record.plays + 1, newPlayCount)
-            }
-            let newRecord = PlayRecord(id: id, fullSong: nil, plays: newPlayCount, lastPlayed: Date())
-            playRecords[id] = newRecord
+            newPlayCount = max(song.info.plays + 1, newPlayCount)
+        }
+        if let record = playRecords[id] {
+            newPlayCount = max(record.plays + 1, newPlayCount)
+        }
+        
+        var newFullSong = fullSong
+        newFullSong.plays += newPlayCount
+        let newRecord = PlayRecord(id: id, fullSong: newFullSong, plays: newPlayCount, lastPlayed: Date())
+        playRecords[id] = newRecord
+        
+        if let song = songMap[id] {
             updatePlay(song: song, playCount: newPlayCount)
-        } else {
-            var newFullSong = fullSong
-            newFullSong.plays += 1
-            let newRecord = PlayRecord(id: id, fullSong: newFullSong, plays: newFullSong.plays, lastPlayed: Date())
-            playRecords[id] = newRecord
         }
         
         save()
@@ -590,67 +592,12 @@ class MusicLibrary {
         }
     }
     
-    func updateData(data: Data) -> Bool {
-        do {
-            let json = try decoder.decode(ServerJSON.self, from: data)
-            
-            for var songInfo in json.songs {
-                songInfo.title = self.normalizeString(string: songInfo.title)
-                if let song = songMap[songInfo.id] {
-                    song.info = songInfo
-                } else {
-                    songs.append(Song(info: songInfo))
-                }
-                
-                if let record = playRecords[songInfo.id] {
-                    if record.plays <= songInfo.plays {
-                        playRecords[songInfo.id] = nil
-                    } else {
-                        updatePlay(song: songMap[songInfo.id]!, playCount: record.plays)
-                    }
-                }
-            }
-            
-            for var albumInfo in json.albums {
-                albumInfo.title = self.normalizeString(string: albumInfo.title)
-                if let album = albumMap[albumInfo.id] {
-                    album.info = albumInfo
-                } else {
-                    albums.append(Album(info: albumInfo))
-                }
-            }
-            
-            for var artistInfo in json.artists {
-                artistInfo.name = self.normalizeString(string: artistInfo.name)
-                if let artist = artistMap[artistInfo.id] {
-                    artist.info = artistInfo
-                } else {
-                    artists.append(Artist(info: artistInfo))
-                }
-            }
-            
-            addPlaylists(json: json)
-            
-            return true
-        } catch {
-            print("\(error)")
-            return false
-        }
-    }
-    
     private func allowDestructiveBehavior() -> Bool {
         return playRecords.count == 0 && player?.hasSomething != true
     }
     
     func parse(data: Data) {
-        var rc = false
-        
-        if allowDestructiveBehavior() {
-            rc = replaceData(data: data)
-        } else {
-            rc = updateData(data: data)
-        }
-        
+        let rc = replaceData(data: data)
         if rc {
             buildMaps()
             save()
