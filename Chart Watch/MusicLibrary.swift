@@ -465,16 +465,9 @@ class MusicLibrary {
     func recordPlay(_ fullSong: FullSong) {
         let id = fullSong.id
         
-        var newPlayCount = fullSong.plays + 1
-        if let song = songMap[id] {
-            newPlayCount = max(song.info.plays + 1, newPlayCount)
-        }
-        if let record = playRecords[id] {
-            newPlayCount = max(record.plays + 1, newPlayCount)
-        }
-        
+        let newPlayCount = max(fullSong.plays, songMap[id]?.info.plays ?? 0, playRecords[id]?.plays ?? 0) + 1
         var newFullSong = fullSong
-        newFullSong.plays += newPlayCount
+        newFullSong.plays = newPlayCount
         let newRecord = PlayRecord(id: id, fullSong: newFullSong, plays: newPlayCount, lastPlayed: Date())
         playRecords[id] = newRecord
         
@@ -571,6 +564,7 @@ class MusicLibrary {
             songs = [Song]()
             for var songInfo in json.songs {
                 songInfo.title = self.normalizeString(string: songInfo.title)
+                songInfo.plays = max(songInfo.plays, playRecords[songInfo.id]?.plays ?? 0)
                 songs.append(Song(info: songInfo))
             }
             
@@ -667,7 +661,9 @@ class MusicLibrary {
             artistString += " feat. \(featureString)"
         }
         
-        let fullSong = FullSong(id: song.id, title: song.title, artistString: artistString, albumId: song.albumId, plays: song.plays, minRank: song.minRank, track: nil, fromNetwork: true)
+        let plays = max(song.plays, playRecords[song.id]?.plays ?? 0)
+        
+        let fullSong = FullSong(id: song.id, title: normalizeString(string: song.title), artistString: normalizeString(string: artistString), albumId: song.albumId, plays: plays, minRank: song.minRank, track: nil, fromNetwork: true)
         
         return fullSong
     }
