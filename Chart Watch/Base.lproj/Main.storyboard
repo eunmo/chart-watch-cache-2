@@ -405,7 +405,13 @@
                             <outlet property="delegate" destination="0eS-Ei-G0C" id="9Mk-da-i9f"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Songs" id="mFi-qS-8uS"/>
+                    <navigationItem key="navigationItem" title="Songs" id="mFi-qS-8uS">
+                        <barButtonItem key="rightBarButtonItem" title="↑↓" id="9bw-8I-wSv">
+                            <connections>
+                                <action selector="reverseOrderButtonPressed:" destination="0eS-Ei-G0C" id="4Ye-re-VMp"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gFr-cw-ffw" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
