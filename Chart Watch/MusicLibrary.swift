@@ -305,8 +305,6 @@ class MusicLibrary {
             artistString += " feat. \(featureString)"
         }
         
-        print(album)
-        
         let songAlbum = album != nil ? album : albumMap[songAlbums[song.id]![0]]!.info
         
         let fullSong = FullSong(id: song.id, title: song.title, artistString: artistString, albumId: songAlbum!.id, plays: song.plays, minRank: song.minRank, track: track, fromNetwork: false)
