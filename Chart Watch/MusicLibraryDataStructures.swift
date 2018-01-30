@@ -63,7 +63,7 @@ class Album: Codable {
 struct SongInfo: Codable {
     let id: Int
     var title: String
-    let plays: Int
+    var plays: Int
     let minRank: Int?
     let artists: [Int]
     let features: [Int]
@@ -71,8 +71,6 @@ struct SongInfo: Codable {
 
 class Song: Codable {
     var info: SongInfo
-    var playCount: Int?
-    var lastPlayed: Date?
     var downloaded = false
     
     var id: Int {
@@ -104,12 +102,12 @@ struct ServerJSON: Decodable {
     let artists: [ArtistInfo]
 }
 
-struct FullSong {
+struct FullSong: Codable {
     let id: Int
     let title: String
     let artistString: String
     let albumId: Int
-    let plays: Int
+    var plays: Int
     let minRank: Int?
     let track: Track?
     let fromNetwork: Bool
@@ -120,6 +118,7 @@ struct Archive: Codable {
     let albums: [Album]
     let artists: [Artist]
     let playlists: [Playlist]
+    let playRecords: [Int: PlayRecord]
 }
 
 enum PlaylistType: Int, Codable {
@@ -157,4 +156,11 @@ struct NetworkSong: Decodable {
     let minRank: Int?
     let artists: [NetworkArtist]
     let features: [NetworkArtist]
+}
+
+struct PlayRecord: Codable {
+    let id: Int
+    let fullSong: FullSong?
+    let plays: Int
+    let lastPlayed: Date
 }

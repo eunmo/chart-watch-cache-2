@@ -10,12 +10,13 @@ import Foundation
 
 class MusicLibrary {
     
-    // MARK: raw data array
+    // MARK: raw data
     
     var songs = [Song]()
     var albums = [Album]()
     var artists = [Artist]()
     var playlists = [Playlist]()
+    var playRecords = [Int: PlayRecord]()
     
     // MARK: indexed map
     
@@ -49,7 +50,7 @@ class MusicLibrary {
     }
     
     func save() {
-        let archive = Archive(songs: songs, albums: albums, artists: artists, playlists: playlists)
+        let archive = Archive(songs: songs, albums: albums, artists: artists, playlists: playlists, playRecords: playRecords)
         let data = try! PropertyListEncoder().encode(archive)
         NSKeyedArchiver.archiveRootObject(data, toFile: MusicLibrary.ArchiveURL.path)
     }
@@ -61,6 +62,7 @@ class MusicLibrary {
                 albums = archive.albums
                 artists = archive.artists
                 playlists = archive.playlists
+                playRecords = archive.playRecords
                 buildMaps()
                 startDownload()
                 return
@@ -390,8 +392,15 @@ class MusicLibrary {
         var albums = [Int]()
         
         for songId in playlist.list {
-            let albumId = songAlbums[songId]![0]
-            if albums.last != albumId {
+            var albumId: Int?
+            
+            if let songAlbums = songAlbums[songId] {
+                albumId = songAlbums[0]
+            } else if let record = playRecords[songId], let fullSong = record.fullSong {
+                albumId = fullSong.albumId
+            }
+            
+            if let albumId = albumId, albums.last != albumId {
                 albums.append(albumId)
             }
         }
@@ -421,23 +430,19 @@ class MusicLibrary {
         var playlistSongs = [FullSong]()
         
         for songId in playlist.list {
-            playlistSongs.append(makeFullSong(song: songMap[songId]!.info))
+            if let song = songMap[songId] {
+                playlistSongs.append(makeFullSong(song: song.info))
+            } else if let record = playRecords[songId], let fullSong = record.fullSong {
+                playlistSongs.append(fullSong)
+            }
         }
         
         return playlistSongs
     }
     
     func getLocallyPlayedPlaylist() -> Playlist {
-        var locallyPlayed = [Song]()
-        
-        for song in songs {
-            if song.lastPlayed != nil {
-                locallyPlayed.append(song)
-            }
-        }
-        
-        locallyPlayed.sort(by: { $0.lastPlayed! < $1.lastPlayed! })
-        
+        var locallyPlayed = Array(playRecords.values.map({ $0 }))
+        locallyPlayed.sort(by: { $0.lastPlayed < $1.lastPlayed })
         return Playlist(playlistType: .songPlaylist, name: "Locally Played", list: locallyPlayed.map({ $0.id }))
     }
     
@@ -455,16 +460,23 @@ class MusicLibrary {
     }
     
     func recordPlay(_ fullSong: FullSong) {
-        let song = songMap[fullSong.id]!
+        let id = fullSong.id
         
-        if song.playCount == nil {
-            song.playCount = song.info.plays + 1
+        if let song = songMap[id] {
+            var newPlayCount = song.info.plays + 1
+            if let record = playRecords[id] {
+                newPlayCount = max(record.plays + 1, newPlayCount)
+            }
+            let newRecord = PlayRecord(id: id, fullSong: nil, plays: newPlayCount, lastPlayed: Date())
+            playRecords[id] = newRecord
+            updatePlay(song: song, playCount: newPlayCount)
         } else {
-            song.playCount! += 1
+            var newFullSong = fullSong
+            newFullSong.plays += 1
+            let newRecord = PlayRecord(id: id, fullSong: newFullSong, plays: newFullSong.plays, lastPlayed: Date())
+            playRecords[id] = newRecord
         }
         
-        song.lastPlayed = Date()
-        updatePlay(song: song, playCount: song.playCount!)
         save()
         notifyUpdate()
     }
@@ -472,10 +484,8 @@ class MusicLibrary {
     func getPushData() -> [PushData] {
         var data = [PushData]()
         
-        for song in songs {
-            if song.playCount != nil {
-                data.append(PushData(id: song.id, plays: song.playCount!, lastPlayed: dateFormatter.string(from: song.lastPlayed!)))
-            }
+        for (id, record) in playRecords {
+            data.append(PushData(id: id, plays: record.plays, lastPlayed: dateFormatter.string(from: record.lastPlayed)))
         }
         
         return data
@@ -486,17 +496,24 @@ class MusicLibrary {
     }
     
     func getPullData() -> [Int] {
-        return songs.map({ $0.id })
+        let setA = Set(songs.map({ $0.id }))
+        let setB = Set(playRecords.keys)
+        let union = setA.union(setB)
+        return Array(union)
     }
     
     func notifyUpdate() {
         NotificationCenter.default.post(name: Notification.Name(rawValue: MusicLibrary.notificationKey), object: self)
     }
     
+    func updateSongInfoPlays(songInfo: SongInfo, plays: Int) -> SongInfo {
+        var newInfo = songInfo
+        newInfo.plays = plays
+        return newInfo
+    }
+    
     func updatePlay(song: Song, playCount: Int) {
-        let info = song.info
-        let newInfo = SongInfo(id: info.id, title: info.title, plays: playCount, minRank: info.minRank, artists: info.artists, features: info.features)
-        song.info = newInfo
+        song.info = updateSongInfoPlays(songInfo: song.info, plays: playCount)
     }
     
     func updatePlays(data: Data) {
@@ -505,15 +522,14 @@ class MusicLibrary {
             
             for data in json {
                 if let song = songMap[data.id] {
-                    if let plays = song.playCount {
-                        if plays <= data.plays {
-                            song.playCount = nil
-                            song.lastPlayed = nil
-                        }
-                    }
-                    
                     if song.info.plays != data.plays {
                         updatePlay(song: song, playCount: data.plays)
+                    }
+                }
+                
+                if let record = playRecords[data.id] {
+                    if record.plays <= data.plays {
+                        playRecords[data.id] = nil
                     }
                 }
             }
@@ -582,17 +598,16 @@ class MusicLibrary {
                 songInfo.title = self.normalizeString(string: songInfo.title)
                 if let song = songMap[songInfo.id] {
                     song.info = songInfo
-                    
-                    if let plays = song.playCount {
-                        if plays <= song.info.plays {
-                            song.playCount = nil
-                            song.lastPlayed = nil
-                        } else {
-                            updatePlay(song: song, playCount: plays)
-                        }
-                    }
                 } else {
                     songs.append(Song(info: songInfo))
+                }
+                
+                if let record = playRecords[songInfo.id] {
+                    if record.plays <= songInfo.plays {
+                        playRecords[songInfo.id] = nil
+                    } else {
+                        updatePlay(song: songMap[songInfo.id]!, playCount: record.plays)
+                    }
                 }
             }
             
@@ -623,14 +638,17 @@ class MusicLibrary {
         }
     }
     
+    private func allowDestructiveBehavior() -> Bool {
+        return playRecords.count == 0 && player?.hasSomething != true
+    }
+    
     func parse(data: Data) {
-        let locallyPlayed = getLocallyPlayedPlaylist()
         var rc = false
         
-        if locallyPlayed.list.count > 0 || player?.hasSomething == true {
-            rc = updateData(data: data)
-        } else {
+        if allowDestructiveBehavior() {
             rc = replaceData(data: data)
+        } else {
+            rc = updateData(data: data)
         }
         
         if rc {
@@ -641,12 +659,16 @@ class MusicLibrary {
         }
     }
     
-    
     func doFetch() {
         downloader.fetch(completion: parse)
     }
     
     func doCleanUp() {
+        if allowDestructiveBehavior() == false {
+            NotificationCenter.default.post(name: Notification.Name(rawValue: MusicLibrary.notificationKeyCleanUpDone), object: self)
+            return
+        }
+        
         do {
             let files = try FileManager.default.contentsOfDirectory(at: MusicLibrary.DocumentsDirectory, includingPropertiesForKeys: [], options: [])
             var imageCount = 0
