@@ -143,6 +143,35 @@ class PlayerTableViewController: UITableViewController {
             return cell
         }
     }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        
+        if indexPath.row == player?.nextSongs.count {
+            if player?.inShuffle == true {
+                let stopAction = UIAlertAction(title: "Stop shuffle", style: .destructive) { (action) in
+                    self.player?.stopShuffle()
+                }
+                
+                alert.addAction(stopAction)
+            }
+        } else {
+            let removeAction = UIAlertAction(title: "Remove from list", style: .destructive) { (action) in
+                self.player?.removeSong(index: indexPath.row)
+            }
+            
+            let lastSongAction = UIAlertAction(title: "Make This The Last Song", style: .default) { (action) in
+                self.player?.makeLastSong(index: indexPath.row)
+            }
+            
+            alert.addAction(removeAction)
+            alert.addAction(lastSongAction)
+        }
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
+        alert.addAction(cancelAction)
+        self.present(alert, animated: true)
+    }
 
     /*
     // Override to support conditional editing of the table view.

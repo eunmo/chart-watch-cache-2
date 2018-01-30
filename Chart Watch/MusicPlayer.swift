@@ -139,7 +139,6 @@ class MusicPlayer: NSObject, AVAudioPlayerDelegate{
         let song = nextSongs.remove(at: 0)
         currentSong = song
         
-        
         if inShuffle {
             addShuffleSongs()
         }
@@ -198,6 +197,31 @@ class MusicPlayer: NSObject, AVAudioPlayerDelegate{
         } else {
             notify()
         }
+    }
+    
+    func stopShuffle() {
+        inShuffle = false
+        notify()
+    }
+    
+    func removeSong(index: Int) {
+        if index < nextSongs.count {
+            nextSongs.remove(at: index)
+        }
+        
+        if inShuffle {
+            addShuffleSongs()
+        }
+        
+        notify()
+    }
+    
+    func makeLastSong(index: Int) {
+        if index < nextSongs.count {
+            nextSongs.removeSubrange((index + 1)..<nextSongs.count)
+        }
+        inShuffle = false
+        notify()
     }
     
     func addNetworkSongs(songs: [FullSong]) {
