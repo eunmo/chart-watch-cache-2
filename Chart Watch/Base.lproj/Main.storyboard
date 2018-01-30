@@ -344,6 +344,7 @@
                     <navigationItem key="navigationItem" title="Albums" id="Pd4-kO-2lH"/>
                     <connections>
                         <segue destination="Acs-fb-yW8" kind="show" identifier="AlbumTrackSegue" id="IVx-gs-El7"/>
+                        <segue destination="0eS-Ei-G0C" kind="show" identifier="AlbumAllSongsSegue" id="S7T-XN-Cmy"/>
                     </connections>
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="p5A-8y-06j" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -443,6 +444,9 @@
                             <outlet property="delegate" destination="CeY-42-g11" id="Gnt-7N-oYo"/>
                         </connections>
                     </tableView>
+                    <connections>
+                        <segue destination="Acs-fb-yW8" kind="show" identifier="ArtistOnlyAlbumSegue" id="B0S-lW-IJz"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="m1a-w0-QK8" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -494,6 +498,8 @@
         <image name="musical notes" width="30" height="30"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="QId-DK-kKf"/>
+        <segue reference="ISJ-i4-7KE"/>
+        <segue reference="B0S-lW-IJz"/>
+        <segue reference="NJi-gu-kiK"/>
     </inferredMetricsTieBreakers>
 </document>

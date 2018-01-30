@@ -305,6 +305,8 @@ class MusicLibrary {
             artistString += " feat. \(featureString)"
         }
         
+        print(album)
+        
         let songAlbum = album != nil ? album : albumMap[songAlbums[song.id]![0]]!.info
         
         let fullSong = FullSong(id: song.id, title: song.title, artistString: artistString, albumId: songAlbum!.id, plays: song.plays, minRank: song.minRank, track: track, fromNetwork: false)
@@ -360,6 +362,26 @@ class MusicLibrary {
             
             return albumSongs
         }
+    }
+    
+    func getAritstPlaylist(artist: ArtistInfo) -> Playlist {
+        var albums = getAlbumsByArtist(artist: artist)
+        albums.sort(by: { $0.release > $1.release })
+        
+        var songIds = [Int]()
+        var songIdSet = Set<Int>()
+        
+        for album in albums {
+            let albumSongs = getSongs(by: album, filterBy: artist)
+            for song in albumSongs {
+                if songIdSet.contains(song.id) == false {
+                    songIds.append(song.id)
+                    songIdSet.insert(song.id)
+                }
+            }
+        }
+        
+        return Playlist(playlistType: .songPlaylist, name: "Songs by \(artist.name)", list: songIds)
     }
     
     func getPlaylistAlbumIds(_ playlist: Playlist) -> [Int] {

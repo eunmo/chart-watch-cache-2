@@ -19,6 +19,11 @@ class CommonUI {
         layer.cornerRadius = 17.5
     }
     
+    static func makeMediumLayerCircular(layer: CALayer) {
+        layer.masksToBounds = true
+        layer.cornerRadius = 17.5
+    }
+    
     static func setPlayCountLabel(song: FullSong, label: UILabel) {
         label.text = "\(song.plays)"
         

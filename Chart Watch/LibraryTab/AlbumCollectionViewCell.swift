@@ -33,10 +33,9 @@ class AlbumCollectionViewCell: UICollectionViewCell {
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
         
-        imageView.layer.masksToBounds = true
-        imageView.layer.cornerRadius = CGFloat(20)
+        // Initialization code
+        CommonUI.makeMediumLayerCircular(layer: imageView.layer)
     }
     
     static var nib: UINib {

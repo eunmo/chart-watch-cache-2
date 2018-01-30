@@ -65,7 +65,14 @@ class ArtistTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        performSegue(withIdentifier: "ArtistAlbumSegue", sender: self)
+        let artist = artists[indexPath.row]
+        let count = library?.getAlbumsByArtist(artist: artist).count
+        
+        if count == 1 {
+            performSegue(withIdentifier: "ArtistOnlyAlbumSegue", sender: self)
+        } else {
+            performSegue(withIdentifier: "ArtistAlbumSegue", sender: self)
+        }
     }
 
     /*
@@ -111,10 +118,17 @@ class ArtistTableViewController: UITableViewController {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
         if let identifier = segue.identifier {
+            let artist = artists[tableView.indexPathForSelectedRow!.row]
+            
             switch identifier {
             case "ArtistAlbumSegue":
                 if let vc = segue.destination as? AlbumCollectionViewController {
-                    vc.artist = artists[tableView.indexPathForSelectedRow!.row]
+                    vc.artist = artist
+                }
+            case "ArtistOnlyAlbumSegue":
+                if let vc = segue.destination as? TrackTableViewController {
+                    vc.album = library?.getAlbumsByArtist(artist: artist)[0]
+                    vc.artist = artist
                 }
             default: break
             }

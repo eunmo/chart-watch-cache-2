@@ -22,6 +22,8 @@
 		5438ED9C201F1A58007EE34D /* PlayerShuffleTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5438ED9A201F1A58007EE34D /* PlayerShuffleTableViewCell.xib */; };
 		5438ED9E201F3513007EE34D /* CommonUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5438ED9D201F3513007EE34D /* CommonUI.swift */; };
 		5438EDA0201F9F28007EE34D /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5438ED9F201F9F28007EE34D /* WebViewController.swift */; };
+		5438EDA32020476B007EE34D /* AllSongsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5438EDA12020476B007EE34D /* AllSongsCollectionViewCell.swift */; };
+		5438EDA42020476B007EE34D /* AllSongsCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5438EDA22020476B007EE34D /* AllSongsCollectionViewCell.xib */; };
 		5461410F201B6DA0000D6ED4 /* TrackTableViewHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5461410E201B6DA0000D6ED4 /* TrackTableViewHeaderView.xib */; };
 		54614113201B6DE5000D6ED4 /* TrackTableViewHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54614112201B6DE5000D6ED4 /* TrackTableViewHeaderView.swift */; };
 		54614115201C50D7000D6ED4 /* TrackTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54614114201C50D7000D6ED4 /* TrackTableViewController.swift */; };
@@ -63,6 +65,8 @@
 		5438ED9A201F1A58007EE34D /* PlayerShuffleTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PlayerShuffleTableViewCell.xib; sourceTree = "<group>"; };
 		5438ED9D201F3513007EE34D /* CommonUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonUI.swift; sourceTree = "<group>"; };
 		5438ED9F201F9F28007EE34D /* WebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
+		5438EDA12020476B007EE34D /* AllSongsCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllSongsCollectionViewCell.swift; sourceTree = "<group>"; };
+		5438EDA22020476B007EE34D /* AllSongsCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AllSongsCollectionViewCell.xib; sourceTree = "<group>"; };
 		5461410E201B6DA0000D6ED4 /* TrackTableViewHeaderView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TrackTableViewHeaderView.xib; sourceTree = "<group>"; };
 		54614112201B6DE5000D6ED4 /* TrackTableViewHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackTableViewHeaderView.swift; sourceTree = "<group>"; };
 		54614114201C50D7000D6ED4 /* TrackTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackTableViewController.swift; sourceTree = "<group>"; };
@@ -164,6 +168,8 @@
 				5429FAA820162F0B001D2F63 /* AlbumCollectionViewController.swift */,
 				5429FAAA20162F1F001D2F63 /* AlbumCollectionViewCell.swift */,
 				5429FAAB20162F1F001D2F63 /* AlbumCollectionViewCell.xib */,
+				5438EDA12020476B007EE34D /* AllSongsCollectionViewCell.swift */,
+				5438EDA22020476B007EE34D /* AllSongsCollectionViewCell.xib */,
 				5429FAAE2016E35D001D2F63 /* SongTableViewController.swift */,
 				5429FAB02016E381001D2F63 /* SongTableViewCell.swift */,
 				5429FAB12016E381001D2F63 /* SongTableViewCell.xib */,
@@ -244,6 +250,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5429FAB32016E381001D2F63 /* SongTableViewCell.xib in Resources */,
+				5438EDA42020476B007EE34D /* AllSongsCollectionViewCell.xib in Resources */,
 				5429FAA5201617A4001D2F63 /* ArtistTableViewCell.xib in Resources */,
 				5489AA1E2014BA4D00B26F62 /* LibraryBasicTableViewCell.xib in Resources */,
 				5438ED9C201F1A58007EE34D /* PlayerShuffleTableViewCell.xib in Resources */,
@@ -274,6 +281,7 @@
 				5489AA1D2014BA4D00B26F62 /* LibraryBasicTableViewCell.swift in Sources */,
 				5489A9FC20146D6400B26F62 /* AppDelegate.swift in Sources */,
 				54614118201C5AD7000D6ED4 /* LibraryPlaylistTableViewCell.swift in Sources */,
+				5438EDA32020476B007EE34D /* AllSongsCollectionViewCell.swift in Sources */,
 				5438ED9E201F3513007EE34D /* CommonUI.swift in Sources */,
 				5429FAA920162F0B001D2F63 /* AlbumCollectionViewController.swift in Sources */,
 				54614115201C50D7000D6ED4 /* TrackTableViewController.swift in Sources */,

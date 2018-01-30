@@ -14,6 +14,7 @@ class AlbumCollectionViewController: UICollectionViewController {
     var artist: ArtistInfo?
     var playlist: Playlist?
     var library: MusicLibrary?
+    var showAllSongsCell = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,6 +24,7 @@ class AlbumCollectionViewController: UICollectionViewController {
 
         // Register cell classes
         self.collectionView?.register(AlbumCollectionViewCell.nib, forCellWithReuseIdentifier: AlbumCollectionViewCell.identifier)
+        self.collectionView?.register(AllSongsCollectionViewCell.nib, forCellWithReuseIdentifier: AllSongsCollectionViewCell.identifier)
 
         // Do any additional setup after loading the view.
         
@@ -36,6 +38,9 @@ class AlbumCollectionViewController: UICollectionViewController {
             self.title = a.name
             self.albums = library!.getAlbumsByArtist(artist: a)
             albums.sort(by: { $0.release > $1.release })
+            if albums.count > 1 {
+                showAllSongsCell = true
+            }
         } else {
             self.albums = library!.getAllAlbums()
             albums.sort(by: { $0.release > $1.release })
@@ -67,24 +72,32 @@ class AlbumCollectionViewController: UICollectionViewController {
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of items
-        return albums.count
+        return albums.count + (showAllSongsCell ? 1 : 0)
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: AlbumCollectionViewCell.identifier, for: indexPath)
-    
-        // Configure the cell
-        if let albumCell = cell as? AlbumCollectionViewCell {
-            let album = albums[indexPath.row]
-            albumCell.album = album
-            albumCell.artists = library?.getAlbumArtistString(id: album.id)
+        if indexPath.row == albums.count {
+            return collectionView.dequeueReusableCell(withReuseIdentifier: AllSongsCollectionViewCell.identifier, for: indexPath)
+        } else {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: AlbumCollectionViewCell.identifier, for: indexPath)
+        
+            // Configure the cell
+            if let albumCell = cell as? AlbumCollectionViewCell {
+                let album = albums[indexPath.row]
+                albumCell.album = album
+                albumCell.artists = library?.getAlbumArtistString(id: album.id)
+            }
+        
+            return cell
         }
-    
-        return cell
     }
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        performSegue(withIdentifier: "AlbumTrackSegue", sender: self)
+        if indexPath.row == albums.count {
+            performSegue(withIdentifier: "AlbumAllSongsSegue", sender: self)
+        } else {
+            performSegue(withIdentifier: "AlbumTrackSegue", sender: self)
+        }
     }
 
     // MARK: UICollectionViewDelegate
@@ -130,6 +143,10 @@ class AlbumCollectionViewController: UICollectionViewController {
                     let album = albums[(collectionView?.indexPathsForSelectedItems![0].row)!]
                     vc.album = album
                     vc.artist = artist
+                }
+            case "AlbumAllSongsSegue":
+                if let vc = segue.destination as? SongTableViewController, let artist = artist {
+                    vc.playlist = library?.getAritstPlaylist(artist: artist)
                 }
             default: break
             }
