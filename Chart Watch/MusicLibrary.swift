@@ -72,6 +72,7 @@ class MusicLibrary {
     
     func buildMaps() {
         songMap = [Int: Song]()
+        songAlbums = [:]
         for song in songs {
             songMap[song.id] = song
             songAlbums[song.id] = [Int]()
@@ -83,6 +84,7 @@ class MusicLibrary {
         }
         
         artistMap = [Int: Artist]()
+        artistAlbums = [:]
         for artist in artists {
             artistMap[artist.id] = artist
             artistAlbums[artist.id] = [Int]()
