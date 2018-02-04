@@ -226,6 +226,12 @@ class MusicPlayer: NSObject, AVAudioPlayerDelegate{
         notify()
     }
     
+    func clearNextSongs() {
+        nextSongs = []
+        inShuffle = false
+        notify()
+    }
+    
     func removeSong(index: Int) {
         if index < nextSongs.count {
             nextSongs.remove(at: index)

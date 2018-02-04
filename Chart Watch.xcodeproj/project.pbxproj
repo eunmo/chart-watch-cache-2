@@ -24,6 +24,8 @@
 		5438EDA0201F9F28007EE34D /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5438ED9F201F9F28007EE34D /* WebViewController.swift */; };
 		5438EDA32020476B007EE34D /* AllSongsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5438EDA12020476B007EE34D /* AllSongsCollectionViewCell.swift */; };
 		5438EDA42020476B007EE34D /* AllSongsCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5438EDA22020476B007EE34D /* AllSongsCollectionViewCell.xib */; };
+		5438EDAB20273114007EE34D /* PlayerNextUpTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5438EDA920273114007EE34D /* PlayerNextUpTableViewCell.swift */; };
+		5438EDAC20273114007EE34D /* PlayerNextUpTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5438EDAA20273114007EE34D /* PlayerNextUpTableViewCell.xib */; };
 		5461410F201B6DA0000D6ED4 /* TrackTableViewHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5461410E201B6DA0000D6ED4 /* TrackTableViewHeaderView.xib */; };
 		54614113201B6DE5000D6ED4 /* TrackTableViewHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54614112201B6DE5000D6ED4 /* TrackTableViewHeaderView.swift */; };
 		54614115201C50D7000D6ED4 /* TrackTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54614114201C50D7000D6ED4 /* TrackTableViewController.swift */; };
@@ -67,6 +69,8 @@
 		5438ED9F201F9F28007EE34D /* WebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
 		5438EDA12020476B007EE34D /* AllSongsCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllSongsCollectionViewCell.swift; sourceTree = "<group>"; };
 		5438EDA22020476B007EE34D /* AllSongsCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AllSongsCollectionViewCell.xib; sourceTree = "<group>"; };
+		5438EDA920273114007EE34D /* PlayerNextUpTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerNextUpTableViewCell.swift; sourceTree = "<group>"; };
+		5438EDAA20273114007EE34D /* PlayerNextUpTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PlayerNextUpTableViewCell.xib; sourceTree = "<group>"; };
 		5461410E201B6DA0000D6ED4 /* TrackTableViewHeaderView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TrackTableViewHeaderView.xib; sourceTree = "<group>"; };
 		54614112201B6DE5000D6ED4 /* TrackTableViewHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackTableViewHeaderView.swift; sourceTree = "<group>"; };
 		54614114201C50D7000D6ED4 /* TrackTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackTableViewController.swift; sourceTree = "<group>"; };
@@ -109,6 +113,8 @@
 			isa = PBXGroup;
 			children = (
 				5461411A201C7F5A000D6ED4 /* PlayerTableViewController.swift */,
+				5438EDA920273114007EE34D /* PlayerNextUpTableViewCell.swift */,
+				5438EDAA20273114007EE34D /* PlayerNextUpTableViewCell.xib */,
 				5438ED99201F1A57007EE34D /* PlayerShuffleTableViewCell.swift */,
 				5438ED9A201F1A58007EE34D /* PlayerShuffleTableViewCell.xib */,
 			);
@@ -261,6 +267,7 @@
 				5489AA0520146D6400B26F62 /* Assets.xcassets in Resources */,
 				5429FAAD20162F1F001D2F63 /* AlbumCollectionViewCell.xib in Resources */,
 				5429FAB720179CD3001D2F63 /* TrackTableViewCell.xib in Resources */,
+				5438EDAC20273114007EE34D /* PlayerNextUpTableViewCell.xib in Resources */,
 				5489AA2E2015008100B26F62 /* LibraryArtistInitialCollectionViewCell.xib in Resources */,
 				5489AA0320146D6400B26F62 /* Main.storyboard in Resources */,
 			);
@@ -290,6 +297,7 @@
 				5438EDA0201F9F28007EE34D /* WebViewController.swift in Sources */,
 				5429FAAC20162F1F001D2F63 /* AlbumCollectionViewCell.swift in Sources */,
 				5429FAA120160AE6001D2F63 /* ArtistTableViewController.swift in Sources */,
+				5438EDAB20273114007EE34D /* PlayerNextUpTableViewCell.swift in Sources */,
 				54984E822018DC9F002D8203 /* Downloader.swift in Sources */,
 				5489AA282014FB2800B26F62 /* LibraryArtistInitialCollectionViewController.swift in Sources */,
 				5489AA202014C3DB00B26F62 /* LibraryTableViewController.swift in Sources */,

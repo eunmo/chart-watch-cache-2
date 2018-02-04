@@ -16,8 +16,6 @@ class PlayerTableViewController: UITableViewController {
     @IBOutlet weak var playButton: UIButton!
     @IBOutlet weak var pauseButton: UIButton!
     @IBOutlet weak var skipButton: UIButton!
-    @IBOutlet weak var nextUpLabel: UILabel!
-    @IBOutlet weak var separatorView: UIView!
     @IBOutlet weak var progressView: UIProgressView!
     @IBOutlet weak var remainingTimeLabel: UILabel! {
         didSet {
@@ -38,6 +36,7 @@ class PlayerTableViewController: UITableViewController {
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
         
+        self.tableView.register(PlayerNextUpTableViewCell.nib, forCellReuseIdentifier: PlayerNextUpTableViewCell.identifier)
         self.tableView.register(SongTableViewCell.nib, forCellReuseIdentifier: SongTableViewCell.identifier)
         self.tableView.register(PlayerShuffleTableViewCell.nib, forCellReuseIdentifier: PlayerShuffleTableViewCell.identifier)
         
@@ -89,12 +88,11 @@ class PlayerTableViewController: UITableViewController {
             stopTimer()
         }
         
-        if let count = player?.nextSongs.count {
-            let noMoreSongs = (count == 0)
-            nextUpLabel.isHidden = noMoreSongs
-            separatorView.isHidden = noMoreSongs
-            if count > 0 {
-                nextUpLabel.text = "Next Up: \(count == 1 ? "" : "\(count) Songs")"
+        if let player = player {
+            if player.nextSongs.count > 0 {
+                tableView.separatorStyle = .singleLine
+            } else {
+                tableView.separatorStyle = .none
             }
         }
     }
@@ -119,44 +117,62 @@ class PlayerTableViewController: UITableViewController {
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return 1
+        return 3
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return player!.nextSongs.count + (player!.inShuffle  ? 1 : 0)
+        switch section {
+        case 0:
+            return player!.nextSongs.count > 0 ? 1 : 0
+        case 1:
+            return player!.nextSongs.count
+        case 2:
+            return player!.inShuffle ? 1 : 0
+        default:
+            return 0
+        }
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if player!.inShuffle && indexPath.row == player!.nextSongs.count {
-            let cell = tableView.dequeueReusableCell(withIdentifier: PlayerShuffleTableViewCell.identifier, for: indexPath)
+        switch indexPath.section {
+        case 0:
+            let cell = tableView.dequeueReusableCell(withIdentifier: PlayerNextUpTableViewCell.identifier, for: indexPath)
+            
+            if let cell = cell as? PlayerNextUpTableViewCell {
+                cell.count = player!.nextSongs.count
+            }
             
             return cell
-        } else {
+        case 1:
             let cell = tableView.dequeueReusableCell(withIdentifier: SongTableViewCell.identifier, for: indexPath)
-
+            
             // Configure the cell...
             if let songCell = cell as? SongTableViewCell {
                 songCell.song = player?.nextSongs[indexPath.row]
             }
-
+            
             return cell
+        case 2:
+            return tableView.dequeueReusableCell(withIdentifier: PlayerShuffleTableViewCell.identifier, for: indexPath)
+        default:
+            return UITableViewCell()
         }
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         
-        if indexPath.row == player?.nextSongs.count {
-            if player?.inShuffle == true {
-                let stopAction = UIAlertAction(title: "Stop shuffle", style: .destructive) { (action) in
-                    self.player?.stopShuffle()
-                }
-                
-                alert.addAction(stopAction)
+        switch indexPath.section {
+        case 0:
+            let clearAction = UIAlertAction(title: "Clear", style: .destructive) { (action) in
+                self.player?.clearNextSongs()
             }
-        } else {
-            let removeAction = UIAlertAction(title: "Remove from list", style: .destructive) { (action) in
+            
+            alert.addAction(clearAction)
+            break
+        case 1:
+            let removeAction = UIAlertAction(title: "Remove From List", style: .destructive) { (action) in
                 self.player?.removeSong(index: indexPath.row)
             }
             
@@ -166,6 +182,16 @@ class PlayerTableViewController: UITableViewController {
             
             alert.addAction(removeAction)
             alert.addAction(lastSongAction)
+            break
+        case 2:
+            let stopAction = UIAlertAction(title: "Stop Shuffle", style: .destructive) { (action) in
+                self.player?.stopShuffle()
+            }
+        
+            alert.addAction(stopAction)
+            break
+        default:
+            break
         }
         
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
