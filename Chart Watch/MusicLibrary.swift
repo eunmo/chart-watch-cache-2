@@ -7,6 +7,8 @@
 //
 
 import Foundation
+import UIKit
+import AVFoundation
 
 class MusicLibrary {
     
@@ -37,6 +39,7 @@ class MusicLibrary {
     static let ArchiveURL = DocumentsDirectory.appendingPathComponent("library")
     static let notificationKey = "MusicPlayerNotificationKey"
     static let notificationKeyCleanUpDone = "MusicPlayerNotificationKey - CleanUp"
+    static let notificationKeyCheckDownloadsDone = "MusicPlayerNotificationKey - CheckDownloads"
     
     init() {
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
@@ -64,7 +67,7 @@ class MusicLibrary {
                 playlists = archive.playlists
                 playRecords = archive.playRecords
                 buildMaps()
-                startDownload()
+                startDownload(skipCheck: false)
                 return
             }
         }
@@ -156,10 +159,10 @@ class MusicLibrary {
         return true
     }
     
-    func startDownload() {
+    func startDownload(skipCheck: Bool) {
         for album in albums {
             if album.downloaded != true {
-                if FileManager.default.fileExists(atPath: MusicLibrary.getImageLocalUrl(album.id).path) {
+                if skipCheck == false && FileManager.default.fileExists(atPath: MusicLibrary.getImageLocalUrl(album.id).path) {
                     album.downloaded = true
                     continue
                 }
@@ -175,7 +178,7 @@ class MusicLibrary {
         
         for song in songs {
             if song.downloaded != true {
-                if FileManager.default.fileExists(atPath: MusicLibrary.getMediaLocalUrl(song.id).path) {
+                if skipCheck == false && FileManager.default.fileExists(atPath: MusicLibrary.getMediaLocalUrl(song.id).path) {
                     song.downloaded = true
                     continue
                 }
@@ -188,6 +191,35 @@ class MusicLibrary {
                 })
             }
         }
+    }
+    
+    func doCheckDownloads() {
+        var albumCount = 0
+        for album in albums {
+            if album.downloaded {
+                let image = UIImage(contentsOfFile: MusicLibrary.getImageLocalUrl(album.id).path)
+                if image == nil {
+                    album.downloaded = false
+                    albumCount += 1
+                }
+            }
+        }
+        
+        var songCount = 0
+        for song in songs {
+            if song.downloaded {
+                let player = try? AVAudioPlayer(contentsOf: MusicLibrary.getMediaLocalUrl(song.id))
+                if player == nil {
+                    song.downloaded = false
+                    songCount += 1
+                }
+            }
+        }
+        
+        save()
+        startDownload(skipCheck: true)
+        
+        NotificationCenter.default.post(name: Notification.Name(rawValue: MusicLibrary.notificationKeyCheckDownloadsDone), object: self)
     }
     
     // MARK: Handle Initials
@@ -601,7 +633,7 @@ class MusicLibrary {
             buildMaps()
             save()
             notifyUpdate()
-            startDownload()
+            startDownload(skipCheck: false)
         }
     }
     
