@@ -25,7 +25,7 @@ class Downloader {
     var requests = [DownloadRequest]()
     var processCount = 0
     
-    let serverAddress = "http://124.49.11.117:3000"
+    let serverAddress = "http://1.235.106.140:3000"
     let simultaneousDownloadLimit = 8
     
     static let notificationKey = "DownloaderNotificationKey"
