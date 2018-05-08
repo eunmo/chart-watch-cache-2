@@ -13,6 +13,7 @@ class WebViewController: UIViewController, WKUIDelegate, WKScriptMessageHandler 
     
     var webView: WKWebView!
     var player: MusicPlayer?
+    var blurView: UIVisualEffectView?
     
     override func loadView() {
         let userScript = WKUserScript(source: "setWebkit()", injectionTime: WKUserScriptInjectionTime.atDocumentEnd, forMainFrameOnly: true)
@@ -28,6 +29,10 @@ class WebViewController: UIViewController, WKUIDelegate, WKScriptMessageHandler 
         webView.uiDelegate = self
         webView.allowsBackForwardNavigationGestures = true
         view = webView
+        
+        let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.regular)
+        blurView = UIVisualEffectView(effect: blurEffect)
+        blurView!.autoresizingMask = [.flexibleWidth, .flexibleHeight]
     }
     
     override func viewDidLoad() {
@@ -40,10 +45,16 @@ class WebViewController: UIViewController, WKUIDelegate, WKScriptMessageHandler 
         
         player = appDelegate.player
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    override func viewWillAppear(_ animated: Bool) {
+        if let statusbar = UIApplication.shared.value(forKey: "statusBar") as? UIView {
+            blurView!.frame = statusbar.bounds
+            statusbar.addSubview(blurView!)
+            statusbar.sendSubview(toBack: blurView!)
+        }
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        blurView!.removeFromSuperview()
     }
     
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {

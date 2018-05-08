@@ -26,6 +26,7 @@ class PlayerTableViewController: UITableViewController {
     
     var player: MusicPlayer?
     var timer: Timer?
+    var blurView: UIVisualEffectView?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -57,6 +58,22 @@ class PlayerTableViewController: UITableViewController {
         CommonUI.makeSmallLayerCircular(layer: playCountLabel.layer)
         
         updateTopView()
+        
+        let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.regular)
+        blurView = UIVisualEffectView(effect: blurEffect)
+        blurView!.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        if let statusbar = UIApplication.shared.value(forKey: "statusBar") as? UIView {
+            blurView!.frame = statusbar.bounds
+            statusbar.addSubview(blurView!)
+            statusbar.sendSubview(toBack: blurView!)
+        }
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        blurView!.removeFromSuperview()
     }
     
     func updateTopView() {
@@ -106,11 +123,6 @@ class PlayerTableViewController: UITableViewController {
         DispatchQueue.main.async(execute: { () -> Void in
             self.update()
         })
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
 
     // MARK: - Table view data source
