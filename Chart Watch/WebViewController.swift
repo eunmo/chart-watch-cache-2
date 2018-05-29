@@ -33,6 +33,11 @@ class WebViewController: UIViewController, WKUIDelegate, WKScriptMessageHandler 
         let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.regular)
         blurView = UIVisualEffectView(effect: blurEffect)
         blurView!.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        
+        webView.scrollView.bounces = true
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(self.refreshWebView(sender:)), for: UIControlEvents.valueChanged)
+        webView.scrollView.addSubview(refreshControl)
     }
     
     override func viewDidLoad() {
@@ -66,14 +71,12 @@ class WebViewController: UIViewController, WKUIDelegate, WKScriptMessageHandler 
         }
     }
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    @objc func refreshWebView(sender: UIRefreshControl) {
+        // Do any additional setup after loading the view.
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        let serverAddress = appDelegate.library.downloader.serverAddress
+        webView.load(URLRequest(url: URL(string: serverAddress)!))
+        sender.endRefreshing()
     }
-    */
 
 }
