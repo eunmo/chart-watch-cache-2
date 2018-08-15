@@ -10,7 +10,7 @@ import UIKit
 
 class LibraryTableViewController: UITableViewController {
     
-    let section1 = ["Artists", "Albums", "Songs", ""]
+    let section1 = ["Artists", ""]
     var playlists = [Playlist]()
     var library: MusicLibrary?
 
@@ -68,7 +68,7 @@ class LibraryTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.section == 0 {
             if let cell = tableView.dequeueReusableCell(withIdentifier: LibraryBasicTableViewCell.identifier, for: indexPath) as?   LibraryBasicTableViewCell {
-                if indexPath.row == 3 {
+                if indexPath.row == 1 {
                     let (done, all) = library!.downloader.getStatus()
                     
                     if done != all {
@@ -100,12 +100,6 @@ class LibraryTableViewController: UITableViewController {
                 performSegue(withIdentifier: "LibraryArtistSegue", sender: self)
                 break
             case 1:
-                performSegue(withIdentifier: "LibraryAlbumSegue", sender: self)
-                break
-            case 2:
-                performSegue(withIdentifier: "LibrarySongSegue", sender: self)
-                break
-            case 3:
                 performSegue(withIdentifier: "LibraryNetworkSegue", sender: self)
                 break
             default:
