@@ -49,6 +49,7 @@
 		5489AA2D2015008100B26F62 /* LibraryArtistInitialCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5489AA2B2015008100B26F62 /* LibraryArtistInitialCollectionViewCell.swift */; };
 		5489AA2E2015008100B26F62 /* LibraryArtistInitialCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5489AA2C2015008100B26F62 /* LibraryArtistInitialCollectionViewCell.xib */; };
 		54984E822018DC9F002D8203 /* Downloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54984E812018DC9F002D8203 /* Downloader.swift */; };
+		54C6B7642129F70800B5C4A6 /* ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54C6B7632129F70800B5C4A6 /* ImageCache.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -96,6 +97,7 @@
 		5489AA2B2015008100B26F62 /* LibraryArtistInitialCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryArtistInitialCollectionViewCell.swift; sourceTree = "<group>"; };
 		5489AA2C2015008100B26F62 /* LibraryArtistInitialCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LibraryArtistInitialCollectionViewCell.xib; sourceTree = "<group>"; };
 		54984E812018DC9F002D8203 /* Downloader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Downloader.swift; sourceTree = "<group>"; };
+		54C6B7632129F70800B5C4A6 /* ImageCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCache.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -147,7 +149,7 @@
 				54614123201DCDCE000D6ED4 /* MusicLibraryDataStructures.swift */,
 				5461411C201C9868000D6ED4 /* MusicPlayer.swift */,
 				5438ED9D201F3513007EE34D /* CommonUI.swift */,
-				5438ED9F201F9F28007EE34D /* WebViewController.swift */,
+				54C6B7622129F6C400B5C4A6 /* WebViewTab */,
 				5461411E201C9E01000D6ED4 /* PlayerTab */,
 				549A23312017A40900CE1F2D /* LibraryTab */,
 				5489AA0420146D6400B26F62 /* Assets.xcassets */,
@@ -189,6 +191,15 @@
 				54614128201DD257000D6ED4 /* NetworkTableViewCell.xib */,
 			);
 			path = LibraryTab;
+			sourceTree = "<group>";
+		};
+		54C6B7622129F6C400B5C4A6 /* WebViewTab */ = {
+			isa = PBXGroup;
+			children = (
+				5438ED9F201F9F28007EE34D /* WebViewController.swift */,
+				54C6B7632129F70800B5C4A6 /* ImageCache.swift */,
+			);
+			path = WebViewTab;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -306,6 +317,7 @@
 				54614113201B6DE5000D6ED4 /* TrackTableViewHeaderView.swift in Sources */,
 				5461411D201C9868000D6ED4 /* MusicPlayer.swift in Sources */,
 				5429FAAF2016E35D001D2F63 /* SongTableViewController.swift in Sources */,
+				54C6B7642129F70800B5C4A6 /* ImageCache.swift in Sources */,
 				5489AA1020146E9400B26F62 /* MusicLibrary.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

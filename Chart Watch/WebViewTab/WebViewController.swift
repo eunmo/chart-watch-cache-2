@@ -16,14 +16,20 @@ class WebViewController: UIViewController, WKUIDelegate, WKScriptMessageHandler 
     var blurView: UIVisualEffectView?
     
     override func loadView() {
-        let userScript = WKUserScript(source: "setWebkit()", injectionTime: WKUserScriptInjectionTime.atDocumentEnd, forMainFrameOnly: true)
+        let userScript1 = WKUserScript(source: "setWebkit()", injectionTime: WKUserScriptInjectionTime.atDocumentEnd, forMainFrameOnly: true)
+        let userScript2 = WKUserScript(source: "window.isWebkit = true;", injectionTime: WKUserScriptInjectionTime.atDocumentStart, forMainFrameOnly: true)
+        
         
         let contentController = WKUserContentController()
-        contentController.addUserScript(userScript)
+        contentController.addUserScript(userScript1)
+        contentController.addUserScript(userScript2)
         contentController.add(self, name: "addSongs")
         
         let config = WKWebViewConfiguration()
         config.userContentController = contentController
+        
+        let cache = ImageCache()
+        config.setURLSchemeHandler(cache, forURLScheme: "cw-custom-scheme")
         
         webView = WKWebView(frame: .zero, configuration: config)
         webView.uiDelegate = self
