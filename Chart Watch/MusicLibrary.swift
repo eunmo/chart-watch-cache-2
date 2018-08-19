@@ -649,7 +649,6 @@ class MusicLibrary {
         
         do {
             let files = try FileManager.default.contentsOfDirectory(at: MusicLibrary.DocumentsDirectory, includingPropertiesForKeys: [], options: [])
-            var imageCount = 0
             var mediaCount = 0
             
             for file in files {
@@ -658,11 +657,6 @@ class MusicLibrary {
                     if let song = Int((file.deletingPathExtension().lastPathComponent)) , songMap[song] == nil {
                         try FileManager.default.removeItem(at: file)
                         mediaCount += 1
-                    }
-                case "jpg":
-                    if let album = Int((file.deletingPathExtension().lastPathComponent)) , albumMap[album] == nil {
-                        try FileManager.default.removeItem(at: file)
-                        imageCount += 1
                     }
                 default:
                     break
@@ -724,8 +718,10 @@ class MusicLibrary {
             
             let missingAlbumIds = Array(albumSet)
             for id in missingAlbumIds {
-                downloader.requestImage(id: id, callback: {})
-            }            
+                if FileManager.default.fileExists(atPath: MusicLibrary.getImageLocalUrl(id).path) == false {
+                    downloader.requestImage(id: id, callback: {})
+                }
+            }
             player?.addNetworkSongs(songs: songs)
         } catch {
             print("\(error)")
