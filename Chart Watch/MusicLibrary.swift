@@ -39,6 +39,7 @@ class MusicLibrary {
     static let ArchiveURL = DocumentsDirectory.appendingPathComponent("library")
     static let notificationKey = "MusicPlayerNotificationKey"
     static let notificationKeyCleanUpDone = "MusicPlayerNotificationKey - CleanUp"
+    static let notificationKeyDeleteImagesDone = "MusicPlayerNotificationKey - DeleteImages"
     static let notificationKeyCheckDownloadsDone = "MusicPlayerNotificationKey - CheckDownloads"
     
     init() {
@@ -667,6 +668,30 @@ class MusicLibrary {
         }
         
         NotificationCenter.default.post(name: Notification.Name(rawValue: MusicLibrary.notificationKeyCleanUpDone), object: self)
+    }
+    
+    func deleteImages() {
+        if allowDestructiveBehavior() == false {
+            NotificationCenter.default.post(name: Notification.Name(rawValue: MusicLibrary.notificationKeyCleanUpDone), object: self)
+            return
+        }
+        
+        do {
+            let files = try FileManager.default.contentsOfDirectory(at: MusicLibrary.DocumentsDirectory, includingPropertiesForKeys: [], options: [])
+            
+            for file in files {
+                switch file.pathExtension {
+                case "jpg":
+                    try FileManager.default.removeItem(at: file)
+                default:
+                    break
+                }
+            }
+        } catch {
+            
+        }
+        
+        NotificationCenter.default.post(name: Notification.Name(rawValue: MusicLibrary.notificationKeyDeleteImagesDone), object: self)
     }
     
     func getRandomSong() -> FullSong {

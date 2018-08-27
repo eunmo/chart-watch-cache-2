@@ -56,6 +56,7 @@ class NetworkTableViewController: UITableViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(NetworkTableViewController.receivePullDone), name: NSNotification.Name(rawValue: Downloader.notificationKeyPullDone), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(NetworkTableViewController.receiveFetchDone), name: NSNotification.Name(rawValue: Downloader.notificationKeyFetchDone), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(NetworkTableViewController.receiveCleanUpDone), name: NSNotification.Name(rawValue: MusicLibrary.notificationKeyCleanUpDone), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(NetworkTableViewController.receiveDeleteImagesDone), name: NSNotification.Name(rawValue: MusicLibrary.notificationKeyDeleteImagesDone), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(NetworkTableViewController.receiveCheckDownloadsDone), name: NSNotification.Name(rawValue: MusicLibrary.notificationKeyCheckDownloadsDone), object: nil)
         
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
@@ -68,6 +69,7 @@ class NetworkTableViewController: UITableViewController {
         items.append(ManagementItem(name: "Do All", function: { self.doAll() }))
         doAllIndex = items.count - 1
         items.append(ManagementItem(name: "Check Downloads", function: { self.library?.doCheckDownloads() }))
+        items.append(ManagementItem(name: "Delete All Images", function: { self.library?.deleteImages() }))
     }
     
     func update() {
@@ -103,6 +105,10 @@ class NetworkTableViewController: UITableViewController {
     
     @objc func receiveCheckDownloadsDone() {
         optionDone(index: 5)
+    }
+    
+    @objc func receiveDeleteImagesDone() {
+        optionDone(index: 6)
     }
 
     override func didReceiveMemoryWarning() {
