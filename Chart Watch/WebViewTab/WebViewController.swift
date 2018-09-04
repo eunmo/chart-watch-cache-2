@@ -51,7 +51,7 @@ class WebViewController: UIViewController, WKUIDelegate, WKScriptMessageHandler 
 
         // Do any additional setup after loading the view.
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        let serverAddress = appDelegate.library.downloader.serverAddress
+        let serverAddress = "\(appDelegate.library.downloader.serverAddress)/react/"
         webView.load(URLRequest(url: URL(string: serverAddress)!))
         
         player = appDelegate.player
@@ -80,7 +80,7 @@ class WebViewController: UIViewController, WKUIDelegate, WKScriptMessageHandler 
     @objc func refreshWebView(sender: UIRefreshControl) {
         // Do any additional setup after loading the view.
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        let serverAddress = appDelegate.library.downloader.serverAddress
+        let serverAddress = "\(appDelegate.library.downloader.serverAddress)/react/"
         webView.load(URLRequest(url: URL(string: serverAddress)!))
         sender.endRefreshing()
     }
