@@ -586,6 +586,11 @@ class MusicLibrary {
         playlists = [Playlist]()
         playlists.append(Playlist(playlistType: .songPlaylist, name: "Current Singles", list: json.singleCharts))
         playlists.append(Playlist(playlistType: .albumPlaylist, name: "Current Albums", list: json.albumCharts))
+        
+        if (json.newAlbums.count > 0) {
+            playlists.append(Playlist(playlistType: .albumPlaylist, name: "New Albums", list: json.newAlbums))
+        }
+        
         playlists.append(Playlist(playlistType: .albumPlaylist, name: "Favorite Artists", list: json.favorites))
         playlists.append(Playlist(playlistType: .songPlaylist, name: "Seasonal Songs", list: json.seasonal))
         playlists.append(Playlist(playlistType: .songPlaylist, name: "Charted Songs", list: json.charted))

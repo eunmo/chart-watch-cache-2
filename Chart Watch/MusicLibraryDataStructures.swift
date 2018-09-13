@@ -97,6 +97,7 @@ struct ServerJSON: Decodable {
     let seasonal: [Int]
     let charted: [Int]
     let uncharted: [Int]
+    let newAlbums: [Int]
     let songs: [SongInfo]
     let albums: [AlbumInfo]
     let artists: [ArtistInfo]
