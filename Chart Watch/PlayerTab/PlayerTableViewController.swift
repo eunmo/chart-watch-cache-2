@@ -53,13 +53,13 @@ class PlayerTableViewController: UITableViewController {
         progressView.progress = 0
         remainingTimeLabel.text = ""
         
-        self.tableView.separatorInset = UIEdgeInsetsMake(0, 59, 0, 0)
+        self.tableView.separatorInset = UIEdgeInsets.init(top: 0, left: 59, bottom: 0, right: 0)
         
         CommonUI.makeSmallLayerCircular(layer: playCountLabel.layer)
         
         updateTopView()
         
-        let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.regular)
+        let blurEffect = UIBlurEffect(style: UIBlurEffect.Style.regular)
         blurView = UIVisualEffectView(effect: blurEffect)
         blurView!.autoresizingMask = [.flexibleWidth, .flexibleHeight]
     }
@@ -68,7 +68,7 @@ class PlayerTableViewController: UITableViewController {
         if let statusbar = UIApplication.shared.value(forKey: "statusBar") as? UIView {
             blurView!.frame = statusbar.bounds
             statusbar.addSubview(blurView!)
-            statusbar.sendSubview(toBack: blurView!)
+            statusbar.sendSubviewToBack(blurView!)
         }
     }
     

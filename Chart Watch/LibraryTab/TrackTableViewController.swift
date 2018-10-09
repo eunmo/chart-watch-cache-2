@@ -51,7 +51,7 @@ class TrackTableViewController: UITableViewController {
         navItem.largeTitleDisplayMode = .never
         self.title = ""
         
-        self.tableView.separatorInset = UIEdgeInsetsMake(0, 54, 0, 59)
+        self.tableView.separatorInset = UIEdgeInsets.init(top: 0, left: 54, bottom: 0, right: 59)
     }
     
     func getSongs() {
@@ -142,7 +142,7 @@ class TrackTableViewController: UITableViewController {
         } else if disks.last?.num == 1 {
             return CGFloat(0)
         }
-        return UITableViewAutomaticDimension
+        return UITableView.automaticDimension
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {

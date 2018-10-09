@@ -29,7 +29,7 @@ class LibraryTableViewController: UITableViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(LibraryTableViewController.receiveNotification), name: NSNotification.Name(rawValue: Downloader.notificationKey), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(LibraryTableViewController.receiveNotification), name: NSNotification.Name(rawValue: MusicLibrary.notificationKey), object: nil)
         
-        self.tableView.rowHeight = UITableViewAutomaticDimension
+        self.tableView.rowHeight = UITableView.automaticDimension
         self.tableView.estimatedRowHeight = 66.0
         
         let appDelegate = UIApplication.shared.delegate as! AppDelegate

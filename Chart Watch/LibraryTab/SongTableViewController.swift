@@ -38,7 +38,7 @@ class SongTableViewController: UITableViewController {
             self.title = pl.name
         }
         
-        self.tableView.separatorInset = UIEdgeInsetsMake(0, 59, 0, 59)
+        self.tableView.separatorInset = UIEdgeInsets.init(top: 0, left: 59, bottom: 0, right: 59)
     }
     
     func getSongs() {

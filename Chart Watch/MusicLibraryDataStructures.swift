@@ -41,7 +41,6 @@ struct AlbumInfo: Codable {
 
 class Album: Codable {
     var info: AlbumInfo
-    var downloaded = false
     
     var id: Int {
         get {
@@ -71,7 +70,6 @@ struct SongInfo: Codable {
 
 class Song: Codable {
     var info: SongInfo
-    var downloaded = false
     
     var id: Int {
         get {
@@ -101,6 +99,8 @@ struct ServerJSON: Decodable {
     let songs: [SongInfo]
     let albums: [AlbumInfo]
     let artists: [ArtistInfo]
+    let songIds: [[Int]]
+    let albumIds: [[Int]]
 }
 
 struct FullSong: Codable {
@@ -120,6 +120,8 @@ struct Archive: Codable {
     let artists: [Artist]
     let playlists: [Playlist]
     let playRecords: [Int: PlayRecord]
+    let downloadedMedia: Set<Int>
+    let downloadedImage: Set<Int>
 }
 
 enum PlaylistType: Int, Codable {

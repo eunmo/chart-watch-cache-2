@@ -29,6 +29,11 @@ class MusicLibrary {
     var songAlbums = [Int: [Int]]()
     var initials = [Character: [Artist]]()
     
+    // MARK: set
+    
+    var downloadedMedia = Set<Int>()
+    var downloadedImage = Set<Int>()
+    
     let downloader = Downloader()
     var player: MusicPlayer?
     
@@ -54,7 +59,7 @@ class MusicLibrary {
     }
     
     func save() {
-        let archive = Archive(songs: songs, albums: albums, artists: artists, playlists: playlists, playRecords: playRecords)
+        let archive = Archive(songs: songs, albums: albums, artists: artists, playlists: playlists, playRecords: playRecords, downloadedMedia: downloadedMedia, downloadedImage: downloadedImage)
         let data = try! PropertyListEncoder().encode(archive)
         NSKeyedArchiver.archiveRootObject(data, toFile: MusicLibrary.ArchiveURL.path)
     }
@@ -67,9 +72,9 @@ class MusicLibrary {
                 artists = archive.artists
                 playlists = archive.playlists
                 playRecords = archive.playRecords
+                downloadedMedia = archive.downloadedMedia
+                downloadedImage = archive.downloadedImage
                 buildMaps()
-                startDownload(skipCheck: false)
-                return
             }
         }
     }
@@ -144,49 +149,25 @@ class MusicLibrary {
     
     // MARK: Initiate Downloads
     
-    func downloadDone() -> Bool {
-        for album in albums {
-            if album.downloaded == false {
-                return false
-            }
-        }
-        
-        for song in songs {
-            if song.downloaded == false {
-                return false
-            }
-        }
-        
-        return true
-    }
-    
-    func startDownload(skipCheck: Bool) {
-        for album in albums {
-            if album.downloaded != true {
-                if skipCheck == false && FileManager.default.fileExists(atPath: MusicLibrary.getImageLocalUrl(album.id).path) {
-                    album.downloaded = true
-                    continue
-                }
-                
-                downloader.requestImage(id: album.id, callback: {
-                    album.downloaded = true
-                    if self.downloadDone() {
+    func startDownload(albums: [Int], songs: [Int]) {
+        for albumId in albums {
+            if downloadedImage.contains(albumId) == false {
+                downloader.requestImage(id: albumId, callback: { (done: Bool) -> Void in
+                    self.downloadedImage.insert(albumId)
+                    
+                    if done {
                         self.save()
                     }
                 })
             }
         }
         
-        for song in songs {
-            if song.downloaded != true {
-                if skipCheck == false && FileManager.default.fileExists(atPath: MusicLibrary.getMediaLocalUrl(song.id).path) {
-                    song.downloaded = true
-                    continue
-                }
-                
-                downloader.requestMedia(id: song.id, callback: {
-                    song.downloaded = true
-                    if self.downloadDone() {
+        for songId in songs {
+            if downloadedMedia.contains(songId) == false {
+                downloader.requestMedia(id: songId, callback: { (done: Bool) -> Void in
+                    self.downloadedMedia.insert(songId)
+                    
+                    if done {
                         self.save()
                     }
                 })
@@ -195,30 +176,28 @@ class MusicLibrary {
     }
     
     func doCheckDownloads() {
-        var albumCount = 0
-        for album in albums {
-            if album.downloaded {
-                let image = UIImage(contentsOfFile: MusicLibrary.getImageLocalUrl(album.id).path)
-                if image == nil {
-                    album.downloaded = false
-                    albumCount += 1
-                }
+        var albums = [Int]()
+        for (_, album) in downloadedImage.enumerated() {
+            let image = UIImage(contentsOfFile: MusicLibrary.getImageLocalUrl(album).path)
+            if image == nil {
+                albums.append(album)
             }
         }
         
-        var songCount = 0
-        for song in songs {
-            if song.downloaded {
-                let player = try? AVAudioPlayer(contentsOf: MusicLibrary.getMediaLocalUrl(song.id))
-                if player == nil {
-                    song.downloaded = false
-                    songCount += 1
-                }
+        var songs = [Int]()
+        for (index, song) in downloadedMedia.enumerated() {
+            let player = try? AVAudioPlayer(contentsOf: MusicLibrary.getMediaLocalUrl(song))
+            if player == nil {
+                songs.append(song)
+            }
+            
+            if index % 1000 == 0 {
+                print(index)
             }
         }
         
         save()
-        startDownload(skipCheck: true)
+        startDownload(albums: albums, songs: songs)
         
         NotificationCenter.default.post(name: Notification.Name(rawValue: MusicLibrary.notificationKeyCheckDownloadsDone), object: self)
     }
@@ -597,6 +576,18 @@ class MusicLibrary {
         playlists.append(Playlist(playlistType: .songPlaylist, name: "Unfamiliar Songs", list: json.uncharted))
     }
     
+    func expandIds(condensed: [[Int]]) -> [Int] {
+        var array = [Int]()
+        
+        for var pair in condensed {
+            for i in pair[0]...pair[1] {
+                array.append(i)
+            }
+        }
+        
+        return array
+    }
+    
     func replaceData(data: Data) -> Bool {
         do {
             let json = try decoder.decode(ServerJSON.self, from: data)
@@ -622,6 +613,10 @@ class MusicLibrary {
             
             addPlaylists(json: json)
             
+            let songIds = expandIds(condensed: json.songIds)
+            let albumIds = expandIds(condensed: json.albumIds)
+            startDownload(albums: albumIds, songs: songIds)
+            
             return true
         } catch {
             print("\(error)")
@@ -639,40 +634,11 @@ class MusicLibrary {
             buildMaps()
             save()
             notifyUpdate()
-            startDownload(skipCheck: false)
         }
     }
     
     func doFetch() {
         downloader.fetch(completion: parse)
-    }
-    
-    func doCleanUp() {
-        if allowDestructiveBehavior() == false {
-            NotificationCenter.default.post(name: Notification.Name(rawValue: MusicLibrary.notificationKeyCleanUpDone), object: self)
-            return
-        }
-        
-        do {
-            let files = try FileManager.default.contentsOfDirectory(at: MusicLibrary.DocumentsDirectory, includingPropertiesForKeys: [], options: [])
-            var mediaCount = 0
-            
-            for file in files {
-                switch file.pathExtension {
-                case "mp3":
-                    if let song = Int((file.deletingPathExtension().lastPathComponent)) , songMap[song] == nil {
-                        try FileManager.default.removeItem(at: file)
-                        mediaCount += 1
-                    }
-                default:
-                    break
-                }
-            }
-        } catch {
-            
-        }
-        
-        NotificationCenter.default.post(name: Notification.Name(rawValue: MusicLibrary.notificationKeyCleanUpDone), object: self)
     }
     
     func deleteImages() {
@@ -695,6 +661,8 @@ class MusicLibrary {
         } catch {
             
         }
+
+        downloadedImage = Set<Int>()
         
         NotificationCenter.default.post(name: Notification.Name(rawValue: MusicLibrary.notificationKeyDeleteImagesDone), object: self)
     }
@@ -741,15 +709,20 @@ class MusicLibrary {
             
             var albumSet = Set<Int>()
             for song in songs {
-                if albumMap[song.albumId] == nil {
+                if downloadedImage.contains(song.albumId) == false {
                     albumSet.insert(song.albumId)
                 }
             }
             
-            let missingAlbumIds = Array(albumSet)
-            for id in missingAlbumIds {
+            for (_, id) in albumSet.enumerated() {
                 if FileManager.default.fileExists(atPath: MusicLibrary.getImageLocalUrl(id).path) == false {
-                    downloader.requestImage(id: id, callback: {})
+                    downloader.requestImage(id: id, callback: { (done: Bool) -> Void in
+                        self.downloadedImage.insert(id)
+                        
+                        if done {
+                            self.save()
+                        }
+                    })
                 }
             }
             player?.addNetworkSongs(songs: songs)

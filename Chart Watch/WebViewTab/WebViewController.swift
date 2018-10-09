@@ -36,13 +36,13 @@ class WebViewController: UIViewController, WKUIDelegate, WKScriptMessageHandler 
         webView.allowsBackForwardNavigationGestures = true
         view = webView
         
-        let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.regular)
+        let blurEffect = UIBlurEffect(style: UIBlurEffect.Style.regular)
         blurView = UIVisualEffectView(effect: blurEffect)
         blurView!.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         
         webView.scrollView.bounces = true
         let refreshControl = UIRefreshControl()
-        refreshControl.addTarget(self, action: #selector(self.refreshWebView(sender:)), for: UIControlEvents.valueChanged)
+        refreshControl.addTarget(self, action: #selector(self.refreshWebView(sender:)), for: UIControl.Event.valueChanged)
         webView.scrollView.addSubview(refreshControl)
     }
     
@@ -60,7 +60,7 @@ class WebViewController: UIViewController, WKUIDelegate, WKScriptMessageHandler 
         if let statusbar = UIApplication.shared.value(forKey: "statusBar") as? UIView {
             blurView!.frame = statusbar.bounds
             statusbar.addSubview(blurView!)
-            statusbar.sendSubview(toBack: blurView!)
+            statusbar.sendSubviewToBack(blurView!)
         }
     }
     

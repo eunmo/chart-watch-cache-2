@@ -31,7 +31,7 @@ class ArtistTableViewController: UITableViewController {
         library = appDelegate.library
         artists = library!.getArtistsByInitial(initial: initial.first!)
         
-        self.tableView.separatorInset = UIEdgeInsetsMake(0, 59, 0, 0)
+        self.tableView.separatorInset = UIEdgeInsets.init(top: 0, left: 59, bottom: 0, right: 0)
     }
 
     override func didReceiveMemoryWarning() {

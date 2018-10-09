@@ -25,6 +25,7 @@ class Downloader {
     var requests = [DownloadRequest]()
     var processCount = 0
     
+    //let serverAddress = "http://192.168.0.9:3000"
     let serverAddress = "http://1.235.106.140:3000"
     let simultaneousDownloadLimit = 8
     
@@ -37,11 +38,11 @@ class Downloader {
         let id: Int
         var type: DownloadType
         var status: DownloadStatus = .ready
-        let callback: () -> Void
+        let callback: (Bool) -> Void
         let localUrl: URL
         let serverUrl: URL
         
-        init(id: Int, type: DownloadType, callback: @escaping () -> Void, localUrl: URL, serverUrl: URL) {
+        init(id: Int, type: DownloadType, callback: @escaping (Bool) -> Void, localUrl: URL, serverUrl: URL) {
             self.id = id
             self.type = type
             self.callback = callback
@@ -181,7 +182,7 @@ class Downloader {
                 downloadThenSave(request: request, callback: { success in
                     if success {
                         request.status = .done
-                        request.callback()
+                        request.callback(self.isDone())
                         self.notify(type: Downloader.notificationKey)
                     } else {
                         request.status = .failed
@@ -196,7 +197,7 @@ class Downloader {
         }
     }
     
-    func requestImage(id: Int, callback: @escaping () -> Void) {
+    func requestImage(id: Int, callback: @escaping (Bool) -> Void) {
         let localUrl = MusicLibrary.getImageLocalUrl(id)
         let serverUrl = URL(string: "\(serverAddress)/\(id).jpg")!
         let request = DownloadRequest(id: id, type: .image, callback: callback, localUrl: localUrl, serverUrl: serverUrl)
@@ -204,12 +205,18 @@ class Downloader {
         resume()
     }
     
-    func requestMedia(id: Int, callback: @escaping () -> Void) {
+    func requestMedia(id: Int, callback: @escaping (Bool) -> Void) {
         let localUrl = MusicLibrary.getMediaLocalUrl(id)
         let serverUrl = URL(string: "\(serverAddress)/music/\(id).mp3")!
         let request = DownloadRequest(id: id, type: .image, callback: callback, localUrl: localUrl, serverUrl: serverUrl)
         requests.append(request)
         resume()
+    }
+    
+    func isDone() -> Bool {
+        let (doneCount, requestCount) = getStatus()
+        
+        return doneCount == requestCount
     }
     
     func getStatus() -> (Int, Int) {

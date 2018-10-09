@@ -16,15 +16,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     let library = MusicLibrary()
     let player = MusicPlayer()
 
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         print("start")
         library.load()
         player.library = library
         library.player = player
         
-        _ = try? AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback, with: [])
-        _ = try? AVAudioSession.sharedInstance().setActive(true, with: [])
+        _ = try? AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)
+        _ = try? AVAudioSession.sharedInstance().setActive(true, options: [])
         
         UIApplication.shared.beginReceivingRemoteControlEvents()
         return true
@@ -64,4 +64,3 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
 }
-

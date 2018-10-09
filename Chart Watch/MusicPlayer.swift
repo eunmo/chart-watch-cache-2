@@ -120,44 +120,10 @@ class MusicPlayer: NSObject, AVAudioPlayerDelegate{
         notify()
     }
     
-    private func requestDownload() {
-        let requestLimit = (self.currentSong == nil) ? 1 : 2
-        
-        for (index, song) in nextSongs.enumerated() {
-            if index >= requestLimit {
-                break
-            }
-            
-            if song.fromNetwork == false || downloadedSongIds.contains(song.id) || requestedSongIds.contains(song.id) {
-                continue
-            }
-            
-            library?.downloader.requestMedia(id: song.id, callback: {
-                self.downloadedSongIds.insert(song.id)
-                print("downloaded \(song.id)")
-                if self.currentSong == nil && self.nextSongs.isEmpty == false && song.id == self.nextSongs[0].id {
-                    self.playNext()
-                }
-            })
-            requestedSongIds.insert(song.id)
-            
-            print("request \(song.id)")
-        }
-    }
-    
     private func playNext() {
         if nextSongs.isEmpty {
             clearPlayer()
             return
-        }
-        
-        if nextSongs[0].fromNetwork {
-            let song = nextSongs[0]
-            
-            if downloadedSongIds.contains(song.id) == false {
-                requestDownload()
-                return
-            }
         }
         
         let song = nextSongs.remove(at: 0)
@@ -178,8 +144,6 @@ class MusicPlayer: NSObject, AVAudioPlayerDelegate{
             MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
         
             play()
-            
-            requestDownload()
         } else {
             clearPlayer()
             notify()
@@ -258,7 +222,6 @@ class MusicPlayer: NSObject, AVAudioPlayerDelegate{
     
     func addNetworkSongs(songs: [FullSong]) {
         nextSongs.append(contentsOf: songs)
-        requestDownload()
         if currentSong == nil {
             playNext()
         } else {
