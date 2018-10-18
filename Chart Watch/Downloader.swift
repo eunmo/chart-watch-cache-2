@@ -25,8 +25,8 @@ class Downloader {
     var requests = [DownloadRequest]()
     var processCount = 0
     
-    //let serverAddress = "http://192.168.0.9:3000"
-    let serverAddress = "http://1.235.106.140:3000"
+    let serverAddress = "http://52.195.14.242:3010"
+    let bucketAddress = "https://s3-ap-northeast-1.amazonaws.com/eunmo-music"
     let simultaneousDownloadLimit = 8
     
     static let notificationKey = "DownloaderNotificationKey"
@@ -207,7 +207,7 @@ class Downloader {
     
     func requestMedia(id: Int, callback: @escaping (Bool) -> Void) {
         let localUrl = MusicLibrary.getMediaLocalUrl(id)
-        let serverUrl = URL(string: "\(serverAddress)/music/\(id).mp3")!
+        let serverUrl = URL(string: "\(bucketAddress)/\(id)")!
         let request = DownloadRequest(id: id, type: .image, callback: callback, localUrl: localUrl, serverUrl: serverUrl)
         requests.append(request)
         resume()
