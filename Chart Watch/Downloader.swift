@@ -30,8 +30,7 @@ class Downloader {
     let simultaneousDownloadLimit = 8
     
     static let notificationKey = "DownloaderNotificationKey"
-    static let notificationKeyPushDone = "DownloaderNotificationKey - Push"
-    static let notificationKeyPullDone = "DownloaderNotificationKey - Pull"
+    static let notificationKeySyncPlaysDone = "DownloaderNotificationKey - Sync Plays"
     static let notificationKeyFetchDone = "DownloaderNotificationKey - Fetch"
     
     class DownloadRequest {
@@ -51,34 +50,15 @@ class Downloader {
         }
     }
     
-    func push(pushData: [PushData]) {
+    func sync(pushData: [PushData], completion: @escaping (Data) -> Void) {
         if pushData.count == 0 {
-            notify(type: Downloader.notificationKeyPushDone)
+            notify(type: Downloader.notificationKeySyncPlaysDone)
             return
         }
         
         if let data = try? JSONEncoder().encode(pushData) {
             
-            let urlAsString = "\(serverAddress)/ios/plays/push"
-            let url = URL(string: urlAsString)!
-            let urlSession = URLSession.shared
-            
-            var request = URLRequest(url: url)
-            request.httpMethod = "PUT"
-            request.httpBody = data
-            request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-            
-            let task = urlSession.dataTask(with: request, completionHandler: { data, response, error -> Void in
-                self.notify(type: Downloader.notificationKeyPushDone)
-            })
-            task.resume()
-        }
-    }
-    
-    func pull(pullData: [Int], completion: @escaping (Data) -> Void) {
-        if let data = try? JSONEncoder().encode(pullData) {
-            
-            let urlAsString = "\(serverAddress)/ios/plays/pull"
+            let urlAsString = "\(serverAddress)/ios/plays/sync"
             let url = URL(string: urlAsString)!
             let urlSession = URLSession.shared
             
@@ -91,7 +71,7 @@ class Downloader {
                 if let d = data {
                     completion(d)
                 }
-                self.notify(type: Downloader.notificationKeyPullDone)
+                self.notify(type: Downloader.notificationKeySyncPlaysDone)
             })
             task.resume()
         }

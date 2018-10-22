@@ -490,6 +490,7 @@ class MusicLibrary {
         }
         
         save()
+        doSync()
         notifyUpdate()
     }
     
@@ -503,15 +504,8 @@ class MusicLibrary {
         return data
     }
     
-    func doPush() {
-        downloader.push(pushData: getPushData())
-    }
-    
-    func getPullData() -> [Int] {
-        let setA = Set(songs.map({ $0.id }))
-        let setB = Set(playRecords.keys)
-        let union = setA.union(setB)
-        return Array(union)
+    func doSync() {
+        downloader.sync(pushData: getPushData(), completion: updatePlays)
     }
     
     func notifyUpdate() {
@@ -551,10 +545,6 @@ class MusicLibrary {
         } catch {
             print("\(error)")
         }
-    }
-    
-    func doPull() {
-        downloader.pull(pullData: getPullData(), completion: updatePlays)
     }
     
     func normalizeString(string: String) -> String {

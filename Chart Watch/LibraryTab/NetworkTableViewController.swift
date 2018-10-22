@@ -52,8 +52,7 @@ class NetworkTableViewController: UITableViewController {
         
         self.tableView.register(NetworkTableViewCell.nib, forCellReuseIdentifier: NetworkTableViewCell.identifier)
         
-        NotificationCenter.default.addObserver(self, selector: #selector(NetworkTableViewController.receivePushDone), name: NSNotification.Name(rawValue: Downloader.notificationKeyPushDone), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(NetworkTableViewController.receivePullDone), name: NSNotification.Name(rawValue: Downloader.notificationKeyPullDone), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(NetworkTableViewController.receivePushDone), name: NSNotification.Name(rawValue: Downloader.notificationKeySyncPlaysDone), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(NetworkTableViewController.receiveFetchDone), name: NSNotification.Name(rawValue: Downloader.notificationKeyFetchDone), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(NetworkTableViewController.receiveDeleteImagesDone), name: NSNotification.Name(rawValue: MusicLibrary.notificationKeyDeleteImagesDone), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(NetworkTableViewController.receiveCheckDownloadsDone), name: NSNotification.Name(rawValue: MusicLibrary.notificationKeyCheckDownloadsDone), object: nil)
@@ -61,11 +60,11 @@ class NetworkTableViewController: UITableViewController {
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         library = appDelegate.library
         
-        items.append(ManagementItem(name: "Push", function: { self.library?.doPush() }))
-        items.append(ManagementItem(name: "Pull", function: { self.library?.doPull() }))
-        items.append(ManagementItem(name: "Fetch", function: { self.library?.doFetch() }))
+        items.append(ManagementItem(name: "Sync Plays", function: { self.library?.doSync() }))
+        items.append(ManagementItem(name: "Sync DB Cache", function: { self.library?.doFetch() }))
         items.append(ManagementItem(name: "Do All", function: { self.doAll() }))
         doAllIndex = items.count - 1
+        items.append(ManagementItem(name: "", function: {}))
         items.append(ManagementItem(name: "Check Downloads", function: { self.library?.doCheckDownloads() }))
         items.append(ManagementItem(name: "Delete All Images", function: { self.library?.deleteImages() }))
     }
@@ -89,12 +88,8 @@ class NetworkTableViewController: UITableViewController {
         optionDone(index: 0)
     }
     
-    @objc func receivePullDone() {
-        optionDone(index: 1)
-    }
-    
     @objc func receiveFetchDone() {
-        optionDone(index: 2)
+        optionDone(index: 1)
     }
     
     @objc func receiveCheckDownloadsDone() {
