@@ -381,6 +381,21 @@ class MusicLibrary {
         }
     }
     
+    func getSongPlaylistFromAlbumPlaylist(_ albumPlaylist: Playlist) -> Playlist {
+        let name = "Songs in \(albumPlaylist.name)"
+        var songIds = [Int]()
+        
+        if albumPlaylist.playlistType == .albumPlaylist {
+            for albumId in albumPlaylist.list {
+                for track in albumMap[albumId]!.info.tracks {
+                    songIds.append(track.id)
+                }
+            }
+        }
+        
+        return Playlist(playlistType: .songPlaylist, name: name, list: songIds)
+    }
+    
     func getAritstPlaylist(artist: ArtistInfo) -> Playlist {
         var albums = getAlbumsByArtist(artist: artist)
         albums.sort(by: { $0.release > $1.release })

@@ -34,6 +34,9 @@ class AlbumCollectionViewController: UICollectionViewController {
         if let pl = playlist {
             self.title = pl.name
             self.albums = library!.getPlaylistAlbums(pl)
+            if pl.name == "New Albums" {
+                showAllSongsCell = true
+            }
         } else if let a = artist {
             self.title = a.name
             self.albums = library!.getAlbumsByArtist(artist: a)
@@ -145,8 +148,12 @@ class AlbumCollectionViewController: UICollectionViewController {
                     vc.artist = artist
                 }
             case "AlbumAllSongsSegue":
-                if let vc = segue.destination as? SongTableViewController, let artist = artist {
-                    vc.playlist = library?.getAritstPlaylist(artist: artist)
+                if let vc = segue.destination as? SongTableViewController {
+                    if let pl = playlist {
+                        vc.playlist = library?.getSongPlaylistFromAlbumPlaylist(pl)
+                    } else if let artist = artist {
+                        vc.playlist = library?.getAritstPlaylist(artist: artist)
+                    }
                 }
             default: break
             }
