@@ -8,6 +8,7 @@
 
 import UIKit
 import AVFoundation
+import MediaPlayer
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -26,7 +27,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         _ = try? AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)
         _ = try? AVAudioSession.sharedInstance().setActive(true, options: [])
         
-        UIApplication.shared.beginReceivingRemoteControlEvents()
+        setupRemoteTransportControls()
         return true
     }
 
@@ -51,16 +52,33 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
-
-    override func remoteControlReceived(with event: UIEvent?) {
-        switch event!.subtype {
-        case .remoteControlPlay:
-            player.play()
-        case .remoteControlPause:
-            player.pause()
-        case .remoteControlNextTrack:
-            player.skip()
-        default:break
+    
+    private func setupRemoteTransportControls() {
+        UIApplication.shared.beginReceivingRemoteControlEvents()
+        
+        let commandCenter = MPRemoteCommandCenter.shared()
+        
+        commandCenter.playCommand.addTarget { (MPRemoteCommandEvent) -> MPRemoteCommandHandlerStatus in
+            if (self.player.player?.isPlaying == false) {
+                self.player.play()
+                return .success
+            }
+            
+            return .commandFailed
+        }
+        
+        commandCenter.pauseCommand.addTarget { (MPRemoteCommandEvent) -> MPRemoteCommandHandlerStatus in
+            if (self.player.player?.isPlaying == true) {
+                self.player.pause()
+                return .success
+            }
+            
+            return .commandFailed
+        }
+        
+        commandCenter.nextTrackCommand.addTarget { (MPRemoteCommandEvent) -> MPRemoteCommandHandlerStatus in
+            self.player.skip()
+            return .success
         }
     }
 }

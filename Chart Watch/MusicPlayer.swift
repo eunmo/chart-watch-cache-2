@@ -80,15 +80,19 @@ class MusicPlayer: NSObject, AVAudioPlayerDelegate{
     
     func play() {
         if let player = player {
-            player.play()
             let nowPlayingInfo = getNowPlayingInfo(currentSong!, player: player)
             MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
+            player.play()
         }
         notify()
     }
     
     func pause() {
-        player?.pause()
+        if let player = player {
+            player.pause()
+            let nowPlayingInfo = getNowPlayingInfo(currentSong!, player: player)
+            MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
+        }
         notify()
     }
     
