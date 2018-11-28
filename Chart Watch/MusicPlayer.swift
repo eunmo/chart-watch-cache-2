@@ -154,9 +154,13 @@ class MusicPlayer: NSObject, AVAudioPlayerDelegate{
         }
     }
     
-    func skip() {
+    func skip(recordPlay: Bool) {
         if let p = player, p.isPlaying {
             p.stop()
+        }
+        
+        if let s = currentSong, recordPlay {
+            library?.recordPlay(s)
         }
         
         playNext()

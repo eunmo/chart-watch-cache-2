@@ -293,7 +293,25 @@ class PlayerTableViewController: UITableViewController {
     }
     
     @IBAction func skipButtonPressed(_ sender: UIButton) {
-        player?.skip()
+        if player?.currentSong == nil {
+            return
+        }
+        
+        let recordPlayAction = UIAlertAction(title: "Record Play", style: .destructive) { (action) in
+            self.player?.skip(recordPlay: true)
+        }
+        
+        let nextSongAction = UIAlertAction(title: "Next Song", style: .default) { (action) in
+            self.player?.skip(recordPlay: false)
+        }
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
+        
+        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        alert.addAction(recordPlayAction)
+        alert.addAction(nextSongAction)
+        alert.addAction(cancelAction)
+        self.present(alert, animated: true)
     }
     
     @IBAction func shuffleButtonPressed(_ sender: UIButton) {

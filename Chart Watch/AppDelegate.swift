@@ -77,7 +77,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         
         commandCenter.nextTrackCommand.addTarget { (MPRemoteCommandEvent) -> MPRemoteCommandHandlerStatus in
-            self.player.skip()
+            self.player.skip(recordPlay: false)
             return .success
         }
     }
