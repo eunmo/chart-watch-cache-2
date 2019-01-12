@@ -25,7 +25,7 @@ class Downloader {
     var requests = [DownloadRequest]()
     var processCount = 0
     
-    let serverAddress = "http://13.230.33.104:3010"
+    let serverAddress = ImageCache.serverAddress
     let bucketAddress = "https://s3-ap-northeast-1.amazonaws.com/eunmo-music"
     let simultaneousDownloadLimit = 8
     
