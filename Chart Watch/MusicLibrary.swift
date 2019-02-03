@@ -48,6 +48,7 @@ class MusicLibrary {
     static let notificationKeyCheckDownloadsDone = "MusicPlayerNotificationKey - CheckDownloads"
     
     init() {
+        dateFormatter.locale = Locale(identifier: "en_US_POSIX")
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
         
         for char in Array("ㄱㄴㄷㄹㅁㅂㅅㅇㅈㅊㅋㅌㅍㅎ#ABCDEFGHIJKLMNOPQRSTUVWXYZ") {
