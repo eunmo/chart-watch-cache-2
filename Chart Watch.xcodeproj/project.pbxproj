@@ -85,6 +85,7 @@
 		54614125201DD1C3000D6ED4 /* NetworkTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkTableViewController.swift; sourceTree = "<group>"; };
 		54614127201DD257000D6ED4 /* NetworkTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkTableViewCell.swift; sourceTree = "<group>"; };
 		54614128201DD257000D6ED4 /* NetworkTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NetworkTableViewCell.xib; sourceTree = "<group>"; };
+		5485B88E225237DB006AB812 /* Chart Watch.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Chart Watch.entitlements"; sourceTree = "<group>"; };
 		5489A9F820146D6400B26F62 /* Chart Watch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Chart Watch.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5489A9FB20146D6400B26F62 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5489AA0220146D6400B26F62 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -144,6 +145,7 @@
 		5489A9FA20146D6400B26F62 /* Chart Watch */ = {
 			isa = PBXGroup;
 			children = (
+				5485B88E225237DB006AB812 /* Chart Watch.entitlements */,
 				5489A9FB20146D6400B26F62 /* AppDelegate.swift */,
 				5489AA0120146D6400B26F62 /* Main.storyboard */,
 				5489AA0F20146E9400B26F62 /* MusicLibrary.swift */,
@@ -241,6 +243,9 @@
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+							com.apple.Push = {
 								enabled = 1;
 							};
 						};
@@ -464,6 +469,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = "Chart Watch/Chart Watch.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = MN8Y3BHMSS;
 				INFOPLIST_FILE = "Chart Watch/Info.plist";
@@ -479,6 +485,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = "Chart Watch/Chart Watch.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = MN8Y3BHMSS;
 				INFOPLIST_FILE = "Chart Watch/Info.plist";
