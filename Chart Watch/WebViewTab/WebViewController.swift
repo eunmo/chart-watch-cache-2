@@ -19,7 +19,6 @@ class WebViewController: UIViewController, WKUIDelegate, WKScriptMessageHandler 
         let userScript1 = WKUserScript(source: "setWebkit()", injectionTime: WKUserScriptInjectionTime.atDocumentEnd, forMainFrameOnly: true)
         let userScript2 = WKUserScript(source: "window.isWebkit = true;", injectionTime: WKUserScriptInjectionTime.atDocumentStart, forMainFrameOnly: true)
         
-        
         let contentController = WKUserContentController()
         contentController.addUserScript(userScript1)
         contentController.addUserScript(userScript2)
@@ -85,4 +84,7 @@ class WebViewController: UIViewController, WKUIDelegate, WKScriptMessageHandler 
         sender.endRefreshing()
     }
 
+    func reload() {
+        webView.evaluateJavaScript("window.location.href = '/react/';")
+    }
 }

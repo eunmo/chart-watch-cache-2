@@ -1,15 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="49e-Tb-3d3">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="49e-Tb-3d3">
     <device id="retina5_9" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
-        <capability name="Alignment constraints to the first baseline" minToolsVersion="6.0"/>
-        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
-        <capability name="Baseline standard spacing" minToolsVersion="9.0"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -17,7 +13,7 @@
         <!--Tab Bar Controller-->
         <scene sceneID="yl2-sM-qoP">
             <objects>
-                <tabBarController id="49e-Tb-3d3" sceneMemberID="viewController">
+                <tabBarController id="49e-Tb-3d3" customClass="TabBarController" customModule="Chart_Watch" customModuleProvider="target" sceneMemberID="viewController">
                     <tabBar key="tabBar" contentMode="scaleToFill" id="W28-zg-YXA">
                         <rect key="frame" x="0.0" y="975" width="768" height="49"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
@@ -98,7 +94,7 @@
                                     <nil key="highlightedColor"/>
                                 </label>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6Tx-O4-UhY">
-                                    <rect key="frame" x="324" y="367" width="35" height="35"/>
+                                    <rect key="frame" x="324" y="367.66666666666669" width="35" height="35"/>
                                     <constraints>
                                         <constraint firstAttribute="width" constant="35" id="B1z-AS-Jfy"/>
                                         <constraint firstAttribute="height" constant="35" id="BQy-Gt-acb"/>
@@ -120,7 +116,7 @@
                                     <nil key="highlightedColor"/>
                                 </label>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="573-rb-QAX">
-                                    <rect key="frame" x="162" y="541" width="50" height="50"/>
+                                    <rect key="frame" x="162.66666666666666" y="541" width="50" height="50"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="50" id="nS2-WY-Tia"/>
                                         <constraint firstAttribute="width" constant="50" id="zl8-Ip-fH1"/>
@@ -131,7 +127,7 @@
                                     </connections>
                                 </button>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="g1A-0Z-bEb">
-                                    <rect key="frame" x="162" y="541" width="50" height="50"/>
+                                    <rect key="frame" x="162.66666666666666" y="541" width="50" height="50"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="50" id="bCX-x5-F3K"/>
                                         <constraint firstAttribute="width" constant="50" id="cde-Cr-kLI"/>
@@ -153,7 +149,7 @@
                                     </connections>
                                 </button>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="b4L-yK-23m">
-                                    <rect key="frame" x="23" y="541.66666666666663" width="50" height="50"/>
+                                    <rect key="frame" x="23" y="541" width="50" height="50"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="50" id="URL-wl-ZLV"/>
                                         <constraint firstAttribute="width" constant="50" id="vLT-yT-Xvy"/>

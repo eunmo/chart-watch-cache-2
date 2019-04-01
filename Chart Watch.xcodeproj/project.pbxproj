@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0A5D4A1F2250FFF200A592DB /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A5D4A1E2250FFF200A592DB /* TabBarController.swift */; };
 		5429FAA120160AE6001D2F63 /* ArtistTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5429FAA020160AE6001D2F63 /* ArtistTableViewController.swift */; };
 		5429FAA4201617A4001D2F63 /* ArtistTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5429FAA2201617A4001D2F63 /* ArtistTableViewCell.swift */; };
 		5429FAA5201617A4001D2F63 /* ArtistTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5429FAA3201617A4001D2F63 /* ArtistTableViewCell.xib */; };
@@ -53,6 +54,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0A5D4A1E2250FFF200A592DB /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		5429FAA020160AE6001D2F63 /* ArtistTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtistTableViewController.swift; sourceTree = "<group>"; };
 		5429FAA2201617A4001D2F63 /* ArtistTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtistTableViewCell.swift; sourceTree = "<group>"; };
 		5429FAA3201617A4001D2F63 /* ArtistTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ArtistTableViewCell.xib; sourceTree = "<group>"; };
@@ -149,6 +151,7 @@
 				54614123201DCDCE000D6ED4 /* MusicLibraryDataStructures.swift */,
 				5461411C201C9868000D6ED4 /* MusicPlayer.swift */,
 				5438ED9D201F3513007EE34D /* CommonUI.swift */,
+				0A5D4A1E2250FFF200A592DB /* TabBarController.swift */,
 				54C6B7622129F6C400B5C4A6 /* WebViewTab */,
 				5461411E201C9E01000D6ED4 /* PlayerTab */,
 				549A23312017A40900CE1F2D /* LibraryTab */,
@@ -315,6 +318,7 @@
 				5489AA202014C3DB00B26F62 /* LibraryTableViewController.swift in Sources */,
 				5429FAA4201617A4001D2F63 /* ArtistTableViewCell.swift in Sources */,
 				5438ED9B201F1A58007EE34D /* PlayerShuffleTableViewCell.swift in Sources */,
+				0A5D4A1F2250FFF200A592DB /* TabBarController.swift in Sources */,
 				54614113201B6DE5000D6ED4 /* TrackTableViewHeaderView.swift in Sources */,
 				5461411D201C9868000D6ED4 /* MusicPlayer.swift in Sources */,
 				5429FAAF2016E35D001D2F63 /* SongTableViewController.swift in Sources */,
