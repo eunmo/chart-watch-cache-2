@@ -206,7 +206,9 @@ class PlayerTableViewController: UITableViewController {
             break
         }
         
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (action) in
+            tableView.deselectRow(at: indexPath, animated: false)
+        }
         alert.addAction(cancelAction)
         self.present(alert, animated: true)
     }
