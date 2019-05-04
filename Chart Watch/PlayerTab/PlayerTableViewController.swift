@@ -42,6 +42,7 @@ class PlayerTableViewController: UITableViewController {
         self.tableView.register(PlayerShuffleTableViewCell.nib, forCellReuseIdentifier: PlayerShuffleTableViewCell.identifier)
         
         NotificationCenter.default.addObserver(self, selector: #selector(PlayerTableViewController.receiveNotification), name: NSNotification.Name(rawValue: MusicPlayer.updateNotificationKey), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(PlayerTableViewController.toggleEdit), name: NSNotification.Name(rawValue: PlayerNextUpTableViewCell.updateNotificationKey), object: nil)
         
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         player = appDelegate.player
@@ -123,6 +124,10 @@ class PlayerTableViewController: UITableViewController {
         DispatchQueue.main.async(execute: { () -> Void in
             self.update()
         })
+    }
+    
+    @objc func toggleEdit() {
+        self.isEditing = !self.isEditing
     }
 
     // MARK: - Table view data source
@@ -213,40 +218,46 @@ class PlayerTableViewController: UITableViewController {
         self.present(alert, animated: true)
     }
 
-    /*
     // Override to support conditional editing of the table view.
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         // Return false if you do not want the specified item to be editable.
-        return true
+        return indexPath.section == 1
     }
-    */
 
-    /*
     // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
+            self.player?.removeSong(index: indexPath.row)
         } else if editingStyle == .insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
         }    
     }
-    */
 
-    /*
     // Override to support rearranging the table view.
     override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
+        self.player?.moveSong(from: fromIndexPath.row, to: to.row)
     }
-    */
 
-    /*
     // Override to support conditional rearranging of the table view.
     override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
         // Return false if you do not want the item to be re-orderable.
-        return true
+        return indexPath.section == 1
     }
-    */
+    
+    override func tableView(_ tableView: UITableView, targetIndexPathForMoveFromRowAt sourceIndexPath: IndexPath, toProposedIndexPath proposedDestinationIndexPath: IndexPath) -> IndexPath {
+        if (sourceIndexPath.section != proposedDestinationIndexPath.section) {
+            var row = 0;
+            
+            if (sourceIndexPath.section < proposedDestinationIndexPath.section) {
+                row = tableView.numberOfRows(inSection: sourceIndexPath.section) - 1;
+            }
+            
+            return IndexPath(row: row, section: sourceIndexPath.section);
+        }
+        
+        return proposedDestinationIndexPath
+    }
 
     /*
     // MARK: - Navigation

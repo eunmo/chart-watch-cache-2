@@ -220,6 +220,13 @@ class MusicPlayer: NSObject, AVAudioPlayerDelegate{
         notify()
     }
     
+    func moveSong(from: Int, to: Int) {
+        let song = nextSongs.remove(at: from)
+        nextSongs.insert(song, at: to)
+        
+        notify()
+    }
+    
     func makeLastSong(index: Int) {
         if index < nextSongs.count {
             nextSongs.removeSubrange((index + 1)..<nextSongs.count)

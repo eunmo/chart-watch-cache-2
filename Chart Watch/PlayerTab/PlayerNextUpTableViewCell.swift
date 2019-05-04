@@ -10,6 +10,8 @@ import UIKit
 
 class PlayerNextUpTableViewCell: UITableViewCell {
     
+    static let updateNotificationKey = "PlayerNextUpTableViewCellNotificationKey"
+    
     @IBOutlet weak var titleLabel: UILabel!
     
     var count: Int? {
@@ -33,4 +35,7 @@ class PlayerNextUpTableViewCell: UITableViewCell {
         return String(describing: self)
     }
     
+    @IBAction func toggleEdit(_ sender: Any) {
+        NotificationCenter.default.post(name: Notification.Name(rawValue: PlayerNextUpTableViewCell.updateNotificationKey), object: self)
+    }
 }
