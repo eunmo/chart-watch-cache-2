@@ -10,9 +10,10 @@ import UIKit
 import AVFoundation
 import MediaPlayer
 import UserNotifications
+import WatchConnectivity
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, WCSessionDelegate {
 
     var window: UIWindow?
     let library = MusicLibrary()
@@ -32,6 +33,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         UNUserNotificationCenter.current().requestAuthorization(options: [.badge, .alert, .sound], completionHandler: {(granted, error) in })
         application.registerForRemoteNotifications()
+        
+        if (WCSession.isSupported()) {
+            let session = WCSession.default
+            session.delegate = self
+            session.activate()
+        }
         
         return true
     }
@@ -100,6 +107,39 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         commandCenter.nextTrackCommand.addTarget { (MPRemoteCommandEvent) -> MPRemoteCommandHandlerStatus in
             self.player.skip(recordPlay: false)
             return .success
+        }
+    }
+    
+    func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {
+        //
+    }
+    
+    func sessionDidBecomeInactive(_ session: WCSession) {
+        //
+    }
+    
+    func sessionDidDeactivate(_ session: WCSession) {
+        //
+    }
+    
+    func session(_ session: WCSession, didReceiveMessage message: [String : Any], replyHandler: @escaping ([String : Any]) -> Void) {
+        let request = message["request"] as! String
+        var reply = [String: Any]()
+        
+        if (request == "list_songs") {
+            reply["songs"] = library.getWatchSongs() as Any
+        }
+        
+        replyHandler(reply)
+    }
+    
+    func session(_ session: WCSession, didReceiveMessage message: [String : Any]) {
+        let request = message["request"] as! String
+        
+        if (request == "song") {
+            let id = message["id"] as! Int
+            let url = MusicLibrary.getMediaLocalUrl(id)
+            session.transferFile(url, metadata: ["id": id])
         }
     }
 }

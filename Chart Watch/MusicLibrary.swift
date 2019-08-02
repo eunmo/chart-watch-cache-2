@@ -744,4 +744,32 @@ class MusicLibrary {
     func parseThenPlayWebviewSongs(data: Data) {
         parseNetworkSongs(data: data)
     }
+    
+    func getChartSong(id: Int) -> [String: Any] {
+        let fullSong = makeFullSong(song: songMap[id]!.info)
+        var song = [String: Any]()
+        
+        song["id"] = fullSong.id
+        song["title"] = fullSong.title
+        song["artists"] = fullSong.artistString
+        song["plays"] = fullSong.plays
+        
+        return song
+    }
+    
+    func getWatchSongs() -> [[String: Any]] {
+        var songs = [[String: Any]]()
+        
+        if let albumPlaylist = playlists.first(where: { $0.name == "Current Albums" }) {
+            let playlist = getSongPlaylistFromAlbumPlaylist(albumPlaylist)
+            
+            for songId in playlist.list {
+                songs.append(getChartSong(id: songId))
+            }
+        }
+        
+        print("\(songs.count)")
+        
+        return songs
+    }
 }
