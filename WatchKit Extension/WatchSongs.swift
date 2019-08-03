@@ -8,7 +8,7 @@
 
 import Foundation
 import WatchConnectivity
-
+import AVFoundation
 
 struct WatchSong: Codable {
     let id: Int
@@ -101,6 +101,16 @@ class WatchSongs {
             songs.append(WatchSong(id: id, title: title, artists: artists, plays: plays))
         }
         self.songs = songs
+        
+        var newDownloadedSongIds = Set<Int>()
+        for song in songs {
+            if downloadedSongIds.contains(song.id) {
+                newDownloadedSongIds.insert(song.id)
+            }
+        }
+        self.downloadedSongIds = newDownloadedSongIds
+        clearRogueFiles()
+        
         save()
     }
     
@@ -163,10 +173,59 @@ class WatchSongs {
         }
     }
     
+    private func clearRogueFiles() {
+        do {
+            let files = try FileManager.default.contentsOfDirectory(at: WatchSongs.DocumentsDirectory, includingPropertiesForKeys: [], options: [])
+            var count = 0
+            
+            for file in files {
+                switch file.pathExtension {
+                case "mp3":
+                    let filename = file.deletingPathExtension().lastPathComponent
+                    if let id = Int(filename), downloadedSongIds.contains(id) == false {
+                        try FileManager.default.removeItem(at: file)
+                        count += 1
+                        print("deleted \(id)")
+                    }
+                default:
+                    break
+                }
+            }
+            
+            print("deleted \(count) rogue files")
+        } catch {
+        }
+    }
+    
+    func checkFiles() {
+        var songs = [Int]()
+        for (index, songId) in downloadedSongIds.enumerated() {
+            let player = try? AVAudioPlayer(contentsOf: WatchSongs.getMediaLocalUrl(songId))
+            if player == nil {
+                songs.append(songId)
+            }
+            
+            if index % 10 == 0 {
+                print("\(index)")
+            }
+        }
+        
+        print("\(songs) invalid songs!")
+        
+        for id in songs {
+            downloadedSongIds.remove(id)
+        }
+        
+        clearRogueFiles()
+        
+        save()
+    }
+    
     private func moveFile(at: URL, to: URL) -> Bool {
         do {
             try FileManager.default.moveItem(at: at, to: to)
         } catch {
+            print(error)
             return false
         }
         

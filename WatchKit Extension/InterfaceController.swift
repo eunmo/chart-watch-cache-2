@@ -33,7 +33,15 @@ class InterfaceController: WKInterfaceController {
     
     func updateUI() {
         let (songCount, savedSongs, played) = songlist!.getStatus()
-        label.setText("\(savedSongs)/\(songCount) songs \(played)p")
+        let songCountString = savedSongs == songCount ? "\(songCount)" : "\(savedSongs)/\(songCount)"
+        let playCountString = played > 0 ? "\(played)p" : ""
+        label.setText("\(songCountString) songs \(playCountString)")
+        
+        if player?.isPlaying ?? false {
+            label2.setText(player!.currentSong!.title)
+        } else {
+            label2.setText("not playing")
+        }
     }
     
     @objc func receiveNotification() {
@@ -54,9 +62,10 @@ class InterfaceController: WKInterfaceController {
     }
     
     @IBAction func onShuffle() {
-        if let randomSong = songlist!.getRandomSavedSong() {
-            label2.setText(randomSong.title)
-            player?.playSong(randomSong)
-        }
+        player?.playNext()
+    }
+    
+    @IBAction func onToggleNextUp(_ value: Bool) {
+        player?.nextUp = value
     }
 }

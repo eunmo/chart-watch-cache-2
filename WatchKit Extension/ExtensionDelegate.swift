@@ -78,7 +78,7 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate, WCSessionDelegate {
     
     func session(_ session: WCSession, didReceiveMessage message: [String : Any], replyHandler: @escaping ([String : Any]) -> Void) {
         let request = message["request"] as! String
-        let limit = 10
+        let limit = 100
         var reply = [String: Any]()
         
         print(request)
@@ -94,6 +94,8 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate, WCSessionDelegate {
             }
         } else if (request == "sync_plays") {
             songlist.syncPlays()
+        } else if (request == "check_files") {
+            songlist.checkFiles()
         }
         
         print("\(reply)")
@@ -127,11 +129,10 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate, WCSessionDelegate {
             
             return .commandFailed
         }
-        /*
+        
         commandCenter.nextTrackCommand.addTarget { (MPRemoteCommandEvent) -> MPRemoteCommandHandlerStatus in
-            self.player.skip(recordPlay: false)
+            self.player.playNext()
             return .success
         }
- */
     }
 }

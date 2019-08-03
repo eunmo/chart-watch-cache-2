@@ -67,14 +67,15 @@ class NetworkTableViewController: UITableViewController {
         library = appDelegate.library
         
         items.append(ManagementItem(name: "Sync Plays", function: { self.library?.doSync() }))
-        items.append(ManagementItem(name: "Sync Plays on Watch", function: { self.syncWatch() }))
         items.append(ManagementItem(name: "Sync DB Cache", function: { self.library?.doFetch() }))
         items.append(ManagementItem(name: "Do All", function: { self.doAll() }))
         doAllIndex = items.count - 1
         items.append(ManagementItem(name: "", function: {}))
+        items.append(ManagementItem(name: "Sync Plays on Watch", function: { self.syncWatch() }))
         items.append(ManagementItem(name: "Send Files to Watch", function: { self.sendFilesToWatch() }))
         sendFileIndex = items.count - 1
         items.append(ManagementItem(name: "", function: {}))
+        items.append(ManagementItem(name: "Check Files on Watch", function: { self.checkFilesOnWatch() }))
         items.append(ManagementItem(name: "Check Downloads", function: { self.library?.doCheckDownloads() }))
         items.append(ManagementItem(name: "Delete All Images", function: { self.library?.deleteImages() }))
         
@@ -106,20 +107,24 @@ class NetworkTableViewController: UITableViewController {
         optionDone(index: 0)
     }
     
-    func receiveWatchSyncDone(_ reply: [String: Any]) {
+    @objc func receiveFetchDone() {
         optionDone(index: 1)
     }
     
-    @objc func receiveFetchDone() {
-        optionDone(index: 2)
+    func receiveWatchSyncDone(_ reply: [String: Any]) {
+        optionDone(index: 4)
     }
     
-    @objc func receiveCheckDownloadsDone() {
+    func receiveWatchCheckDone(_ reply: [String: Any]) {
         optionDone(index: 7)
     }
     
-    @objc func receiveDeleteImagesDone() {
+    @objc func receiveCheckDownloadsDone() {
         optionDone(index: 8)
+    }
+    
+    @objc func receiveDeleteImagesDone() {
+        optionDone(index: 9)
     }
 
     override func didReceiveMemoryWarning() {
@@ -149,6 +154,10 @@ class NetworkTableViewController: UITableViewController {
             
             if indexPath.row == doAllIndex {
                 cell.backgroundColor = CommonUI.tealBlue
+            }
+            
+            if indexPath.row == sendFileIndex {
+                cell.backgroundColor = CommonUI.pink
             }
         }
 
@@ -230,6 +239,14 @@ class NetworkTableViewController: UITableViewController {
         
         let session = WCSession.default
         session.sendMessage(message, replyHandler: receiveWatchSyncDone)
+    }
+    
+    func checkFilesOnWatch() {
+        var message = [String: Any]()
+        message["request"] = "check_files"
+        
+        let session = WCSession.default
+        session.sendMessage(message, replyHandler: receiveWatchCheckDone)
     }
 
     /*

@@ -21,6 +21,11 @@
                             </connections>
                         </button>
                         <label alignment="center" text="Label" id="odP-KR-gBQ"/>
+                        <switch width="1" alignment="left" verticalAlignment="bottom" value="YES" title="Next Up" id="WY2-kQ-cof">
+                            <connections>
+                                <action selector="onToggleNextUp:" destination="AgC-eL-Hgc" id="yDT-gt-p1C"/>
+                            </connections>
+                        </switch>
                     </items>
                     <connections>
                         <outlet property="label" destination="kgI-cI-41L" id="jjw-AM-Ohv"/>

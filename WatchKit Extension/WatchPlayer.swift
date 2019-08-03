@@ -15,6 +15,7 @@ class WatchPlayer: NSObject, AVAudioPlayerDelegate {
     var currentSong: WatchSong?
     var player: AVAudioPlayer?
     var library: WatchSongs?
+    var nextUp = true
     
     var isPlaying: Bool {
         get {
@@ -62,6 +63,11 @@ class WatchPlayer: NSObject, AVAudioPlayerDelegate {
     }
     
     func playNext() {
+        if nextUp == false {
+            clearPlayer()
+            return
+        }
+        
         if let song = library?.getRandomSavedSong() {
             playSong(song)
         }
