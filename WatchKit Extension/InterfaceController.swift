@@ -12,7 +12,6 @@ import WatchConnectivity
 
 
 class InterfaceController: WKInterfaceController {
-    @IBOutlet weak var syncButton: WKInterfaceButton!
     @IBOutlet weak var label: WKInterfaceLabel!
     @IBOutlet weak var shuffleButton: WKInterfaceButton!
     @IBOutlet weak var label2: WKInterfaceLabel!
@@ -23,8 +22,21 @@ class InterfaceController: WKInterfaceController {
         super.awake(withContext: context)
         
         // Configure interface objects here.
+        NotificationCenter.default.addObserver(self, selector: #selector(InterfaceController.receiveNotification), name: NSNotification.Name(rawValue: WatchSongs.notificationKey), object: nil)
+        
         let watchDelegate = WKExtension.shared().delegate as! ExtensionDelegate
         songlist = watchDelegate.songlist
+    }
+    
+    func updateUI() {
+        let (songCount, savedSongs, extra) = songlist!.getStatus()
+        label.setText("\(savedSongs)/\(songCount) songs!")
+    }
+    
+    @objc func receiveNotification() {
+        DispatchQueue.main.async(execute: { () -> Void in
+            self.updateUI()
+        })
     }
     
     override func willActivate() {
@@ -33,27 +45,14 @@ class InterfaceController: WKInterfaceController {
         updateUI()
     }
     
-    func updateUI() {
-        label.setText("\(songlist!.songs.count) songs!")
-    }
-    
     override func didDeactivate() {
         // This method is called when watch view controller is no longer visible
         super.didDeactivate()
     }
     
-    func handleReply(reply: [String: Any]) {
-        songlist!.parseSongList(reply)
-        label.setText("\(songlist!.songs.count) songs")
-    }
-
-    @IBAction func onSync() {
-        let session = WCSession.default
-        session.sendMessage(["request": "list_songs"], replyHandler: handleReply)
-    }
-    
     @IBAction func onShuffle() {
-        let randomIndex = Int(arc4random_uniform(UInt32(songlist!.songs.count)))
-        label2.setText(songlist!.songs[randomIndex].title)
+        if let randomSong = songlist!.getRandomSavedSong() {
+            label2.setText(randomSong.title)
+        }
     }
 }

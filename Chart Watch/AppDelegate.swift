@@ -121,25 +121,4 @@ class AppDelegate: UIResponder, UIApplicationDelegate, WCSessionDelegate {
     func sessionDidDeactivate(_ session: WCSession) {
         //
     }
-    
-    func session(_ session: WCSession, didReceiveMessage message: [String : Any], replyHandler: @escaping ([String : Any]) -> Void) {
-        let request = message["request"] as! String
-        var reply = [String: Any]()
-        
-        if (request == "list_songs") {
-            reply["songs"] = library.getWatchSongs() as Any
-        }
-        
-        replyHandler(reply)
-    }
-    
-    func session(_ session: WCSession, didReceiveMessage message: [String : Any]) {
-        let request = message["request"] as! String
-        
-        if (request == "song") {
-            let id = message["id"] as! Int
-            let url = MusicLibrary.getMediaLocalUrl(id)
-            session.transferFile(url, metadata: ["id": id])
-        }
-    }
 }

@@ -68,8 +68,32 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate, WCSessionDelegate {
         //
     }
     
+    func session(_ session: WCSession, didReceiveMessage message: [String : Any], replyHandler: @escaping ([String : Any]) -> Void) {
+        let request = message["request"] as! String
+        let limit = 3
+        var reply = [String: Any]()
+        
+        print(request)
+        
+        if (request == "sync_songs") {
+            if let list = message["songs"] as? [[String: Any]] {
+                songlist.parseSongList(list)
+                var songIds = songlist.getSongIdsToRequest()
+                if songIds.count > limit {
+                    songIds.removeSubrange(limit...)
+                }
+                reply["ids"] = songIds as Any
+            }
+        }
+        
+        print("\(reply)")
+        
+        replyHandler(reply)
+    }
+    
     func session(_ session: WCSession, didReceive file: WCSessionFile) {
         let id = file.metadata!["id"] as! Int
+        print("\(Date()) \(id) received")
+        songlist.saveFile(file)
     }
-
 }

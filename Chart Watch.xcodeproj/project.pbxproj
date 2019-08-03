@@ -378,6 +378,11 @@
 					54290D4C22F48B6C007D81C3 = {
 						CreatedOnToolsVersion = 10.3;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.BackgroundModes.watchos.extension = {
+								enabled = 0;
+							};
+						};
 					};
 					5489A9F720146D6400B26F62 = {
 						CreatedOnToolsVersion = 9.2;

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import WatchConnectivity
 
 enum ManagementStatus {
     case ready
@@ -15,7 +16,7 @@ enum ManagementStatus {
 }
 
 class ManagementItem {
-    let name: String
+    var name: String
     var status: ManagementStatus = .ready
     let function: () -> Void
     
@@ -40,6 +41,11 @@ class NetworkTableViewController: UITableViewController {
     var items = [ManagementItem]()
     var doingAll = false
     var doAllIndex = 0
+    var sendFileIndex = 0
+    
+    var timer: Timer?
+    var isSending = false
+    var numSending = 0
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -65,8 +71,19 @@ class NetworkTableViewController: UITableViewController {
         items.append(ManagementItem(name: "Do All", function: { self.doAll() }))
         doAllIndex = items.count - 1
         items.append(ManagementItem(name: "", function: {}))
+        items.append(ManagementItem(name: "Send files to watch", function: { self.sendFilesToWatch() }))
+        sendFileIndex = items.count - 1
+        items.append(ManagementItem(name: "", function: {}))
         items.append(ManagementItem(name: "Check Downloads", function: { self.library?.doCheckDownloads() }))
         items.append(ManagementItem(name: "Delete All Images", function: { self.library?.deleteImages() }))
+        
+        let session = WCSession.default
+        let outstanding = session.outstandingFileTransfers.count
+        if outstanding > 0 {
+            numSending = outstanding
+            items[sendFileIndex].status = .ongoing
+            startTimer()
+        }
     }
     
     func update() {
@@ -149,6 +166,57 @@ class NetworkTableViewController: UITableViewController {
         }
         
         navigationController?.popViewController(animated: true)
+    }
+    
+    func sendFilesToWatch() {
+        var message = [String: Any]()
+        message["request"] = "sync_songs"
+        message["songs"] = library?.getWatchSongs() as Any
+        
+        let session = WCSession.default
+        session.sendMessage(message, replyHandler: sendFiles)
+    }
+    
+    func sendFiles(_ reply: [String: Any]) {
+        let session = WCSession.default
+        
+        if let value = reply["ids"], let array = value as? [Int] {
+            isSending = true
+            for songId in array {
+                let url = MusicLibrary.getMediaLocalUrl(songId)
+                session.transferFile(url, metadata: ["id": songId])
+                print("\(songId) sent")
+            }
+            DispatchQueue.main.async(execute: { () -> Void in
+                self.numSending = array.count
+                self.startTimer()
+            })
+        }
+    }
+    
+    @objc func updateSendFileStatus() {
+        let session = WCSession.default
+        let outstanding = session.outstandingFileTransfers
+        
+        items[sendFileIndex].name = "Send files to watch ... \(numSending - outstanding.count)/\(numSending)"
+        update()
+        if outstanding.count == 0 {
+            numSending = 0
+            stopTimer()
+        }
+    }
+    
+    func startTimer() {
+        timer?.invalidate()
+        updateSendFileStatus()
+        timer = Timer.scheduledTimer(timeInterval: 2.0, target: self, selector: (#selector(NetworkTableViewController.updateSendFileStatus)), userInfo: nil, repeats: true)
+    }
+    
+    func stopTimer() {
+        items[sendFileIndex].name = "Send files to watch ... Done"
+        items[sendFileIndex].status = .done
+        timer?.invalidate()
+        timer = nil
     }
 
     /*

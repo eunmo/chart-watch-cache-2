@@ -14,11 +14,6 @@
             <objects>
                 <controller id="AgC-eL-Hgc" customClass="InterfaceController" customModule="WatchKit" customModuleProvider="target">
                     <items>
-                        <button width="1" alignment="left" title="Sync" id="XVp-R9-dP6">
-                            <connections>
-                                <action selector="onSync" destination="AgC-eL-Hgc" id="gxN-sZ-r1R"/>
-                            </connections>
-                        </button>
                         <label alignment="center" text="Label" id="kgI-cI-41L"/>
                         <button width="1" alignment="left" title="Shuffle" id="gKE-dw-LpZ">
                             <connections>
@@ -31,7 +26,6 @@
                         <outlet property="label" destination="kgI-cI-41L" id="jjw-AM-Ohv"/>
                         <outlet property="label2" destination="odP-KR-gBQ" id="WqT-Du-GTD"/>
                         <outlet property="shuffleButton" destination="gKE-dw-LpZ" id="9N1-vo-3nG"/>
-                        <outlet property="syncButton" destination="XVp-R9-dP6" id="egd-3P-Lbp"/>
                     </connections>
                 </controller>
             </objects>
