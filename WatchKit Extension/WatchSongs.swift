@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import AVFoundation
 import WatchConnectivity
 
 
@@ -18,15 +17,40 @@ struct WatchSong: Codable {
     let plays: Int
 }
 
+struct PlayRecord: Codable {
+    let id: Int
+    let plays: Int
+    let lastPlayed: Date
+}
+
 struct WatchSongArchive: Codable {
     let songs: [WatchSong]
+    let playRecords: [Int: PlayRecord]
     let downloadedSongIds: Set<Int>
+}
+
+struct PushData: Codable {
+    let id: Int
+    let plays: Int
+    let lastPlayed: String
+}
+
+struct PullData: Codable {
+    let id: Int
+    let plays: Int
 }
 
 class WatchSongs {
     
     var songs = [WatchSong]()
+    var songMap = [Int: WatchSong]()
+    var playRecords = [Int: PlayRecord]()
     var downloadedSongIds = Set<Int>()
+    
+    let dateFormatter: DateFormatter = DateFormatter()
+    let decoder: JSONDecoder
+    
+    let serverAddress = "http://13.230.33.104:3010"
     
     static let DocumentsDirectory = FileManager().urls(for: .documentDirectory, in: .userDomainMask).first!
     static let ArchiveURL = DocumentsDirectory.appendingPathComponent("watchsongs")
@@ -36,12 +60,20 @@ class WatchSongs {
         return WatchSongs.DocumentsDirectory.appendingPathComponent("\(id).mp3")
     }
     
+    init() {
+        dateFormatter.locale = Locale(identifier: "en_US_POSIX")
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+        
+        decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .formatted(dateFormatter)
+    }
+    
     func getStatus() -> (Int, Int, Int) {
         let songCount = songs.count
         let savedSongs = getSavedSongs().count
-        let extra = downloadedSongIds.count - savedSongs
+        let played = playRecords.count
         
-        return (songCount, savedSongs, extra)
+        return (songCount, savedSongs, played)
     }
     
     func getSavedSongs() -> [WatchSong] {
@@ -85,7 +117,7 @@ class WatchSongs {
     }
     
     func save() {
-        let archive = WatchSongArchive(songs: songs, downloadedSongIds: downloadedSongIds)
+        let archive = WatchSongArchive(songs: songs, playRecords: playRecords, downloadedSongIds: downloadedSongIds)
         let encoded = try! PropertyListEncoder().encode(archive)
         let data = try! NSKeyedArchiver.archivedData(withRootObject: encoded, requiringSecureCoding: false)
         try! data.write(to: WatchSongs.ArchiveURL)
@@ -97,10 +129,19 @@ class WatchSongs {
             let archived = try? NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(data) as? Data,
             let archive = try? PropertyListDecoder().decode(WatchSongArchive.self, from: archived) {
             songs = archive.songs
+            playRecords = archive.playRecords
             downloadedSongIds = archive.downloadedSongIds
+            buildMaps()
         }
         
         //deleteAllFiles()
+    }
+    
+    func buildMaps() {
+        songMap = [Int: WatchSong]()
+        for song in songs {
+            songMap[song.id] = song
+        }
     }
     
     private func deleteAllFiles() {
@@ -115,6 +156,9 @@ class WatchSongs {
                     break
                 }
             }
+            
+            downloadedSongIds.removeAll()
+            save()
         } catch {
         }
     }
@@ -136,6 +180,70 @@ class WatchSongs {
         if moveFile(at: file.fileURL, to: localUrl) {
             downloadedSongIds.insert(id)
             save()
+        }
+    }
+    
+    func recordPlay(_ song: WatchSong) {
+        let id = song.id
+        
+        let playCount = max(song.plays, songMap[id]?.plays ?? 0, playRecords[id]?.plays ?? 0) + 1
+        playRecords[id] = PlayRecord(id: id, plays: playCount, lastPlayed: Date())
+        
+        save()
+    }
+    
+    func getPushData() -> [PushData] {
+        var data = [PushData]()
+        
+        for (id, record) in playRecords {
+            data.append(PushData(id: id, plays: record.plays, lastPlayed: dateFormatter.string(from: record.lastPlayed)))
+        }
+        
+        return data
+    }
+
+    func updatePlays(_ data: Data) {
+        do {
+            let json = try decoder.decode([PullData].self, from: data)
+            
+            for data in json {
+                if let record = playRecords[data.id] {
+                    if record.plays <= data.plays {
+                        playRecords[data.id] = nil
+                    }
+                }
+            }
+            
+            save()
+        } catch {
+            print(error)
+        }
+    }
+    
+    func syncPlays() {
+        let pushData = getPushData()
+        
+        if pushData.count == 0 {
+            return
+        }
+        
+        if let data = try? JSONEncoder().encode(pushData) {
+            
+            let urlAsString = "\(serverAddress)/ios/plays/sync"
+            let url = URL(string: urlAsString)!
+            let urlSession = URLSession.shared
+            
+            var request = URLRequest(url: url)
+            request.httpMethod = "PUT"
+            request.httpBody = data
+            request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+            
+            let task = urlSession.dataTask(with: request, completionHandler: { data, response, error -> Void in
+                if let d = data {
+                    self.updatePlays(d)
+                }
+            })
+            task.resume()
         }
     }
 }

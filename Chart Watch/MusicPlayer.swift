@@ -10,7 +10,7 @@ import Foundation
 import AVFoundation
 import MediaPlayer
 
-class MusicPlayer: NSObject, AVAudioPlayerDelegate{
+class MusicPlayer: NSObject, AVAudioPlayerDelegate {
     
     var currentSong: FullSong?
     var nextSongs = [FullSong]()

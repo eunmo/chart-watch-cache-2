@@ -57,6 +57,7 @@
 		5489AA282014FB2800B26F62 /* LibraryArtistInitialCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5489AA272014FB2800B26F62 /* LibraryArtistInitialCollectionViewController.swift */; };
 		5489AA2D2015008100B26F62 /* LibraryArtistInitialCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5489AA2B2015008100B26F62 /* LibraryArtistInitialCollectionViewCell.swift */; };
 		5489AA2E2015008100B26F62 /* LibraryArtistInitialCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5489AA2C2015008100B26F62 /* LibraryArtistInitialCollectionViewCell.xib */; };
+		548AA83A22F56B6F009CAD93 /* WatchPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 548AA83922F56B6F009CAD93 /* WatchPlayer.swift */; };
 		54984E822018DC9F002D8203 /* Downloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54984E812018DC9F002D8203 /* Downloader.swift */; };
 		54C6B7642129F70800B5C4A6 /* ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54C6B7632129F70800B5C4A6 /* ImageCache.swift */; };
 		54FA90AE22F49FD4000E20F5 /* WatchSongs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54FA90AD22F49FD4000E20F5 /* WatchSongs.swift */; };
@@ -161,6 +162,7 @@
 		5489AA272014FB2800B26F62 /* LibraryArtistInitialCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryArtistInitialCollectionViewController.swift; sourceTree = "<group>"; };
 		5489AA2B2015008100B26F62 /* LibraryArtistInitialCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryArtistInitialCollectionViewCell.swift; sourceTree = "<group>"; };
 		5489AA2C2015008100B26F62 /* LibraryArtistInitialCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LibraryArtistInitialCollectionViewCell.xib; sourceTree = "<group>"; };
+		548AA83922F56B6F009CAD93 /* WatchPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchPlayer.swift; sourceTree = "<group>"; };
 		54984E812018DC9F002D8203 /* Downloader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Downloader.swift; sourceTree = "<group>"; };
 		54C6B7632129F70800B5C4A6 /* ImageCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCache.swift; sourceTree = "<group>"; };
 		54FA90AD22F49FD4000E20F5 /* WatchSongs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchSongs.swift; sourceTree = "<group>"; };
@@ -204,6 +206,7 @@
 				54290D5A22F48B6C007D81C3 /* Info.plist */,
 				54290D5B22F48B6C007D81C3 /* PushNotificationPayload.apns */,
 				54FA90AD22F49FD4000E20F5 /* WatchSongs.swift */,
+				548AA83922F56B6F009CAD93 /* WatchPlayer.swift */,
 			);
 			path = "WatchKit Extension";
 			sourceTree = "<group>";
@@ -380,7 +383,7 @@
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.BackgroundModes.watchos.extension = {
-								enabled = 0;
+								enabled = 1;
 							};
 						};
 					};
@@ -469,6 +472,7 @@
 				54FA90AE22F49FD4000E20F5 /* WatchSongs.swift in Sources */,
 				54290D5722F48B6C007D81C3 /* NotificationController.swift in Sources */,
 				54290D5522F48B6C007D81C3 /* ExtensionDelegate.swift in Sources */,
+				548AA83A22F56B6F009CAD93 /* WatchPlayer.swift in Sources */,
 				54290D5322F48B6C007D81C3 /* InterfaceController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

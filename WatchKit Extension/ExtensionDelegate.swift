@@ -8,10 +8,13 @@
 
 import WatchKit
 import WatchConnectivity
+import AVFoundation
+import MediaPlayer
 
 class ExtensionDelegate: NSObject, WKExtensionDelegate, WCSessionDelegate {
     
     let songlist = WatchSongs()
+    let player = WatchPlayer()
     
     func applicationDidFinishLaunching() {
         // Perform any final initialization of your application.
@@ -23,6 +26,11 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate, WCSessionDelegate {
         }
         
         songlist.load()
+        player.library = songlist
+        
+        _ = try? AVAudioSession.sharedInstance().setCategory(.playback, mode: .default, policy: .longForm)
+        
+        setupRemoteTransportControls()
     }
 
     func applicationDidBecomeActive() {
@@ -70,7 +78,7 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate, WCSessionDelegate {
     
     func session(_ session: WCSession, didReceiveMessage message: [String : Any], replyHandler: @escaping ([String : Any]) -> Void) {
         let request = message["request"] as! String
-        let limit = 3
+        let limit = 10
         var reply = [String: Any]()
         
         print(request)
@@ -84,6 +92,8 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate, WCSessionDelegate {
                 }
                 reply["ids"] = songIds as Any
             }
+        } else if (request == "sync_plays") {
+            songlist.syncPlays()
         }
         
         print("\(reply)")
@@ -95,5 +105,33 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate, WCSessionDelegate {
         let id = file.metadata!["id"] as! Int
         print("\(Date()) \(id) received")
         songlist.saveFile(file)
+    }
+    
+    private func setupRemoteTransportControls() {
+        let commandCenter = MPRemoteCommandCenter.shared()
+        
+        commandCenter.playCommand.addTarget { (MPRemoteCommandEvent) -> MPRemoteCommandHandlerStatus in
+            if (self.player.player?.isPlaying == false) {
+                self.player.play()
+                return .success
+            }
+            
+            return .commandFailed
+        }
+        
+        commandCenter.pauseCommand.addTarget { (MPRemoteCommandEvent) -> MPRemoteCommandHandlerStatus in
+            if (self.player.player?.isPlaying == true) {
+                self.player.pause()
+                return .success
+            }
+            
+            return .commandFailed
+        }
+        /*
+        commandCenter.nextTrackCommand.addTarget { (MPRemoteCommandEvent) -> MPRemoteCommandHandlerStatus in
+            self.player.skip(recordPlay: false)
+            return .success
+        }
+ */
     }
 }

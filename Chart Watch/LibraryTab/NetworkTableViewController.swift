@@ -67,11 +67,12 @@ class NetworkTableViewController: UITableViewController {
         library = appDelegate.library
         
         items.append(ManagementItem(name: "Sync Plays", function: { self.library?.doSync() }))
+        items.append(ManagementItem(name: "Sync Plays on Watch", function: { self.syncWatch() }))
         items.append(ManagementItem(name: "Sync DB Cache", function: { self.library?.doFetch() }))
         items.append(ManagementItem(name: "Do All", function: { self.doAll() }))
         doAllIndex = items.count - 1
         items.append(ManagementItem(name: "", function: {}))
-        items.append(ManagementItem(name: "Send files to watch", function: { self.sendFilesToWatch() }))
+        items.append(ManagementItem(name: "Send Files to Watch", function: { self.sendFilesToWatch() }))
         sendFileIndex = items.count - 1
         items.append(ManagementItem(name: "", function: {}))
         items.append(ManagementItem(name: "Check Downloads", function: { self.library?.doCheckDownloads() }))
@@ -105,16 +106,20 @@ class NetworkTableViewController: UITableViewController {
         optionDone(index: 0)
     }
     
-    @objc func receiveFetchDone() {
+    func receiveWatchSyncDone(_ reply: [String: Any]) {
         optionDone(index: 1)
     }
     
+    @objc func receiveFetchDone() {
+        optionDone(index: 2)
+    }
+    
     @objc func receiveCheckDownloadsDone() {
-        optionDone(index: 4)
+        optionDone(index: 7)
     }
     
     @objc func receiveDeleteImagesDone() {
-        optionDone(index: 5)
+        optionDone(index: 8)
     }
 
     override func didReceiveMemoryWarning() {
@@ -198,7 +203,7 @@ class NetworkTableViewController: UITableViewController {
         let session = WCSession.default
         let outstanding = session.outstandingFileTransfers
         
-        items[sendFileIndex].name = "Send files to watch ... \(numSending - outstanding.count)/\(numSending)"
+        items[sendFileIndex].name = "Send Files to Watch ... \(numSending - outstanding.count)/\(numSending)"
         update()
         if outstanding.count == 0 {
             numSending = 0
@@ -213,10 +218,18 @@ class NetworkTableViewController: UITableViewController {
     }
     
     func stopTimer() {
-        items[sendFileIndex].name = "Send files to watch ... Done"
+        items[sendFileIndex].name = "Send Files to Watch ... Done"
         items[sendFileIndex].status = .done
         timer?.invalidate()
         timer = nil
+    }
+    
+    func syncWatch() {
+        var message = [String: Any]()
+        message["request"] = "sync_plays"
+        
+        let session = WCSession.default
+        session.sendMessage(message, replyHandler: receiveWatchSyncDone)
     }
 
     /*
