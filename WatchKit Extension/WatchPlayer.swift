@@ -40,6 +40,9 @@ class WatchPlayer: NSObject, AVAudioPlayerDelegate {
         if let player = player {
             let nowPlayingInfo = getNowPlayingInfo(currentSong!, player: player)
             AVAudioSession.sharedInstance().activate(options: []) { (success, error) in
+                if let error = error {
+                    print(error)
+                }
                 MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
                 player.play()
                 print("playing \(nowPlayingInfo)!")
@@ -60,6 +63,11 @@ class WatchPlayer: NSObject, AVAudioPlayerDelegate {
         player?.stop()
         player = nil
         MPNowPlayingInfoCenter.default().nowPlayingInfo = nil
+        notify()
+    }
+    
+    func notify() {
+        NotificationCenter.default.post(name: Notification.Name(rawValue: WatchPlayer.notificationKey), object: self)
     }
     
     func playNext() {
@@ -90,6 +98,7 @@ class WatchPlayer: NSObject, AVAudioPlayerDelegate {
         } else {
             clearPlayer()
         }
+        notify()
     }
     
     func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {

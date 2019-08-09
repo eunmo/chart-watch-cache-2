@@ -96,6 +96,8 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate, WCSessionDelegate {
             songlist.syncPlays()
         } else if (request == "check_files") {
             songlist.checkFiles()
+        } else if (request == "ping") {
+            //
         }
         
         print("\(reply)")

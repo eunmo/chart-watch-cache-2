@@ -15,6 +15,7 @@ class InterfaceController: WKInterfaceController {
     @IBOutlet weak var label: WKInterfaceLabel!
     @IBOutlet weak var shuffleButton: WKInterfaceButton!
     @IBOutlet weak var label2: WKInterfaceLabel!
+    @IBOutlet weak var nextUpSwitch: WKInterfaceSwitch!
     
     var songlist: WatchSongs?
     var player: WatchPlayer?
@@ -29,6 +30,8 @@ class InterfaceController: WKInterfaceController {
         let watchDelegate = WKExtension.shared().delegate as! ExtensionDelegate
         songlist = watchDelegate.songlist
         player = watchDelegate.player
+        player?.nextUp = true
+        nextUpSwitch.setOn(true)
     }
     
     func updateUI() {
@@ -40,7 +43,7 @@ class InterfaceController: WKInterfaceController {
         if player?.isPlaying ?? false {
             label2.setText(player!.currentSong!.title)
         } else {
-            label2.setText("not playing")
+            label2.setText("not playing on watch")
         }
     }
     

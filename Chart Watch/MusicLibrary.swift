@@ -758,15 +758,19 @@ class MusicLibrary {
     }
     
     func getWatchSongs() -> [[String: Any]] {
-        var songs = [[String: Any]]()
+        var songIds = Set<Int>()
         
         if let albumPlaylist = playlists.first(where: { $0.name == "Current Albums" }) {
-            let playlist = getSongPlaylistFromAlbumPlaylist(albumPlaylist)
-            
-            for songId in playlist.list {
-                songs.append(getChartSong(id: songId))
-            }
+            getSongPlaylistFromAlbumPlaylist(albumPlaylist).list.forEach { id in songIds.insert(id) }
         }
+        
+        if let albumPlaylist = playlists.first(where: { $0.name == "Favorite Artists" }) {
+            getSongPlaylistFromAlbumPlaylist(albumPlaylist).list.forEach { id in songIds.insert(id) }
+        }
+        
+        var songs = [[String: Any]]()
+        
+        songIds.forEach { id in songs.append(getChartSong(id: id)) }
         
         print("\(songs.count)")
         

@@ -71,6 +71,7 @@ class NetworkTableViewController: UITableViewController {
         items.append(ManagementItem(name: "Do All", function: { self.doAll() }))
         doAllIndex = items.count - 1
         items.append(ManagementItem(name: "", function: {}))
+        items.append(ManagementItem(name: "Ping Watch", function: { self.pingWatch() }))
         items.append(ManagementItem(name: "Sync Plays on Watch", function: { self.syncWatch() }))
         items.append(ManagementItem(name: "Send Files to Watch", function: { self.sendFilesToWatch() }))
         sendFileIndex = items.count - 1
@@ -111,20 +112,24 @@ class NetworkTableViewController: UITableViewController {
         optionDone(index: 1)
     }
     
-    func receiveWatchSyncDone(_ reply: [String: Any]) {
+    func receiveWatchPingDone(_ reply: [String: Any]) {
         optionDone(index: 4)
     }
     
-    func receiveWatchCheckDone(_ reply: [String: Any]) {
-        optionDone(index: 7)
+    func receiveWatchSyncDone(_ reply: [String: Any]) {
+        optionDone(index: 5)
     }
     
-    @objc func receiveCheckDownloadsDone() {
+    func receiveWatchCheckDone(_ reply: [String: Any]) {
         optionDone(index: 8)
     }
     
-    @objc func receiveDeleteImagesDone() {
+    @objc func receiveCheckDownloadsDone() {
         optionDone(index: 9)
+    }
+    
+    @objc func receiveDeleteImagesDone() {
+        optionDone(index: 10)
     }
 
     override func didReceiveMemoryWarning() {
@@ -239,6 +244,14 @@ class NetworkTableViewController: UITableViewController {
         
         let session = WCSession.default
         session.sendMessage(message, replyHandler: receiveWatchSyncDone)
+    }
+    
+    func pingWatch() {
+        var message = [String: Any]()
+        message["request"] = "ping"
+        
+        let session = WCSession.default
+        session.sendMessage(message, replyHandler: receiveWatchPingDone)
     }
     
     func checkFilesOnWatch() {

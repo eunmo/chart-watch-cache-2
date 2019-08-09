@@ -9,10 +9,10 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBWatchKitPlugin" version="14490.21"/>
     </dependencies>
     <scenes>
-        <!--Interface Controller-->
+        <!--Chart Watch-->
         <scene sceneID="aou-V4-d1y">
             <objects>
-                <controller id="AgC-eL-Hgc" customClass="InterfaceController" customModule="WatchKit" customModuleProvider="target">
+                <controller title="Chart Watch" id="AgC-eL-Hgc" customClass="InterfaceController" customModule="WatchKit" customModuleProvider="target">
                     <items>
                         <label alignment="center" text="Label" id="kgI-cI-41L"/>
                         <button width="1" alignment="left" title="Shuffle" id="gKE-dw-LpZ">
@@ -30,7 +30,9 @@
                     <connections>
                         <outlet property="label" destination="kgI-cI-41L" id="jjw-AM-Ohv"/>
                         <outlet property="label2" destination="odP-KR-gBQ" id="WqT-Du-GTD"/>
+                        <outlet property="nextUpSwitch" destination="WY2-kQ-cof" id="OhU-J2-uE8"/>
                         <outlet property="shuffleButton" destination="gKE-dw-LpZ" id="9N1-vo-3nG"/>
+                        <segue destination="tLM-b0-A4q" kind="relationship" relationship="nextPage" id="uci-Fk-YFr"/>
                     </connections>
                 </controller>
             </objects>
@@ -60,12 +62,23 @@
             </objects>
             <point key="canvasLocation" x="468" y="643"/>
         </scene>
+        <!--Now Playing-->
+        <scene sceneID="g6U-KJ-cOG">
+            <objects>
+                <controller title="Now Playing" id="tLM-b0-A4q">
+                    <items>
+                        <nowPlayingView alignment="left" id="ySa-wX-dj2"/>
+                    </items>
+                </controller>
+            </objects>
+            <point key="canvasLocation" x="468" y="28"/>
+        </scene>
         <!--Notification Controller-->
         <scene sceneID="Niz-AI-uX2">
             <objects>
                 <controller id="eXb-UN-Cd0" customClass="NotificationController" customModule="WatchKit" customModuleProvider="target"/>
             </objects>
-            <point key="canvasLocation" x="468" y="345"/>
+            <point key="canvasLocation" x="571" y="345"/>
         </scene>
     </scenes>
 </document>
