@@ -19,9 +19,12 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate {
     }
     
     func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
+        print("??? \(tabBarController.selectedIndex)")
         
-        if previousVC == viewController, let vc = viewController as? WebViewController {
-            vc.reload()
+        if previousVC == viewController && tabBarController.selectedIndex == 2 {
+            print("!!!")
+            NotificationCenter.default.post(name: Notification.Name(rawValue: WebViewController.updateNotificationKey), object: self)
+            //vc.reload()
         }
         
         previousVC = viewController

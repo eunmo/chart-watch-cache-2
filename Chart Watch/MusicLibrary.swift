@@ -585,7 +585,7 @@ class MusicLibrary {
     func expandIds(condensed: [[Int]]) -> [Int] {
         var array = [Int]()
         
-        for var pair in condensed {
+        for pair in condensed {
             for i in pair[0]...pair[1] {
                 array.append(i)
             }

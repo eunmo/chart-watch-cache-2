@@ -26,7 +26,6 @@ class PlayerTableViewController: UITableViewController {
     
     var player: MusicPlayer?
     var timer: Timer?
-    var blurView: UIVisualEffectView?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -59,22 +58,10 @@ class PlayerTableViewController: UITableViewController {
         CommonUI.makeSmallLayerCircular(layer: playCountLabel.layer)
         
         updateTopView()
-        
-        let blurEffect = UIBlurEffect(style: UIBlurEffect.Style.regular)
-        blurView = UIVisualEffectView(effect: blurEffect)
-        blurView!.autoresizingMask = [.flexibleWidth, .flexibleHeight]
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        if let statusbar = UIApplication.shared.value(forKey: "statusBar") as? UIView {
-            blurView!.frame = statusbar.bounds
-            statusbar.addSubview(blurView!)
-            statusbar.sendSubviewToBack(blurView!)
-        }
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        blurView!.removeFromSuperview()
+    override var prefersStatusBarHidden: Bool {
+        return true
     }
     
     func updateTopView() {

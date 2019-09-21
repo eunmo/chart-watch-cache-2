@@ -11,9 +11,10 @@ import WebKit
 
 class WebViewController: UIViewController, WKUIDelegate, WKScriptMessageHandler {
     
+    static let updateNotificationKey = "WebViewControllerNotificationKey"
+    
     var webView: WKWebView!
     var player: MusicPlayer?
-    var blurView: UIVisualEffectView?
     
     override func loadView() {
         let userScript1 = WKUserScript(source: "setWebkit()", injectionTime: WKUserScriptInjectionTime.atDocumentEnd, forMainFrameOnly: true)
@@ -35,10 +36,6 @@ class WebViewController: UIViewController, WKUIDelegate, WKScriptMessageHandler 
         webView.allowsBackForwardNavigationGestures = true
         view = webView
         
-        let blurEffect = UIBlurEffect(style: UIBlurEffect.Style.regular)
-        blurView = UIVisualEffectView(effect: blurEffect)
-        blurView!.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        
         webView.scrollView.bounces = true
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(self.refreshWebView(sender:)), for: UIControl.Event.valueChanged)
@@ -47,6 +44,8 @@ class WebViewController: UIViewController, WKUIDelegate, WKScriptMessageHandler 
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(WebViewController.reload), name: NSNotification.Name(rawValue: WebViewController.updateNotificationKey), object: nil)
 
         // Do any additional setup after loading the view.
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
@@ -54,17 +53,6 @@ class WebViewController: UIViewController, WKUIDelegate, WKScriptMessageHandler 
         webView.load(URLRequest(url: URL(string: serverAddress)!))
         
         player = appDelegate.player
-    }
-    override func viewWillAppear(_ animated: Bool) {
-        if let statusbar = UIApplication.shared.value(forKey: "statusBar") as? UIView {
-            blurView!.frame = statusbar.bounds
-            statusbar.addSubview(blurView!)
-            statusbar.sendSubviewToBack(blurView!)
-        }
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        blurView!.removeFromSuperview()
     }
     
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
@@ -84,7 +72,7 @@ class WebViewController: UIViewController, WKUIDelegate, WKScriptMessageHandler 
         sender.endRefreshing()
     }
 
-    func reload() {
+    @objc func reload() {
         webView.evaluateJavaScript("window.location.href = '/react/';")
     }
 }
