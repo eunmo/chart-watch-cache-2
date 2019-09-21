@@ -9,11 +9,6 @@
 import UIKit
 
 class CommonUI {
-    static let pink = UIColor(red: 255/255, green: 45/255, blue: 85/255, alpha: 1)
-    static let purple = UIColor(red: 88/255, green: 86/255, blue: 214/255, alpha: 1)
-    static let blue = UIColor(red: 0/255, green: 122/255, blue: 255/255, alpha: 1)
-    static let tealBlue = UIColor(red: 90/255, green: 200/255, blue: 250/255, alpha: 1)
-    
     static func makeSmallLayerCircular(layer: CALayer) {
         layer.masksToBounds = true
         layer.cornerRadius = 17.5
@@ -29,14 +24,14 @@ class CommonUI {
         
         if let minRank = song.minRank {
             if minRank == 1 {
-                label.backgroundColor = CommonUI.pink
+                label.backgroundColor = UIColor.systemPink
             } else if minRank <= 5 {
-                label.backgroundColor = CommonUI.purple
+                label.backgroundColor = UIColor.systemIndigo
             } else {
-                label.backgroundColor = CommonUI.blue
+                label.backgroundColor = UIColor.systemBlue
             }
         } else {
-            label.backgroundColor = CommonUI.tealBlue
+            label.backgroundColor = UIColor.systemGray
         }
     }
 }

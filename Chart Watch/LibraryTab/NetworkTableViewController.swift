@@ -158,11 +158,11 @@ class NetworkTableViewController: UITableViewController {
             networkCell.item = item
             
             if indexPath.row == doAllIndex {
-                cell.backgroundColor = CommonUI.tealBlue
+                cell.backgroundColor = UIColor.systemTeal
             }
             
             if indexPath.row == sendFileIndex {
-                cell.backgroundColor = CommonUI.pink
+                cell.backgroundColor = UIColor.systemPink
             }
         }
 

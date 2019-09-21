@@ -35,6 +35,8 @@ class LibraryArtistInitialCollectionViewController: UICollectionViewController {
                 counts.append(count)
             }
         }
+        
+        self.collectionView.backgroundColor = UIColor.systemBackground
     }
 
     override func didReceiveMemoryWarning() {

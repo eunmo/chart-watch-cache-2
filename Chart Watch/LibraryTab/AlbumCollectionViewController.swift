@@ -48,6 +48,8 @@ class AlbumCollectionViewController: UICollectionViewController {
             self.albums = library!.getAllAlbums()
             albums.sort(by: { $0.release > $1.release })
         }
+        
+        self.collectionView.backgroundColor = UIColor.systemBackground
     }
 
     override func didReceiveMemoryWarning() {
