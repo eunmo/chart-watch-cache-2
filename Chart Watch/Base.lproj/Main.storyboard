@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14868" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="49e-Tb-3d3">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15400" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="49e-Tb-3d3">
     <device id="retina5_9" orientation="portrait" appearance="light"/>
     <dependencies>
-        <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14824"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15404"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -82,8 +81,8 @@
                                 </imageView>
                                 <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="Qgr-jR-ZfN">
                                     <rect key="frame" x="70.666666666666671" y="384" width="237.33333333333331" height="2"/>
-                                    <color key="progressTintColor" red="0.26051741839999998" green="0.2605243921" blue="0.260520637" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                    <color key="trackTintColor" red="0.75406885150000003" green="0.75408679249999999" blue="0.75407713649999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    <color key="progressTintColor" systemColor="secondaryLabelColor" red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
+                                    <color key="trackTintColor" systemColor="tertiaryLabelColor" red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.29999999999999999" colorSpace="custom" customColorSpace="sRGB"/>
                                 </progressView>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="-2:34" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jWL-Or-dtk">
                                     <rect key="frame" x="15.999999999999996" y="376" width="38.666666666666657" height="18"/>
@@ -214,6 +213,7 @@
                             <outlet property="delegate" destination="Ens-0A-FEm" id="qKC-al-9TL"/>
                         </connections>
                     </tableView>
+                    <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
                     <tabBarItem key="tabBarItem" title="Player" image="play.circle" catalog="system" id="Wyu-Iv-T3G"/>
                     <connections>
                         <outlet property="artistLabel" destination="e2c-i5-fU1" id="Axq-hM-JLk"/>
@@ -496,11 +496,11 @@
     <resources>
         <image name="forward.fill" catalog="system" width="64" height="38"/>
         <image name="icloud" catalog="system" width="64" height="44"/>
-        <image name="music.note.list" catalog="system" width="64" height="58"/>
+        <image name="music.note.list" catalog="system" width="64" height="56"/>
         <image name="pause.fill" catalog="system" width="58" height="64"/>
-        <image name="play.circle" catalog="system" width="64" height="62"/>
+        <image name="play.circle" catalog="system" width="64" height="60"/>
         <image name="play.fill" catalog="system" width="58" height="64"/>
-        <image name="shuffle" catalog="system" width="64" height="48"/>
+        <image name="shuffle" catalog="system" width="64" height="46"/>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="ISJ-i4-7KE"/>

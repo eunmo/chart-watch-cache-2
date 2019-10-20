@@ -60,10 +60,6 @@ class PlayerTableViewController: UITableViewController {
         updateTopView()
     }
     
-    override var prefersStatusBarHidden: Bool {
-        return true
-    }
-    
     func updateTopView() {
         if let currentSong = player?.currentSong {
             let imageUrl = MusicLibrary.getImageLocalUrl(currentSong.albumId)

@@ -44,7 +44,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, WCSessionDelegate {
     }
     
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
-        let deviceTokenString = deviceToken.reduce("", {$0 + String(format: "%02X", $1)})
+        let deviceTokenString = deviceToken.map{ String(format: "%02x", $0) }.joined()
         print("success in registering for remote notifications with token \(deviceTokenString)")
     }
 
