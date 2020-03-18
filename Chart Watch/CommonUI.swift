@@ -31,7 +31,11 @@ class CommonUI {
                 label.backgroundColor = UIColor.systemBlue
             }
         } else {
-            label.backgroundColor = UIColor.systemGray
+            if song.plays < 3 {
+                label.backgroundColor = UIColor.systemGreen
+            } else {
+                label.backgroundColor = UIColor.systemGray
+            }
         }
     }
 }
