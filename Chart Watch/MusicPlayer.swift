@@ -160,15 +160,26 @@ class MusicPlayer: NSObject, AVAudioPlayerDelegate {
         }
         
         if let s = currentSong, recordPlay {
-            library?.recordPlay(s)
+            let playRecord = library?.recordPlay(s)
+            updateNextSongPlays(playRecord!)
         }
         
         playNext()
     }
     
     func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
-        library?.recordPlay(currentSong!)
+        let playRecord = library?.recordPlay(currentSong!)
+        updateNextSongPlays(playRecord!)
         playNext()
+    }
+    
+    func updateNextSongPlays(_ record: PlayRecord) {
+        print("\(record.id) \(record.plays)")
+        for (index, song) in nextSongs.enumerated() {
+            if record.id == song.id {
+                nextSongs[index].plays = record.plays
+            }
+        }
     }
     
     private func addShuffleSongs() {

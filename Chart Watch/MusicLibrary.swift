@@ -492,7 +492,7 @@ class MusicLibrary {
         return playlists
     }
     
-    func recordPlay(_ fullSong: FullSong) {
+    func recordPlay(_ fullSong: FullSong) -> PlayRecord {
         let id = fullSong.id
         
         let newPlayCount = max(fullSong.plays, songMap[id]?.info.plays ?? 0, playRecords[id]?.plays ?? 0) + 1
@@ -508,6 +508,8 @@ class MusicLibrary {
         save()
         doSync()
         notifyUpdate()
+        
+        return newRecord
     }
     
     func getPushData() -> [PushData] {
