@@ -38,7 +38,7 @@ class InterfaceController: WKInterfaceController {
         let (songCount, savedSongs, played) = songlist!.getStatus()
         let songCountString = savedSongs == songCount ? "\(songCount)" : "\(savedSongs)/\(songCount)"
         let playCountString = played > 0 ? "\(played)p" : ""
-        label.setText("\(songCountString) songs \(playCountString)")
+        label.setText("\(songCountString) Songs \(playCountString)")
         
         if player?.isPlaying ?? false {
             label2.setText(player!.currentSong!.title)

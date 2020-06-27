@@ -19,6 +19,11 @@
 			<key>orderHint</key>
 			<integer>2</integer>
 		</dict>
+		<key>WatchKit Extension.xcscheme_^#shared#^_</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>3</integer>
+		</dict>
 		<key>WatchKit.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
@@ -28,6 +33,11 @@
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
 		<key>54290D4022F48B6A007D81C3</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>54290D4C22F48B6C007D81C3</key>
 		<dict>
 			<key>primary</key>
 			<true/>

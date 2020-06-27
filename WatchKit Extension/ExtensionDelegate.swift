@@ -28,7 +28,7 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate, WCSessionDelegate {
         songlist.load()
         player.library = songlist
         
-        _ = try? AVAudioSession.sharedInstance().setCategory(.playback, mode: .default, policy: .longForm)
+        _ = try? AVAudioSession.sharedInstance().setCategory(.playback, mode: .default, policy: .longFormAudio)
         
         setupRemoteTransportControls()
     }
