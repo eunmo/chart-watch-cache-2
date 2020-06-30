@@ -181,6 +181,12 @@ class TrackTableViewController: UITableViewController {
         self.present(alert, animated: true)
     }
 
+    @IBAction func onRefresh(_ sender: UIBarButtonItem) {
+        if let id = album?.id {
+            library?.refreshAlbumImage(id: id)
+        }
+    }
+    
     /*
     // Override to support conditional editing of the table view.
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15400" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="49e-Tb-3d3">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="49e-Tb-3d3">
     <device id="retina5_9" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15404"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -360,7 +360,13 @@
                             <outlet property="delegate" destination="Acs-fb-yW8" id="daO-De-lyu"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Title" id="3EZ-tz-368"/>
+                    <navigationItem key="navigationItem" title="Title" id="3EZ-tz-368">
+                        <barButtonItem key="rightBarButtonItem" systemItem="refresh" id="lRd-b0-Czm">
+                            <connections>
+                                <action selector="onRefresh:" destination="Acs-fb-yW8" id="svm-qy-G0W"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="navItem" destination="3EZ-tz-368" id="5Oy-9h-UYr"/>
                     </connections>
@@ -493,18 +499,18 @@
             <point key="canvasLocation" x="780" y="711.57635467980299"/>
         </scene>
     </scenes>
-    <resources>
-        <image name="forward.fill" catalog="system" width="64" height="38"/>
-        <image name="icloud" catalog="system" width="64" height="44"/>
-        <image name="music.note.list" catalog="system" width="64" height="56"/>
-        <image name="pause.fill" catalog="system" width="58" height="64"/>
-        <image name="play.circle" catalog="system" width="64" height="60"/>
-        <image name="play.fill" catalog="system" width="58" height="64"/>
-        <image name="shuffle" catalog="system" width="64" height="46"/>
-    </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="ISJ-i4-7KE"/>
-        <segue reference="B0S-lW-IJz"/>
+        <segue reference="S7T-XN-Cmy"/>
+        <segue reference="IVx-gs-El7"/>
         <segue reference="NJi-gu-kiK"/>
     </inferredMetricsTieBreakers>
+    <resources>
+        <image name="forward.fill" catalog="system" width="128" height="79"/>
+        <image name="icloud" catalog="system" width="128" height="88"/>
+        <image name="music.note.list" catalog="system" width="128" height="113"/>
+        <image name="pause.fill" catalog="system" width="116" height="128"/>
+        <image name="play.circle" catalog="system" width="128" height="121"/>
+        <image name="play.fill" catalog="system" width="116" height="128"/>
+        <image name="shuffle" catalog="system" width="128" height="93"/>
+    </resources>
 </document>

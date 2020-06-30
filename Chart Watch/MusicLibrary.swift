@@ -778,4 +778,14 @@ class MusicLibrary {
         
         return songs
     }
+    
+    func refreshAlbumImage(id: Int) {
+        downloader.requestImage(id: id, callback: { (done: Bool) -> Void in
+            self.downloadedImage.insert(id)
+            
+            if done {
+                self.save()
+            }
+        })
+    }
 }
